@@ -43,3 +43,8 @@ validation-report.json
 # Folders to ignore
 node_modules
 bower_components
+
+# Ignore Audio Files
+*.flac
+*.m4a
+*.opus
