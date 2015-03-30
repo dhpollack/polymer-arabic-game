@@ -64,10 +64,8 @@
       'change-language': 'changeLanguage'
     },
     created: function() {
-      console.log("letter-list created");
     },
     ready: function() {
-      console.log("letter-list ready");
     },
     fireTapFunction: function(e) {
       console.log("fire tap function!");
@@ -78,7 +76,7 @@
       //this.currlang = event.detail.jsonLang;
       //console.log("now the new language is: " + this.currlang);
     },
-    changeLanguage: function() {
+    changeLanguage: function(event) {
       console.log("change-language was heard");
       this.currlang = (this.currlang == "ar") ? "en" : "ar";
     },

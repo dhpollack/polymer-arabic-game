@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
+<!-- Additional Component Load -->
 <link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
 
 <dom-module id="letter-card">
@@ -55,8 +55,7 @@
       },
       canOpus: {
         type: Boolean,
-        value: false,
-        reflectToAttribute: true
+        value: false
       },
       aacAudio: {
         type: String,
@@ -83,11 +82,11 @@
     ready: function() {
     },
     computeAacAudio: function(letter, mylang) {
+      if(letter === " ") return "";
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
     },
     computeOpusAudio: function(letter, mylang) {
-      console.log("letter-card canOpus: " + this.canOpus);
-      if(this.canOpus) {
+      if(this.canOpus && letter !== " ") {
         return "/assets/audio/"+ mylang +"/" + letter + ".opus";
       } else {
         return '';

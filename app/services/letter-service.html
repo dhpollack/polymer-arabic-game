@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Additional Component Load -->
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 <dom-module id="letter-service">
   <style>
@@ -39,6 +40,8 @@
     listeners: {
       'change-language': 'changeJsonUrl'
     },
+    ready: function() {
+    },
     changeJsonUrl: function(ev) {
       console.log("change-language heard by letter-service");
     },
@@ -57,34 +60,7 @@
       if(jsonSuccess) {
         var ajaxData = this.$.ajax.lastResponse.slice()[0];
         this.lobj = ajaxData;
-        //console.log("# letters: " + this.letters.length);
-        //console.log(this.letters[1].letter);
-        //console.log(this.lobj.alphabet[0].letter);
-        //console.log(this.lobj.lang[0].code);
-        //console.log(this.currlang);
-        //console.log(this.lobj);
         this.fire('new-letters', { jsonLang:  ajaxData.lang.code });
-      }
-    },
-    /** 
-     * Update the service with the current favorite value.
-     * (Two-way data binding updates the favorite value 
-     * stored locally.) If this was a real service, this
-     * method would do something useful.
-     * 
-     * @method setFavorite
-     * @param uid {Number} Unique ID for post.
-     * @param isFavorite {Boolean} True if the user marked this post as a favorite.
-     */
-    setCard: function(uid, isFavorite) {
-      // no service backend, change local data
-      var i, len;
-      for (i = 0, len=this.posts.length; i<len; i++) {
-        if (this.posts[i].uid == uid) {
-          //this.posts[i].favorite = isFavorite;
-          this.setPathValue('posts.' + i + '.favorite', isFavorite);
-          return;
-        }
       }
     }
   });
