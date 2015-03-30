@@ -12,6 +12,10 @@
     font-size: 5vh;
     top: 0;
   }
+  .score-box {
+    float: right;
+    vertical-align: top;
+  }
   .footer  {
     background: #03a9f4;
     color: white;

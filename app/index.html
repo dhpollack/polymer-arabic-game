@@ -22,10 +22,13 @@
   -->
   <template is="x-autobind">
   <div class="header">
-    <span>Polymer Arabic Game</span>
+    <span id="game-name">Polymer Arabic Game</span>
+    <div class="score-box">
+      <span id="score-sign">Score: <span id="score-box-score">_______</span></span>
+    </div>
   </div>
   <div class="container layout vertical center">
-    <letter-list limit="9" currlang="ar"></letter-list>
+    <letter-list limit="12" lang-code="ar"></letter-list>
   </div>
   <div class="footer"><letter-card class="space-bar" recenters>___</letter-card></div>
   </template>
