@@ -1,0 +1,24 @@
+{
+  "name": "polymer-0-8-test",
+  "version": "0.0.1",
+  "authors": [
+    "David Pollack <sent@da3.net>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-roboto": "Polymer/font-roboto#^0.5.0",
+    "webcomponents": "webcomponents/webcomponentsjs#^0.5.0",
+    "layout": "Polymer/layout#0.8-preview",
+    "core-ajax": "Polymer/core-ajax#0.8-preview",
+    "paper-ripple": "Polymer/paper-ripple#0.8-preview",
+    "polymer": "Polymer/polymer#0.8-preview"
+  }
+}

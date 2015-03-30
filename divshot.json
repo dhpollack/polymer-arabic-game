@@ -1,0 +1,6 @@
+{
+  "name": "polymer-arabic-game",
+  "root": "_dist",
+  "clean_urls": true,
+  "error_page": "error.html"
+}

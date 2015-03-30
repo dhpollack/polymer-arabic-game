@@ -1,0 +1,68 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../services/letter-service.html">
+<link rel="import" href="letter-card.html">
+
+<dom-module id="letter-list">
+  <style>
+    :host {
+      display: inline-block;
+      position: relative;
+    }
+  </style>
+  <template>
+    <letter-service id="service" lobj="{{lobj}}"></letter-service>
+        <template id="repeater" is="x-repeat" items="[[lobj.alphabet]]">
+          <letter-card
+            uid="[[item.uid]]"
+            audio="[[item.audio]]"
+            on-tap="fireTapFunction"
+            letter="[[item.letter]]"
+            currlang="[[item.currlang]]"
+            alang="[[item.letter]]"
+            hidden="[[item.hidden]]">
+            <p>[[item.letter]]</p>
+          </letter-card>
+        </template>
+      </div>
+  </template>
+  <template>
+    <letter-service id="service" currlang="{{currlang}}"></letter-service>
+      <h1>{{currlang}}</h1>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "letter-list",
+    properties: {
+      limit: {
+        type: Number
+      },
+      clicked: {
+        type: Number,
+        notify: true
+      },
+      hideCard: {
+        type: Boolean,
+        computed: 'hideLetCard(limit)'
+      }
+    },
+    bind: {
+    },
+    created: function() {
+      console.log("letter-list created");
+    },
+    ready: function() {
+      console.log("letter-list ready");
+    },
+    fireTapFunction: function(e) {
+      console.log("fire tap function!");
+      this.fire("letter-tapped");
+    },
+    hideLetCard: function(ev) {
+      var hide = Math.random() >= 0.5;
+      console.log(ev);
+      console.log("Hide Card: " + hide);
+      return hide;
+    }
+  });
+</script>

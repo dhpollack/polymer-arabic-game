@@ -1,0 +1,103 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<dom-module id="letter-service">
+  <style>
+  core-ajax {
+    display: none;
+  }
+  </style>
+  <template>
+    <core-ajax id="ajax" 
+      auto 
+      verbose 
+      url="/api/ar/letters.json" 
+      handleas="json" 
+      on-response="lettersLoaded">
+    </core-ajax>
+  </template>
+</dom-module>
+  <script>
+  Polymer({
+    is: 'letter-service',
+
+    properties: {
+      letters: {
+        type: Array,
+        readOnly: true,
+        notify: true
+      },
+      currlang: {
+        type: String,
+        readOnly: true,
+        notify: true
+      },
+      lobj: {
+        type: Object,
+        readOnly: true,
+        notify: true
+      }
+    },
+    lettersLoaded: function() {
+      console.log("loading letters...");
+      // Make a copy of the loaded data
+      //console.log(ajaxData);
+      var ajaxData = this.$.ajax.lastResponse.slice()[0];
+      shuffle(ajaxData.alphabet);
+      ajaxData.alphabet.forEach(function(entry, i) {
+        entry["currlang"] = ajaxData.lang[0].code;
+        if(i <= 11) {
+          entry["hidden"] = false;
+        }
+      });
+      this._setLobj(ajaxData);
+      //console.log("# letters: " + this.letters.length);
+      //console.log(this.letters[1].letter);
+      //console.log(this.lobj.alphabet[0].letter);
+      //console.log(this.lobj.lang[0].code);
+      //console.log(this.currlang);
+      //console.log(this.lobj);
+      this.fire('new-letters');
+
+    },
+    /** 
+     * Update the service with the current favorite value.
+     * (Two-way data binding updates the favorite value 
+     * stored locally.) If this was a real service, this
+     * method would do something useful.
+     * 
+     * @method setFavorite
+     * @param uid {Number} Unique ID for post.
+     * @param isFavorite {Boolean} True if the user marked this post as a favorite.
+     */
+    setCard: function(uid, isFavorite) {
+      // no service backend, change local data
+      var i, len;
+      for (i = 0, len=this.posts.length; i<len; i++) {
+        if (this.posts[i].uid == uid) {
+          //this.posts[i].favorite = isFavorite;
+          this.setPathValue('posts.' + i + '.favorite', isFavorite);
+          return;
+        }
+      }
+    }
+    
+  });
+  function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex ;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+  </script>

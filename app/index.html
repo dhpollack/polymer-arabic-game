@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>Polymer Arabic Game</title>
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <!-- Polymer Imports -->
+  <script src="../bower_components/webcomponents/webcomponents.js"></script>
+  <link rel="import" href="/bower_components/polymer/polymer.html">
+  <link rel="import" href="../bower_components/layout/layout.html">
+  <!-- Custom Elements Vulcanized -->
+  <link rel="import" href="elements/elements.html">
+  <!-- App CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
+</head>
+
+<body fullbleed>
+  <!-- arabic alphabet
+  غ	ظ	ض	ذ	خ	ث	ت	ش	ر	ق	ص	ف	ع	س	ن	م	ل	ك	ي	ط	ح	ز	و	ه	د	ج	ب	ا
+  -->
+  <div class="header">
+    Polymer Arabic Game
+  </div>
+  <div class="container layout vertical center">
+    <letter-list limit="9" currlang="en"></letter-list>
+  </div>
+  <div class="footer"><letter-card class="space-bar" recenters>___</letter-card></div>
+
+
+  <script>
+ </script>
+</body>
+
+</html>

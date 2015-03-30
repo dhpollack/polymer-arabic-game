@@ -1,0 +1,87 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+
+<dom-module id="letter-card">
+    <style>
+    :host {
+      display: inline-block;
+      position: relative;
+      float: left;
+    }
+    :host:before{
+  	  content: "";
+  	  display: inline-block;
+    	padding-top: 100%; 	/* initial ratio of 1:1*/
+    }
+    .card-content {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    </style>
+    <template>
+      <div class="card-body layout horizontal center">
+        <div class="card-content">
+          <paper-ripple recenters></paper-ripple>
+          <span class="content-span"><content></content></span>
+        </div>
+        <audio style="display: none;">
+          <script type="text/javascript">
+          </script>
+          <source src="{{aacAudio}}">
+          <source src="{{opusAudio}}">
+        </audio>
+      </div>
+    </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'letter-card',
+    properties: {
+      letter: {
+        type: String,
+        reflectToAttribute: true
+      },
+      currlang: {
+        type: String,
+        reflectToAttribute: true
+      },
+      uid: {
+        type: String,
+        reflectToAttribute: true
+      },
+      aacAudio: {
+        type: String,
+        computed: 'computeAacAudio(letter, currlang)'
+      },
+      opusAudio: {
+        type: String,
+        computed: 'computeOpusAudio(letter, currlang)'
+      }
+    },
+    listeners: {
+      'click': 'handleClick'
+    },
+    handleClick: function(e) {
+      var audio = this.querySelector("audio");
+      audio.play();
+    },
+    ready: function(e) {
+    },
+    computeAacAudio: function(letter, mylang) {
+      return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
+    },
+    computeOpusAudio: function(letter, mylang) {
+      var audioTag = document.createElement("audio");
+      if(!!(audioTag.canPlayType && audioTag.canPlayType('audio/ogg;codecs="opus"').replace(/no/, ''))) {
+        return "/assets/audio/"+ mylang +"/" + letter + ".opus";
+      } else {
+        return '';
+      }
+    }
+  });
+</script>
