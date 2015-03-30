@@ -166,19 +166,14 @@ gulp.task('html', function () {
 
 // Vulcanize imports
 gulp.task('vulcanize', function () {
-  return gulp.src(appDir + '/elements/elements.vulcanized.html')
+  return gulp.src(distDir + '/index.vulcanized.html')
     .pipe($.vulcanize({
       dest: distDir,
-      strip: false,
+      strip: true,
       csp: true,
-      inline: false,
-      excludes: {
-        imports: [
-          "polymer.html"
-        ]
-      }
+      inline: true
     }))
-    .pipe(gulp.dest(distDir + '/elements'))
+    .pipe(gulp.dest(distDir))
     .pipe($.size({title: 'vulcanize'}));
 });
 

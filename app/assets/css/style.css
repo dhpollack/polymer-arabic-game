@@ -57,7 +57,7 @@
     margin: 0 0 0 0;
   }
   paper-ripple {
-    color: green;
+    color: #18C924; /* greenish */
   }
   @media (min-width: 481px) {
     .container {

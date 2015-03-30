@@ -1,8 +1,8 @@
 [
   {
-    "lang": [{
+    "lang": {
       "code": "ar"
-    }],
+    },
     "alphabet": [
       {
         "uid": 1,
@@ -14,17 +14,20 @@
         "uid": 2,
         "hidden": true,
         "letter": "ب",
-        "en": "baa"      },
+        "en": "baa"
+      },
       {
         "uid": 3,
         "hidden": true,
         "letter": "ج",
-        "en": "jeem"      },
+        "en": "jeem"
+      },
       {
         "uid": 4,
         "hidden": true,
         "letter": "د",
-        "en": "daal"      },
+        "en": "daal"
+      },
       {
         "uid": 5,
         "hidden": true,

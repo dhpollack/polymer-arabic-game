@@ -10,27 +10,25 @@
     }
   </style>
   <template>
-    <letter-service id="service" lobj="{{lobj}}"></letter-service>
-        <template id="repeater" is="x-repeat" items="[[lobj.alphabet]]">
+    <h1>{{fitlerWord}}</h1>
+    <letter-service id="service" currlang="{{currlang}}" lobj="{{lobj}}"></letter-service>
+        <template id="repeater" is="x-repeat" items="[[filterResults(lobj, filterWord)]]">
           <letter-card
             uid="[[item.uid]]"
             audio="[[item.audio]]"
             on-tap="fireTapFunction"
             letter="[[item.letter]]"
             currlang="[[item.currlang]]"
-            alang="[[item.letter]]"
+            can-opus="[[item.canOpus]]"
             hidden="[[item.hidden]]">
             <p>[[item.letter]]</p>
           </letter-card>
         </template>
       </div>
   </template>
-  <template>
-    <letter-service id="service" currlang="{{currlang}}"></letter-service>
-      <h1>{{currlang}}</h1>
-  </template>
 </dom-module>
 <script>
+(function() {
   Polymer({
     is: "letter-list",
     properties: {
@@ -41,12 +39,29 @@
         type: Number,
         notify: true
       },
-      hideCard: {
+      currlang: {
+        type: String,
+        notify: true,
+        value: "es"
+      },
+      canOpus: {
         type: Boolean,
-        computed: 'hideLetCard(limit)'
+        value: false,
+        reflectToAttribute: true
+      },
+      filterWord: {
+        type: Object,
+        value: function() {
+          return {
+            value: 'مرحبا',  
+            langCode: "ar"
+          };
+        }
       }
     },
-    bind: {
+    listeners: {
+      'new-letters': 'onNewLetters',
+      'change-language': 'changeLanguage'
     },
     created: function() {
       console.log("letter-list created");
@@ -58,11 +73,70 @@
       console.log("fire tap function!");
       this.fire("letter-tapped");
     },
-    hideLetCard: function(ev) {
-      var hide = Math.random() >= 0.5;
-      console.log(ev);
-      console.log("Hide Card: " + hide);
-      return hide;
+    onNewLetters: function(event) {
+      console.log("new-letters was fired and heard by letters-list: " + this.currlang);
+      //this.currlang = event.detail.jsonLang;
+      //console.log("now the new language is: " + this.currlang);
+    },
+    changeLanguage: function() {
+      console.log("change-language was heard");
+      this.currlang = (this.currlang == "ar") ? "en" : "ar";
+    },
+    filterResults: function(items, filter) {
+      var numTiles = 12;
+      if(Object.keys(items).length === 0) {
+        console.log("hmm, you've got an empty dataset");
+      } else {
+        shuffle(items.alphabet);
+        if(filter.langCode == items.lang.code) {
+          numTiles = numTiles - filter.value.length;
+        }
+        var opus = checkOpus();
+        items.alphabet.forEach(function(entry, i) {
+          entry.currlang = items.lang.code;
+          entry.canOpus = opus;
+          if(filter.value.indexOf(entry.letter) > -1) {
+            entry.hidden = false;
+          } else if(numTiles > 0) {
+            entry.hidden = false;
+            numTiles--;
+          }
+        });
+      }
+      return items.alphabet;
     }
   });
+  function checkOpus() {
+    console.log("running checkOpus()");
+    var audioTag = document.createElement("audio");
+    if(!!(audioTag.canPlayType && audioTag.canPlayType('audio/ogg;codecs="opus"').replace(/no/, ''))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function shuffle(array) {
+    if(array instanceof Array) {
+      var currentIndex = array.length, temporaryValue, randomIndex ;
+    
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+    
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+    
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    } else {
+      console.log("You're trying to shuffle something that is not an array.");
+      return array;
+    }
+  }
+
+})();
 </script>
