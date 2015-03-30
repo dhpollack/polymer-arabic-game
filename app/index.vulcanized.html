@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <!-- Polymer Imports -->
   <script src="../bower_components/webcomponents/webcomponents.js"></script>
-  <link rel="import" href="/bower_components/polymer/polymer.html">
+  <link rel="import" href="../bower_components/polymer/polymer.html">
   <link rel="import" href="../bower_components/layout/layout.html">
   <!-- Custom Elements Vulcanized -->
   <link rel="import" href="elements/elements.html">
@@ -22,27 +22,15 @@
   -->
   <template is="x-autobind">
   <div class="header">
-    <span id="game-name">Logo</span>
-    <score-board></score-board>
+    Polymer Arabic Game
   </div>
   <div class="container layout vertical center">
-    <letter-list limit="12" lang-code="ar"></letter-list>
+    <letter-list limit="9" currlang="en"></letter-list>
   </div>
-  <div class="footer"><letter-card class="space-bar" letter=" "><jumbotron-text></jumbotron-text class="layout vertical bottom"></letter-card></div>
+  <div class="footer"><letter-card class="space-bar" recenters>___</letter-card></div>
   </template>
 
   <script>
-  var scoreBox = document.querySelector("jumbotron-text");
-  var footerBox = document.querySelector('.footer');
-  footerBox.addEventListener('click-from-card', function(event) {
-    scoreBox.setAttribute("last-bucket", "reset");    
-  });
-  var containerBox = document.querySelector('.container');
-  containerBox.addEventListener('click-from-card', function(event) {
-    scoreBox.setAttribute("last-bucket", "");    
-    scoreBox.setAttribute("last-bucket", event.detail.letter);    
-  });
-
  </script>
 </body>
 

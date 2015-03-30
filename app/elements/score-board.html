@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="score-board">
+  <style>
+  </style>
+  <template>
+    <div class="score-box">
+      <span id="score-sign">Score: <span id="score-box-score">{{score}}</span></span>
+    </div>
+  </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: "score-board",
+    properties: {
+      scoreArray: {
+        type: Array,
+        value: function() { return []; }
+      },
+      score: {
+        type: String,
+        notify: true,
+        value: "_____"
+      },
+      lastBucket: {
+        type: String,
+        notify: true,
+        observer: 'calcScore'
+      }
+    },
+    listeners: {
+      'click-from-card': 'updateScoreBoard'
+    },
+    created: function() {
+    },
+    ready: function() {
+      //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
+    },
+    updateScoreBoard: function(event) {
+      console.log(event);
+      //this.currlang = (this.currlang == "ar") ? "en" : "ar";
+    },
+    calcScore: function() {
+      if(this.lastBucket === "reset") {
+        this.scoreArray = [];
+        this.score = "_____";
+      } else if(this.lastBucket !== "") {
+        if(this.scoreArray.length >= 5) this.scoreArray.shift();
+        this.scoreArray.push(this.lastBucket);
+        this.score = this.scoreArray.join("");
+      }
+    }
+  });
+})();
+</script>

@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="jumbotron-text">
+  <style>
+  </style>
+  <template>
+    <div class="jumbotron">
+      <span id="jumbotron-text">{{usertext}}</span>
+    </div>
+  </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: "jumbotron-text",
+    properties: {
+      scoreArray: {
+        type: Array,
+        value: function() { return []; }
+      },
+      usertext: {
+        type: String,
+        notify: true,
+        value: "_____"
+      },
+      lastBucket: {
+        type: String,
+        notify: true,
+        observer: 'calcScore'
+      }
+    },
+    listeners: {
+      'click': 'handleClick'
+    },
+    handleClick: function(e) {
+      this.fire("click-from-card", { letter: " " });
+    },
+    created: function() {
+    },
+    ready: function() {
+      //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
+    },
+    calcScore: function() {
+      if(this.lastBucket === "reset") {
+        this.scoreArray = [];
+        this.usertext = "_____";
+      } else if(this.lastBucket !== "") {
+        if(this.scoreArray.length >= 5) this.scoreArray.shift();
+        this.scoreArray.push(this.lastBucket);
+        this.usertext = this.scoreArray.join("");
+      }
+    }
+  });
+})();
+</script>

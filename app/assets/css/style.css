@@ -15,6 +15,13 @@
   .score-box {
     float: right;
     vertical-align: top;
+    margin: 0 1vw 0 0;
+  }
+  #jumbotron-text {
+    font-size: 8vh;
+    position: absolute;
+    bottom: 4.5vh;
+    right: 48vw;
   }
   .footer  {
     background: #03a9f4;

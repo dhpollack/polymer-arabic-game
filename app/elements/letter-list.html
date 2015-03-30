@@ -15,7 +15,6 @@
           <letter-card
             uid="[[item.uid]]"
             audio="[[item.audio]]"
-            on-tap="fireTapFunction"
             letter="[[item.letter]]"
             currlang="[[item.currlang]]"
             can-opus="[[item.canOpus]]"
@@ -61,15 +60,12 @@
     },
     listeners: {
       'new-letters': 'onNewLetters',
-      'change-language': 'changeLanguage'
+      'change-language': 'changeLanguage',
+      'click-from-card': 'changeLanguage'
     },
     created: function() {
     },
     ready: function() {
-    },
-    fireTapFunction: function(e) {
-      console.log("fire tap function!");
-      this.fire("letter-tapped");
     },
     onNewLetters: function(event) {
       console.log("new-letters was fired and heard by letters-list: " + this.langCode);
@@ -77,8 +73,8 @@
       //console.log("now the new language is: " + this.currlang);
     },
     changeLanguage: function(event) {
-      console.log("change-language was heard");
-      this.currlang = (this.currlang == "ar") ? "en" : "ar";
+      console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
+      //this.currlang = (this.currlang == "ar") ? "en" : "ar";
     },
     filterResults: function(items, filter) {
       var numTiles = this.limit;

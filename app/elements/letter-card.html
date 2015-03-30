@@ -71,13 +71,13 @@
     },
     handleClick: function(e) {
       if(e.path[1].querySelector(".content-span").innerText == "___") {
-        console.log("firing change-language");
         // gonna use later
         //var testword = 'مرحبا';
-        this.fire("change-language");
       }
       var audio = this.querySelector("audio");
       audio.play();
+      console.log("firing click-from-card...");
+      this.fire("click-from-card", {letter: this.letter});
     },
     ready: function() {
     },
