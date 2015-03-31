@@ -14,14 +14,14 @@
   Polymer({
     is: "score-board",
     properties: {
-      scoreArray: {
-        type: Array,
-        value: function() { return []; }
+      checkWord: {
+        type: String,
+        value: 'مرحبا'
       },
       score: {
-        type: String,
+        type: Number,
         notify: true,
-        value: "_____"
+        value: 0
       },
       lastBucket: {
         type: String,
@@ -42,13 +42,13 @@
       //this.currlang = (this.currlang == "ar") ? "en" : "ar";
     },
     calcScore: function() {
-      if(this.lastBucket === "reset") {
-        this.scoreArray = [];
-        this.score = "_____";
-      } else if(this.lastBucket !== "") {
-        if(this.scoreArray.length >= 5) this.scoreArray.shift();
-        this.scoreArray.push(this.lastBucket);
-        this.score = this.scoreArray.join("");
+      if(["","_____"].indexOf(this.lastBucket) === -1) {
+        console.log("Does " + this.lastBucket + " = " + this.checkWord);
+        if(this.lastBucket === this.checkWord) {
+          this.score += 100;
+        } else {
+          this.score -= 30;
+        }
       }
     }
   });

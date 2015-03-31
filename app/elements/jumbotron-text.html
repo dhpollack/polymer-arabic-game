@@ -41,7 +41,8 @@
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
     },
     calcScore: function() {
-      if(this.lastBucket === "reset") {
+      if(this.lastBucket === " ") {
+        this.fire("check-jumbotron-word", { word: this.usertext });
         this.scoreArray = [];
         this.usertext = "_____";
       } else if(this.lastBucket !== "") {

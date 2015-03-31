@@ -32,16 +32,21 @@
   </template>
 
   <script>
-  var scoreBox = document.querySelector("jumbotron-text");
-  var footerBox = document.querySelector('.footer');
-  footerBox.addEventListener('click-from-card', function(event) {
-    scoreBox.setAttribute("last-bucket", "reset");    
-  });
+  var jumbotronBox = document.querySelector("jumbotron-text");
   var containerBox = document.querySelector('.container');
-  containerBox.addEventListener('click-from-card', function(event) {
-    scoreBox.setAttribute("last-bucket", "");    
-    scoreBox.setAttribute("last-bucket", event.detail.letter);    
+  var footerBox = document.querySelector('.footer');
+  var scoreBox = document.querySelector('score-board');
+  footerBox.addEventListener('click-from-card', function(event) {
+    jumbotronBox.setAttribute("last-bucket", " ");
   });
+  containerBox.addEventListener('click-from-card', function(event) {
+    jumbotronBox.setAttribute("last-bucket", "");
+    jumbotronBox.setAttribute("last-bucket", event.detail.letter);
+  });
+  footerBox.addEventListener("check-jumbotron-word", function(event) {
+    scoreBox.setAttribute("last-bucket", "");
+    scoreBox.setAttribute("last-bucket", event.detail.word);
+  })
 
  </script>
 </body>

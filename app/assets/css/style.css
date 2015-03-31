@@ -17,11 +17,13 @@
     vertical-align: top;
     margin: 0 1vw 0 0;
   }
-  #jumbotron-text {
+  jumbotron-text {
+    width: 100%;
     font-size: 8vh;
     position: absolute;
+    text-align: center;
     bottom: 4.5vh;
-    right: 48vw;
+    margin: 0 auto;
   }
   .footer  {
     background: #03a9f4;
