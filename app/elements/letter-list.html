@@ -11,7 +11,7 @@
   </style>
   <template>
     <letter-service id="service" currlang="{{langCode}}" lobj="{{lobj}}"></letter-service>
-        <template id="repeater" is="x-repeat" items="[[filterResults(lobj, filterWord)]]">
+        <template id="repeater" is="x-repeat" items="[[filterResults(lobj, filterWord, langCode)]]">
           <letter-card
             uid="[[item.uid]]"
             audio="[[item.audio]]"
@@ -49,49 +49,44 @@
         reflectToAttribute: true
       },
       filterWord: {
-        type: Object,
-        value: function() {
-          return {
-            value: 'مرحبا',  
-            langCode: "ar"
-          };
-        }
+        type: String,
+        notify: true,
+        value: 'مرحبا'
       }
     },
     listeners: {
       'new-letters': 'onNewLetters',
-      'change-language': 'changeLanguage',
-      'click-from-card': 'changeLanguage'
     },
     created: function() {
     },
     ready: function() {
     },
     onNewLetters: function(event) {
-      console.log("new-letters was fired and heard by letters-list: " + this.langCode);
+      //console.log("new-letters was fired and heard by letters-list: " + this.langCode);
       //this.currlang = event.detail.jsonLang;
-      //console.log("now the new language is: " + this.currlang);
+      console.log("now the new language is: " + event.detail.jsonLang);
     },
     changeLanguage: function(event) {
-      console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
+      //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
       //this.currlang = (this.currlang == "ar") ? "en" : "ar";
     },
-    filterResults: function(items, filter) {
+    filterResults: function(items, word, lang) {
       var numTiles = this.limit;
       if(Object.keys(items).length === 0) {
         console.log("hmm, you've got an empty dataset");
       } else {
         shuffle(items.alphabet);
-        if(filter.langCode == items.lang.code) {
-          numTiles = numTiles - filter.value.length;
+        if(lang === items.lang.code) {
+          numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
         }
         var opus = checkOpus();
         items.alphabet.forEach(function(entry, i) {
           entry.currlang = items.lang.code;
           entry.canOpus = opus;
-          if(filter.value.indexOf(entry.letter) > -1) {
+          if(word.indexOf(entry.letter) > -1) {
             entry.hidden = false;
           } else if(numTiles > 0) {
+            console.log("i: " + i + " | numTiles: " + numTiles);
             entry.hidden = false;
             numTiles--;
           } else {
@@ -103,7 +98,6 @@
     }
   });
   function checkOpus() {
-    console.log("running checkOpus()");
     var audioTag = document.createElement("audio");
     if(!!(audioTag.canPlayType && audioTag.canPlayType('audio/ogg;codecs="opus"').replace(/no/, ''))) {
       return true;

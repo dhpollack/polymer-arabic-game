@@ -27,6 +27,10 @@
         type: String,
         notify: true,
         observer: 'calcScore'
+      },
+      zielWort: {
+        type: String,
+        value: "_____"
       }
     },
     listeners: {
@@ -46,7 +50,7 @@
         this.scoreArray = [];
         this.usertext = "_____";
       } else if(this.lastBucket !== "") {
-        if(this.scoreArray.length >= 5) this.scoreArray.shift();
+        if(this.scoreArray.length >= this.zielWort.length) this.scoreArray.shift();
         this.scoreArray.push(this.lastBucket);
         this.usertext = this.scoreArray.join("");
       }

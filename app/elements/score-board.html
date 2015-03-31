@@ -30,22 +30,18 @@
       }
     },
     listeners: {
-      'click-from-card': 'updateScoreBoard'
     },
     created: function() {
     },
     ready: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
     },
-    updateScoreBoard: function(event) {
-      console.log(event);
-      //this.currlang = (this.currlang == "ar") ? "en" : "ar";
-    },
     calcScore: function() {
       if(["","_____"].indexOf(this.lastBucket) === -1) {
         console.log("Does " + this.lastBucket + " = " + this.checkWord);
         if(this.lastBucket === this.checkWord) {
           this.score += 100;
+          this.fire("correct-answer", { lastword: this.lastBucket });
         } else {
           this.score -= 30;
         }

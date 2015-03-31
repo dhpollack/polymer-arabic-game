@@ -70,21 +70,19 @@
       'click': 'handleClick'
     },
     handleClick: function(e) {
-      // gonna use later
-      // var testword = 'مرحبا';
       var audio = this.querySelector("audio");
       audio.play();
-      console.log("firing click-from-card...");
+      //console.log("firing click-from-card...");
       this.fire("click-from-card", {letter: this.letter});
     },
     ready: function() {
     },
     computeAacAudio: function(letter, mylang) {
-      if(letter === " ") return "";
+      if(letter === " " || mylang === undefined) return "";
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
     },
     computeOpusAudio: function(letter, mylang) {
-      if(this.canOpus && letter !== " ") {
+      if(this.canOpus && letter !== " " && mylang !== undefined) {
         return "/assets/audio/"+ mylang +"/" + letter + ".opus";
       } else {
         return '';
