@@ -25,8 +25,7 @@
       },
       lastBucket: {
         type: String,
-        notify: true,
-        observer: 'calcScore'
+        notify: true
       }
     },
     listeners: {
@@ -36,12 +35,12 @@
     ready: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
     },
-    calcScore: function() {
-      if(["","_____"].indexOf(this.lastBucket) === -1) {
-        console.log("Does " + this.lastBucket + " = " + this.checkWord);
-        if(this.lastBucket === this.checkWord) {
+    calcScore2: function(attempt) {
+      if(["","_____"].indexOf(attempt) === -1) {
+        console.log("Does " + attempt + " = " + this.checkWord);
+        if(attempt === this.checkWord) {
           this.score += 100;
-          this.fire("correct-answer", { lastword: this.lastBucket });
+          this.fire("correct-answer", { lastword: attempt });
         } else {
           this.score -= 30;
         }

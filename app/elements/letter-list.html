@@ -10,19 +10,21 @@
     }
   </style>
   <template>
-    <letter-service id="service" currlang="{{langCode}}" lobj="{{lobj}}"></letter-service>
-        <template id="repeater" is="x-repeat" items="[[filterResults(lobj, filterWord, langCode)]]">
-          <letter-card
-            uid="[[item.uid]]"
-            audio="[[item.audio]]"
-            letter="[[item.letter]]"
-            currlang="[[item.currlang]]"
-            can-opus="[[item.canOpus]]"
-            hidden="[[item.hidden]]">
-            <p>[[item.letter]]</p>
-          </letter-card>
-        </template>
-      </div>
+    <letter-service id="lservice" currlang="{{langCode}}" lobj="{{lobj}}"></letter-service>
+    <div class="letter-matrix-container">
+      <template id="repeater" is="x-repeat" items="{{letterList}}">
+        <letter-card
+          class="letter-matrix"
+          uid="[[item.uid]]"
+          audio="[[item.audio]]"
+          letter="[[item.letter]]"
+          currlang="[[item.currlang]]"
+          can-opus="[[item.canOpus]]"
+          hidden="{{item.hidden}}">
+          <p>[[item.letter]]</p>
+        </letter-card>
+      </template>
+    </div>
   </template>
 </dom-module>
 <script>
@@ -51,7 +53,16 @@
       filterWord: {
         type: String,
         notify: true,
-        value: 'مرحبا'
+        value: 'مرحبا',
+      },
+      letterList: {
+        type: Array,
+        notify: true,
+        value: function() { return []; }
+      },
+      saveSet: {
+        type: Boolean,
+        value: true
       }
     },
     listeners: {
@@ -59,7 +70,7 @@
     },
     created: function() {
     },
-    ready: function() {
+    attached: function() {
     },
     onNewLetters: function(event) {
       //console.log("new-letters was fired and heard by letters-list: " + this.langCode);
@@ -70,8 +81,11 @@
       //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
       //this.currlang = (this.currlang == "ar") ? "en" : "ar";
     },
-    filterResults: function(items, word, lang) {
+    filterResults: function(items, word, lang, save) {
       var numTiles = this.limit;
+      console.log("letter-list.filterResults().word: " + word);
+      word = stripDiacritics(word);
+      console.log("stripped word: " + word);
       if(Object.keys(items).length === 0) {
         console.log("hmm, you've got an empty dataset");
       } else {
@@ -86,7 +100,6 @@
           if(word.indexOf(entry.letter) > -1) {
             entry.hidden = false;
           } else if(numTiles > 0) {
-            console.log("i: " + i + " | numTiles: " + numTiles);
             entry.hidden = false;
             numTiles--;
           } else {
@@ -95,6 +108,38 @@
         });
       }
       return items.alphabet;
+    },
+    onNewLetters: function() {
+      console.log("caught new letters");
+      this.letterList = this.filterResults(this.$.lservice.lobj, this.filterWord, this.langCode, this.saveSet);
+    },
+    onNewWord2: function(word) {
+      console.log("caught new word2: " + word);
+      this.filterWord = word;
+      if(this.letterList.length > 0) this.shuffleLetters(word);
+    },
+    shuffleLetters: function(word) {
+      var stripped = stripDiacritics(word);
+      console.log("code: "+ word.charCodeAt(0));
+      console.log("no accents: " + word + "|" + stripDiacritics(word) + "|" + stripped);
+      var letterCards = document.querySelectorAll('letter-card.letter-matrix');
+      var letterParent = letterCards[0].parentNode;
+      console.log(letterParent);
+      var numTiles = this.limit;
+      numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
+      for(var i = 0; i < letterCards.length; i++) {
+        letterParent.appendChild(letterParent.children[Math.random() * i | 0]);
+        if(letterCards[i].letter === " ") {
+          //do nothing for spacebar
+        } else if(word.indexOf(letterCards[i].letter) > -1) {
+          letterCards[i].hidden = false;
+        } else if(numTiles > 0) {
+          letterCards[i].hidden = false;
+          numTiles--;
+        } else {
+          letterCards[i].hidden = true;
+        }
+      }
     }
   });
   function checkOpus() {
@@ -104,6 +149,9 @@
     } else {
       return false;
     }
+  }
+  function stripDiacritics(r) {
+    return r.replace(new RegExp("[\u064b-\u0653\u0670]", 'g'),"");
   }
   function shuffle(array) {
     if(array instanceof Array) {

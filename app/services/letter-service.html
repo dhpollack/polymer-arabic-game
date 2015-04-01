@@ -9,8 +9,6 @@
   </style>
   <template>
     <core-ajax id="ajax" 
-      auto 
-      verbose 
       url="{{jsonUrl}}" 
       handleas="json" 
       on-response="lettersLoaded">
@@ -34,19 +32,20 @@
       },
       jsonUrl: {
         type: String,
-        computed: 'createJsonUrl(currlang)'
+        value: ""
       }
     },
     listeners: {
       'change-language': 'changeJsonUrl'
     },
-    ready: function() {
+    attached: function() {
+      this.jsonUrl = this.createJsonUrl(this.currlang);
+      this.$.ajax.auto = true;
     },
     changeJsonUrl: function(ev) {
       console.log("change-language heard by letter-service");
     },
     createJsonUrl: function(langCode) {
-      //console.log("createJsonUrl: " + langCode);
       if(langCode == undefined) {
         return "/api/ar/letters.json";
       } else {

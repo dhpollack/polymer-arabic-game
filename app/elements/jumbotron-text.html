@@ -25,8 +25,7 @@
       },
       lastBucket: {
         type: String,
-        notify: true,
-        observer: 'calcScore'
+        notify: true
       },
       zielWort: {
         type: String,
@@ -44,14 +43,14 @@
     ready: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
     },
-    calcScore: function() {
-      if(this.lastBucket === " ") {
+    calcScore2: function(nextLetter) {
+      if(nextLetter === " ") {
         this.fire("check-jumbotron-word", { word: this.usertext });
         this.scoreArray = [];
         this.usertext = "_____";
-      } else if(this.lastBucket !== "") {
-        if(this.scoreArray.length >= this.zielWort.length) this.scoreArray.shift();
-        this.scoreArray.push(this.lastBucket);
+      } else if(nextLetter !== "") {
+        if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
+        this.scoreArray.push(nextLetter);
         this.usertext = this.scoreArray.join("");
       }
     }

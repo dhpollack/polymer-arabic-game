@@ -43,27 +43,26 @@
   var wordBoardBox = document.querySelector('word-board');
   
   headerBox.addEventListener('random-word-selected', function(event) {
-    letterListBox.setAttribute("filter-word", event.detail.value);
-    scoreBox.setAttribute("check-word", event.detail.value);
-    jumbotronBox.setAttribute("ziel-wort", event.detail.value);
+    console.log(event.detail);
+    letterListBox.onNewWord2(event.detail.value);
+    scoreBox.checkWord = event.detail.value;
+    jumbotronBox.zielWort = event.detail.value;
   });
   
   headerBox.addEventListener('correct-answer', function(event) {
     console.log("Congrats!");
-    wordBoardBox.setAttribute('reset', true);
+    wordBoardBox.resetWord2();
   });
 
   containerBox.addEventListener('click-from-card', function(event) {
-    jumbotronBox.setAttribute("last-bucket", "");
-    jumbotronBox.setAttribute("last-bucket", event.detail.letter);
+    jumbotronBox.calcScore2(event.detail.letter);
   });
 
   footerBox.addEventListener('click-from-card', function(event) {
-    jumbotronBox.setAttribute("last-bucket", " ");
+    jumbotronBox.calcScore2(" ");
   });
   footerBox.addEventListener("check-jumbotron-word", function(event) {
-    scoreBox.setAttribute("last-bucket", "");
-    scoreBox.setAttribute("last-bucket", event.detail.word);
+    scoreBox.calcScore2(event.detail.word);
   })
 
  </script>
