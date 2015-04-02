@@ -23,11 +23,6 @@
         notify: true,
         value: "es"
       },
-      canOpus: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
       myWord: {
         type: String,
         value: "",
@@ -37,9 +32,8 @@
         type: Array,
         value: function() { return []; }
       },
-      reset: {
-        type: Boolean,
-        value: true
+      ranWordIndex: {
+        type: Number
       }
     },
     listeners: {
@@ -49,29 +43,22 @@
     },
     ready: function() {
     },
-    onNewLetters: function(event) {
-      console.log("new-letters was fired and heard by letters-list: " + this.langCode);
-      //this.currlang = event.detail.jsonLang;
-      //console.log("now the new language is: " + this.currlang);
-    },
     changeLanguage: function(event) {
       //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
       //this.currlang = (this.currlang == "ar") ? "en" : "ar";
     },
-    wordFilter: function(items) {
-      if(items.length === 0) return "";
-      this.resetWord2();
-    },
-    resetWord2: function() {
-      var word = this.wordArray[Math.round(Math.random() * this.wordArray.length)];
+    wordFilter: function() {
+      this.ranWordIndex = Math.round(Math.random() * this.wordArray.length);
+      var word = this.wordArray[this.ranWordIndex];
       this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
       this.myWord = word[0]; 
     },
     setWords: function() {
-      console.log("setting words");
       var items = this.$.service.warray;
-      this.wordArray = items;
-      this.wordFilter(items);
+      if(items.length !== 0) {
+        this.wordArray = items;
+        this.wordFilter(items);
+      }
       return items;
     },
     myTest: function() {

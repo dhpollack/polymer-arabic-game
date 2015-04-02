@@ -83,7 +83,7 @@ gulp.task('audio', function () {
       'mkdir -p .tmp',
       'echo <%= file.path %> >> '+ tmpDir + '/ffmpeg.log',
       'echo <%= file.path %> >> '+ tmpDir + '/opus.log',
-      'ffmpeg -i <%= file.path %> -vbr 1 -acodec aac -strict experimental <%= f(file.path, ".m4a") %> >> '+ tmpDir + '/ffmpeg.log 2>&1',
+      'ffmpeg -y -i <%= file.path %> -vbr 1 -acodec aac -strict experimental <%= f(file.path, ".m4a") %> >> '+ tmpDir + '/ffmpeg.log 2>&1',
       'opusenc --bitrate 8 <%= file.path %> <%= f(file.path, ".opus") %> >> '+ tmpDir + '/opus.log 2>&1'
     ], {
       templateData: {

@@ -186,7 +186,13 @@
         "hidden": true,
         "letter": "غ",
         "en": "ghain"
-      }    
+      },
+      {
+        "uid": 29,
+        "hidden": true,
+        "letter": "ى",
+        "en": "yaay"
+      }
     ]
   }
 ]

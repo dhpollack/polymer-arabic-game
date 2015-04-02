@@ -53,14 +53,14 @@
       filterWord: {
         type: Array,
         notify: true,
-        value: function() { return ['مرحبا','مرحبا'];}
+        value: function() { return []; }
       },
       letterList: {
         type: Array,
         notify: true,
         value: function() { return []; }
       },
-      saveWord: {
+      setWord: {
         type: Boolean,
         value: false
       }
@@ -94,8 +94,11 @@
       this.letterList = this.filterResults(this.$.lservice.lobj, this.filterWord[1], this.langCode);
       if(this.setWord) {
         this.async(function() {
+          if(this.filterWord.length === 0) this.fire("resend-word");
           this.shuffleLetters(this.filterWord[1]);
         });
+      } else {
+        if(this.filterWord.length === 0) this.fire("resend-word");
       }
     },
     onNewWord2: function(word) {
@@ -115,6 +118,8 @@
           //do nothing for spacebar
         } else if(word.indexOf(letterCards[i].letter) > -1) {
           letterCards[i].hidden = false;
+        } else if(letterCards[i].letter === "ى") {
+          letterCards[i].hidden = true;
         } else if(numTiles > 0) {
           letterCards[i].hidden = false;
           numTiles--;
