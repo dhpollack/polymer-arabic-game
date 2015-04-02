@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../services/word-service.html">
+
+<dom-module id="word-board">
+  <style>
+    :host {
+      display: inline-block;
+      position: relative;
+    }
+  </style>
+  <template>
+    <div class="word-board"><span>{{myWord}}</span></div>
+    <word-service id="service" currlang="{{langCode}}" warray="{{warray}}"></word-service>
+  </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: "word-board",
+    properties: {
+      langCode: {
+        type: String,
+        notify: true,
+        value: "es"
+      },
+      canOpus: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+      myWord: {
+        type: String,
+        value: "",
+        notify: true
+      },
+      wordArray: {
+        type: Array,
+        value: function() { return []; }
+      },
+      reset: {
+        type: Boolean,
+        value: true
+      }
+    },
+    listeners: {
+      'new-words': 'setWords'
+    },
+    created: function() {
+    },
+    ready: function() {
+    },
+    onNewLetters: function(event) {
+      console.log("new-letters was fired and heard by letters-list: " + this.langCode);
+      //this.currlang = event.detail.jsonLang;
+      //console.log("now the new language is: " + this.currlang);
+    },
+    changeLanguage: function(event) {
+      //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
+      //this.currlang = (this.currlang == "ar") ? "en" : "ar";
+    },
+    wordFilter: function(items) {
+      if(items.length === 0) return "";
+      this.resetWord2();
+    },
+    resetWord2: function() {
+      var word = this.wordArray[Math.round(Math.random() * this.wordArray.length)];
+      this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
+      this.myWord = word[0]; 
+    },
+    setWords: function() {
+      console.log("setting words");
+      var items = this.$.service.warray;
+      this.wordArray = items;
+      this.wordFilter(items);
+      return items;
+    },
+    myTest: function() {
+      console.log("running myTest...");
+    }
+  });
+})();
+</script>

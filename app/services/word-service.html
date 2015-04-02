@@ -1,0 +1,65 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Additional Component Load -->
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<dom-module id="word-service">
+  <style>
+  core-ajax {
+    display: none;
+  }
+  </style>
+  <template>
+    <core-ajax id="wajax" 
+      url={{jsonUrl}} 
+      handleas="json" 
+      on-response="wordsLoaded">
+    </core-ajax>
+  </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: 'word-service',
+
+    properties: {
+      currlang: {
+        type: String
+      },
+      warray: {
+        type: Array,
+        value: function () { return []; }
+      },
+      jsonUrl: {
+        type: String,
+        value: ""
+      }
+    },
+    listeners: {
+      'change-language': 'changeJsonUrl'
+    },
+    attached: function() {
+      this.jsonUrl = this.createJsonUrl(this.currlang);
+      this.$.wajax.auto = true;
+    },
+    changeJsonUrl: function(ev) {
+      console.log("change-language heard by word-service");
+    },
+    createJsonUrl: function(langCode) {
+      if(langCode == undefined) {
+        return "/api/ar/words-stpacc.json";
+      } else {
+        return "/api/"+langCode+"/words-stpacc.json";
+      }
+    },
+    wordsLoaded: function() {
+      var jsonSuccess = (this.$.wajax.lastResponse != null) ? true : false;
+      console.log("loading words from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
+      // Make a copy of the loaded data
+      if(jsonSuccess) {
+        var ajaxData = this.$.wajax.lastResponse;
+        this.warray = ajaxData;
+        this.fire('new-words');
+      }
+    }
+  });
+})();
+</script>
