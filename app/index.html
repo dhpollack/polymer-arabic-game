@@ -6,6 +6,7 @@
   <title>Polymer Arabic Game</title>
 
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <!-- Polymer Imports -->
   <script src="../bower_components/webcomponents/webcomponents.js"></script>
   <link rel="import" href="/bower_components/polymer/polymer.html">
@@ -44,8 +45,8 @@
   
   headerBox.addEventListener('random-word-selected', function(event) {
     console.log(event.detail);
-    letterListBox.onNewWord2(event.detail.value);
-    scoreBox.checkWord = event.detail.value;
+    letterListBox.onNewWord2([event.detail.value, event.detail.valueOhneAccent]);
+    scoreBox.checkWord = [event.detail.value, event.detail.valueOhneAccent];
     jumbotronBox.zielWort = event.detail.value;
   });
   

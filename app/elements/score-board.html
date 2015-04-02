@@ -15,8 +15,8 @@
     is: "score-board",
     properties: {
       checkWord: {
-        type: String,
-        value: 'مرحبا'
+        type: Array,
+        value: function() { return ['مرحبا','مرحبا'];}
       },
       score: {
         type: Number,
@@ -37,8 +37,8 @@
     },
     calcScore2: function(attempt) {
       if(["","_____"].indexOf(attempt) === -1) {
-        console.log("Does " + attempt + " = " + this.checkWord);
-        if(attempt === this.checkWord) {
+        console.log("Does " + attempt + " = " + this.checkWord[1]);
+        if(attempt === this.checkWord[1]) {
           this.score += 100;
           this.fire("correct-answer", { lastword: attempt });
         } else {

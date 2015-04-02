@@ -17,6 +17,10 @@
     vertical-align: top;
     margin: 0 1vw 0 0;
   }
+  word-board {
+    font-size: 7vh;
+    margin-left: 1vw;
+  }
   jumbotron-text {
     width: 100%;
     font-size: 8vh;

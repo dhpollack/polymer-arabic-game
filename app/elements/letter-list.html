@@ -51,18 +51,18 @@
         reflectToAttribute: true
       },
       filterWord: {
-        type: String,
+        type: Array,
         notify: true,
-        value: 'مرحبا',
+        value: function() { return ['مرحبا','مرحبا'];}
       },
       letterList: {
         type: Array,
         notify: true,
         value: function() { return []; }
       },
-      saveSet: {
+      saveWord: {
         type: Boolean,
-        value: true
+        value: false
       }
     },
     listeners: {
@@ -72,59 +72,41 @@
     },
     attached: function() {
     },
-    onNewLetters: function(event) {
-      //console.log("new-letters was fired and heard by letters-list: " + this.langCode);
-      //this.currlang = event.detail.jsonLang;
-      console.log("now the new language is: " + event.detail.jsonLang);
-    },
     changeLanguage: function(event) {
       //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
       //this.currlang = (this.currlang == "ar") ? "en" : "ar";
     },
-    filterResults: function(items, word, lang, save) {
-      var numTiles = this.limit;
+    filterResults: function(items, word, lang) {
       console.log("letter-list.filterResults().word: " + word);
-      word = stripDiacritics(word);
-      console.log("stripped word: " + word);
       if(Object.keys(items).length === 0) {
         console.log("hmm, you've got an empty dataset");
       } else {
-        shuffle(items.alphabet);
-        if(lang === items.lang.code) {
-          numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
-        }
         var opus = checkOpus();
         items.alphabet.forEach(function(entry, i) {
-          entry.currlang = items.lang.code;
+          entry.currlang = lang;
           entry.canOpus = opus;
-          if(word.indexOf(entry.letter) > -1) {
-            entry.hidden = false;
-          } else if(numTiles > 0) {
-            entry.hidden = false;
-            numTiles--;
-          } else {
-            entry.hidden = true;
-          }
+          entry.hidden = false;
         });
       }
       return items.alphabet;
     },
     onNewLetters: function() {
-      console.log("caught new letters");
-      this.letterList = this.filterResults(this.$.lservice.lobj, this.filterWord, this.langCode, this.saveSet);
+      this.letterList = this.filterResults(this.$.lservice.lobj, this.filterWord[1], this.langCode);
+      if(this.setWord) {
+        this.async(function() {
+          this.shuffleLetters(this.filterWord[1]);
+        });
+      }
     },
     onNewWord2: function(word) {
-      console.log("caught new word2: " + word);
+      console.log("caught new word2: " + word[0] + "| ohneAccent: " + word[1]);
+      this.setWord = true;
       this.filterWord = word;
-      if(this.letterList.length > 0) this.shuffleLetters(word);
+      if(this.letterList.length > 0) this.shuffleLetters(word[1]);
     },
     shuffleLetters: function(word) {
-      var stripped = stripDiacritics(word);
-      console.log("code: "+ word.charCodeAt(0));
-      console.log("no accents: " + word + "|" + stripDiacritics(word) + "|" + stripped);
       var letterCards = document.querySelectorAll('letter-card.letter-matrix');
       var letterParent = letterCards[0].parentNode;
-      console.log(letterParent);
       var numTiles = this.limit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
       for(var i = 0; i < letterCards.length; i++) {
@@ -149,9 +131,6 @@
     } else {
       return false;
     }
-  }
-  function stripDiacritics(r) {
-    return r.replace(new RegExp("[\u064b-\u0653\u0670]", 'g'),"");
   }
   function shuffle(array) {
     if(array instanceof Array) {
