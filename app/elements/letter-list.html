@@ -11,7 +11,7 @@
   </style>
   <template>
     <letter-service id="lservice" currlang="{{langCode}}" lobj="{{lobj}}"></letter-service>
-    <div class="letter-matrix-container">
+    <div id="lmc">
       <template id="repeater" is="x-repeat" items="{{letterList}}">
         <letter-card
           class="letter-matrix"
@@ -20,6 +20,7 @@
           letter="[[item.letter]]"
           currlang="[[item.currlang]]"
           can-opus="[[item.canOpus]]"
+          regular="[[item.regular]]"
           hidden="{{item.hidden}}">
           <p>[[item.letter]]</p>
         </letter-card>
@@ -92,35 +93,45 @@
     },
     onNewLetters: function() {
       this.letterList = this.filterResults(this.$.lservice.lobj, this.filterWord[1], this.langCode);
-      if(this.setWord) {
         this.async(function() {
-          if(this.filterWord.length === 0) this.fire("resend-word");
-          this.shuffleLetters(this.filterWord[1]);
+          var wordBoardBox = document.querySelector('word-board');
+          if(this.setWord) {
+              if(this.filterWord.length === 0) {
+                this.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]);
+                //this.fire("resend-word");
+              }
+              this.shuffleLetters(this.filterWord[1]);
+          } else {
+            if(this.filterWord.length === 0) {
+              this.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]);
+              //this.fire("resend-word");
+            }
+          }
         });
-      } else {
-        if(this.filterWord.length === 0) this.fire("resend-word");
-      }
     },
     onNewWord2: function(word) {
       console.log("caught new word2: " + word[0] + "| ohneAccent: " + word[1]);
       this.setWord = true;
       this.filterWord = word;
-      if(this.letterList.length > 0) this.shuffleLetters(word[1]);
+      if(this.letterList.length > 0) {
+        this.shuffleLetters(word[1]);
+      } else {
+        console.log("this.letterList is not yet set :-/");
+      }
     },
     shuffleLetters: function(word) {
-      var letterCards = document.querySelectorAll('letter-card.letter-matrix');
-      var letterParent = letterCards[0].parentNode;
+      console.log("shuffling letters...");
+      var letterParent = Polymer.dom(this.$.lmc);
+      var letterCards = letterParent.children;
       var numTiles = this.limit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
       for(var i = 0; i < letterCards.length; i++) {
         letterParent.appendChild(letterParent.children[Math.random() * i | 0]);
-        if(letterCards[i].letter === " ") {
+        if(letterCards[i].letter === "!!!" || letterCards[i].letter === undefined) {
           //do nothing for spacebar
         } else if(word.indexOf(letterCards[i].letter) > -1) {
           letterCards[i].hidden = false;
-        } else if(letterCards[i].letter === "ى") {
-          letterCards[i].hidden = true;
-        } else if(numTiles > 0) {
+        } else if(numTiles > 0 && letterCards[i].regular !== false) {
           letterCards[i].hidden = false;
           numTiles--;
         } else {

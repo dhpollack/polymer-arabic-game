@@ -51,7 +51,17 @@
       this.ranWordIndex = Math.round(Math.random() * this.wordArray.length);
       var word = this.wordArray[this.ranWordIndex];
       this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
-      this.myWord = word[0]; 
+      this.myWord = word[0];
+
+
+      var jumbotronBox = document.querySelector("jumbotron-text");
+      var scoreBox = document.querySelector('score-board');
+      var letterListBox = document.querySelector('letter-list');
+
+      letterListBox.onNewWord2([word[0], word[1]]);
+      scoreBox.checkWord = [word[0], word[1]];
+      jumbotronBox.zielWort = word[0];
+
     },
     setWords: function() {
       var items = this.$.service.warray;

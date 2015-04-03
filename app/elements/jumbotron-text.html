@@ -32,20 +32,17 @@
         value: "_____"
       }
     },
-    listeners: {
-      'click': 'handleClick'
-    },
-    handleClick: function(e) {
-      this.fire("click-from-card", { letter: " " });
-    },
     created: function() {
     },
     ready: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
     },
     calcScore2: function(nextLetter) {
-      if(nextLetter === " ") {
-        this.fire("check-jumbotron-word", { word: this.usertext });
+      console.log("updating jumbotron-text with (" + nextLetter + ")");
+      if(nextLetter == "!!!" || nextLetter.length > 2) {
+        //this.fire("check-jumbotron-word", { word: this.usertext });
+        var scoreBox = document.querySelector('score-board');
+        scoreBox.calcScore2(this.usertext);
         this.scoreArray = [];
         this.usertext = "_____";
       } else if(nextLetter !== "") {

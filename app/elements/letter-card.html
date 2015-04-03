@@ -26,8 +26,8 @@
     <template>
       <div class="card-body layout horizontal center">
         <div class="card-content">
-          <paper-ripple recenters></paper-ripple>
           <span class="content-span"><content></content></span>
+          <paper-ripple recenters></paper-ripple>
         </div>
         <audio style="display: none;">
           <source src="{{aacAudio}}">
@@ -57,6 +57,10 @@
         type: Boolean,
         value: false
       },
+      regular: {
+        type: Boolean,
+        value: true
+      },
       aacAudio: {
         type: String,
         computed: 'computeAacAudio(letter, currlang)'
@@ -70,10 +74,10 @@
       'click': 'handleClick'
     },
     handleClick: function(e) {
+      var jumbotronBox = document.querySelector("jumbotron-text");
+      jumbotronBox.calcScore2(this.letter);
       var audio = this.querySelector("audio");
       audio.play();
-      //console.log("firing click-from-card...");
-      this.fire("click-from-card", {letter: this.letter});
     },
     ready: function() {
     },

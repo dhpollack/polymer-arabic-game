@@ -40,7 +40,9 @@
         console.log("Does " + attempt + " = " + this.checkWord[1]);
         if(attempt === this.checkWord[1]) {
           this.score += 100;
-          this.fire("correct-answer", { lastword: attempt });
+          //this.fire("correct-answer", { lastword: attempt });
+          var wordBoardBox = document.querySelector('word-board');
+          wordBoardBox.wordFilter();
         } else {
           this.score -= 30;
         }
