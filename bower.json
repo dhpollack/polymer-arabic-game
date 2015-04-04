@@ -19,7 +19,13 @@
     "layout": "Polymer/layout#0.8-preview",
     "core-ajax": "Polymer/core-ajax#0.8-preview",
     "core-header-panel": "Polymer/core-header-panel#0.8-preview",
+    "core-toolbar": "Polymer/core-toolbar#0.8-preview",
     "paper-ripple": "Polymer/paper-ripple#0.8-preview",
-    "polymer": "Polymer/polymer#0.8-preview"
+    "paper-icon-button": "Polymer/paper-icon-button#0.8-initial-port",
+    "polymer": "Polymer/polymer#0.8-preview",
+    "recordrtc": "*"
+  },
+  "resolutions": {
+    "layout": "0.8-preview"
   }
 }

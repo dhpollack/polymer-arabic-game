@@ -1,0 +1,104 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Additional Component Load -->
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/av-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<script src="../../bower_components/recordrtc/RecordRTC.js"></script>
+
+<dom-module id="word-recorder">
+    <style>
+    </style>
+    <template>
+      <div>
+        <audio id="recAudio" src="" controls hidden></audio>
+        <paper-icon-button id="recorderInit" icon="av:mic" on-tap="startRecording"></paper-icon-button>
+        <paper-icon-button id="recorderStop" icon="av:stop" on-tap="stopRecording"></paper-icon-button>
+        <paper-icon-button id="recorderPlay" icon="av:play-circle-fill" on-tap="playRecording"></paper-icon-button>
+      </div>
+    </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: 'word-recorder',
+    properties: {
+      dummy1: {
+        type: String,
+        reflectToAttribute: true
+      },
+      dummy2: {
+        type: Boolean,
+        value: false,
+        notify: true
+      },
+      dummy3: {
+        type: String,
+        computed: 'dummyFunc(dummy1, dummy2)'
+      }
+    },
+    ready: function() {
+      this.audio = this.$.recAudio;
+    },
+    dummyFunc: function(dummy1, dummy2) {
+      console.log("dummy1: " + dummy1 + "\ndummy2: " + dummy2);
+      return false;
+    },
+    startRecording: function() {
+      startRecording(this.audio);
+    },
+    stopRecording: function() {
+      stopRecording(this.audio);
+    },
+    playRecording: function() {
+      playRecording(this.audio);
+    }  
+  });
+  /* RecordRTC Scripts */
+  var recorder;
+  var audioStream;
+  function startRecording(audioElem) {
+    if(!this.audioStream) {
+      console.log("start recording...");
+      navigator.getUserMedia(
+        {audio: true},
+        function(stream) {
+          if (window.IsChrome) {
+            console.log("window.isChrome: " + window.IsChrome);
+            stream = new window.MediaStream(stream.getAudioTracks());
+          }
+          this.audioStream = stream;
+          
+          // "audio" is a default type
+          this.recorder = window.RecordRTC(stream, {
+              type: 'audio'
+          });
+          console.log(this.recorder);
+          this.recorder.startRecording();
+        },
+        function() { console.log("there was an error recording..."); } );
+    } else {
+      console.log("other start...");
+      audioElem.src = window.URL.createObjectURL(this.audioStream);
+      audioElem.muted = true;
+      audioElem.play();
+      if (this.recorder) this.recorder.startRecording();
+    }
+  }
+  function stopRecording(audioElem) {
+    console.log("stop recording...");
+    audioElem.src = '';
+    if(this.recorder) {
+      this.recorder.stopRecording(function(url) {
+        console.log("audio data url: " + url);
+        audioElem.src = url;
+        audioElem.muted = false;
+      });
+    }
+  }
+  function playRecording(audioElem) {
+    console.log("play recording...");
+    console.log(audioElem);
+    audioElem.play();
+  }
+})();
+</script>

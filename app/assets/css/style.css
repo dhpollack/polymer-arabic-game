@@ -7,41 +7,30 @@
   core-header-panel {
     height: 100vh;
   }
-  .core-header  {
+  .core-header {
     background: #03a9f4;
     color: white;
     height: 10vh;
     font-size: 5vh;
-    top: 0;
-  }
-  .score-box {
-    float: right;
-    vertical-align: top;
-    margin: 0 1vw 0 0;
   }
   word-board {
     font-size: 7vh;
     margin-left: 1vw;
   }
+  word-recorder {
+  }
+  score-board {
+    margin-right: 1vw;
+  }
   jumbotron-text {
-    width: 100%;
     font-size: 8vh;
-    position: absolute;
     text-align: center;
-    bottom: 4.5vh;
-    right: 0px;
-    margin: 4px auto;
   }
   .footer  {
     background: #03a9f4;
     color: white;
-    width: 100vw;
     height: 10vh;
     font-size: 0;
-    padding: 0;
-    margin: 0;
-    line-height: 0px;
-    text-align: center;
     vertical-align: bottom;
     bottom: 0;
     overflow: hidden;

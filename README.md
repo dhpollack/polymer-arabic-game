@@ -11,4 +11,5 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [Polymer + Chrome App - Gulpfile.js](https://gist.github.com/kincaidoneil/b7ad507c1bb7bb243828): Example gulpfile.js  
 [Example of repeat filter](http://jsbin.com/vuvikare/12/edit?html,output): Old version of Polymer but it works  
 [stripping diacritics](http://stackoverflow.com/questions/12118812/find-and-highlight-arabic-with-diacritics-text-in-uiwebview)  
-[arabic language chart](http://symbolcodes.tlt.psu.edu/bylanguage/arabicchart.html)
+[arabic language chart](http://symbolcodes.tlt.psu.edu/bylanguage/arabicchart.html)  
+[recordrtc](http://recordrtc.org/)  

@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Additional Component Load -->
+
+<dom-module id="empty">
+    <style>
+    :host {
+      display: inline-block;
+      position: relative;
+    }
+
+    </style>
+    <template>
+    </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: 'empty',
+    properties: {
+      dummy1: {
+        type: String,
+        reflectToAttribute: true
+      },
+      dummy2: {
+        type: Boolean,
+        value: false,
+        notify: true
+      },
+      dummy3: {
+        type: String,
+        computed: 'dummyFunc(dummy1, dummy2)'
+      }
+    },
+    listeners: {
+      'click': 'handleClick'
+    },
+    handleClick: function(e) {
+    },
+    ready: function() {
+    },
+    dummyFunc: function(dummy1, dummy2) {
+      console.log("dummy1: " + dummy1 + "\ndummy2: " + dummy2);
+      return false;
+    }
+  });
+})();
+</script>

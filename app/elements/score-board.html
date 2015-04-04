@@ -1,11 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/layout/layout.html">
 
 <dom-module id="score-board">
   <style>
   </style>
   <template>
     <div class="score-box">
-      <span id="score-sign">Score: <span id="score-box-score">{{score}}</span></span>
+      <span id="score-sign" class="horizontal layout center"><span id="score-box-score">{{score}}</span> <core-icon id="star-points" icon="stars"></core-icon></span>
     </div>
   </template>
 </dom-module>

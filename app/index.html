@@ -10,8 +10,9 @@
   <!-- Polymer Imports -->
   <script src="../bower_components/webcomponents/webcomponents.js"></script>
   <link rel="import" href="/bower_components/polymer/polymer.html">
-  <link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
   <link rel="import" href="../bower_components/layout/layout.html">
+  <!-- Layout/Default Elements -->
+  <link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
   <!-- Custom Elements Vulcanized -->
   <link rel="import" href="elements/elements.html">
   <!-- App CSS -->
@@ -22,62 +23,18 @@
   <!-- arabic alphabet
   غ	ظ	ض	ذ	خ	ث	ت	ش	ر	ق	ص	ف	ع	س	ن	م	ل	ك	ي	ط	ح	ز	و	ه	د	ج	ب	ا
   -->
-  <template is="x-autobind">
-  <core-header-panel id="header-panel" flex>
-    <div class="core-header">
-      <word-board lang-code="ar"></word-board>
-      <score-board></score-board>
-    </div>
+  <core-header-panel id="header-panel">
+    <core-toolbar class="core-header horizontal justified layout">
+      <word-board lang-code="ar" class="horizontal start-justified layout flex"></word-board>
+      <word-recorder class="horizontal center-justified layout flex-2"></word-recorder>
+      <score-board class="horizontal end-justified layout flex"></score-board>
+    </core-toolbar>
     <div class="content">
       <letter-list limit="12" lang-code="ar"></letter-list>
-      <div class="footer"><letter-card class="space-bar" letter="!!!"><jumbotron-text></jumbotron-text></letter-card></div>
+      <div class="footer horizontal center-justified layout"><letter-card class="space-bar flex" letter="!!!"><jumbotron-text></jumbotron-text></letter-card></div>
     </div>
   </core-header-panel>
-
-  </template>
-
   <script>
-  /* Catchers */
-  //var scope = document.querySelector('template[is=x-autobind]');
-  var headerBox = document.querySelector('core-header-panel');
-  var contentBox = document.querySelector('.content');
-  //var footerBox = document.querySelector('.footer');
-  /* Batters */
-  var jumbotronBox = document.querySelector("jumbotron-text");
-  var scoreBox = document.querySelector('score-board');
-  var letterListBox = document.querySelector('letter-list');
-  var wordBoardBox = document.querySelector('word-board');
-  /*
-  headerBox.addEventListener('random-word-selected', function(event) {
-    console.log(event.detail);
-    //letterListBox.onNewWord2([event.detail.value, event.detail.valueOhneAccent]);
-    //scoreBox.checkWord = [event.detail.value, event.detail.valueOhneAccent];
-    //jumbotronBox.zielWort = event.detail.value;
-  });
-  */
-  /*
-  headerBox.addEventListener('correct-answer', function(event) {
-    console.log("Congrats!");
-    wordBoardBox.wordFilter();
-  });
-  */
-  /*
-  contentBox.addEventListener('click-from-card', function(event) {
-    jumbotronBox.calcScore2(event.detail.letter);
-  });
-  */
-  /*
-  contentBox.addEventListener('resend-word', function(event) {
-    console.log("filter word not found");
-    letterListBox.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]); 
-  });
-  */
-  /*
-  contentBox.addEventListener("check-jumbotron-word", function(event) {
-    scoreBox.calcScore2(event.detail.word);
-  });
-  */
-  
  </script>
 </body>
 
