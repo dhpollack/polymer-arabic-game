@@ -22,26 +22,9 @@
   Polymer({
     is: 'word-recorder',
     properties: {
-      dummy1: {
-        type: String,
-        reflectToAttribute: true
-      },
-      dummy2: {
-        type: Boolean,
-        value: false,
-        notify: true
-      },
-      dummy3: {
-        type: String,
-        computed: 'dummyFunc(dummy1, dummy2)'
-      }
     },
     ready: function() {
       this.audio = this.$.recAudio;
-    },
-    dummyFunc: function(dummy1, dummy2) {
-      console.log("dummy1: " + dummy1 + "\ndummy2: " + dummy2);
-      return false;
     },
     startRecording: function() {
       startRecording(this.audio);
@@ -63,7 +46,6 @@
         {audio: true},
         function(stream) {
           if (window.IsChrome) {
-            console.log("window.isChrome: " + window.IsChrome);
             stream = new window.MediaStream(stream.getAudioTracks());
           }
           this.audioStream = stream;
@@ -72,7 +54,6 @@
           this.recorder = window.RecordRTC(stream, {
               type: 'audio'
           });
-          console.log(this.recorder);
           this.recorder.startRecording();
         },
         function() { console.log("there was an error recording..."); } );
@@ -97,7 +78,6 @@
   }
   function playRecording(audioElem) {
     console.log("play recording...");
-    console.log(audioElem);
     audioElem.play();
   }
 })();

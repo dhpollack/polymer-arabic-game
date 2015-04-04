@@ -154,11 +154,11 @@ gulp.task('html', function () {
     .pipe(assets.restore())
     .pipe($.useref())
     // Minify Any HTML
-    .pipe($.if('*.html', $.minifyHtml({
-      quotes: true,
-      empty: true,
-      spare: true
-    })))
+    //.pipe($.if('*.html', $.minifyHtml({
+    //  quotes: true,
+    //  empty: true,
+    //  spare: true
+    //})))
     // Output Files
     .pipe(gulp.dest(distDir))
     .pipe($.size({title: 'html'}));
