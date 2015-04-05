@@ -27,58 +27,76 @@
       this.audio = this.$.recAudio;
     },
     startRecording: function() {
-      startRecording(this.audio);
+      var aud = this.audio;
+      var recLimit = 25000;
+      startRecording(aud);
+      setTimeout(function() {
+        if(preventLongRec) {
+          stopRecording(aud);
+          console.log("recording timed out after " + (recLimit / 1000) + " seconds.");
+        }
+      }, recLimit);
     },
     stopRecording: function() {
       stopRecording(this.audio);
     },
     playRecording: function() {
+      
       playRecording(this.audio);
     }  
   });
   /* RecordRTC Scripts */
   var recorder;
   var audioStream;
+  var preventLongRec = true;
   function startRecording(audioElem) {
-    if(!this.audioStream) {
+    preventLongRec = true;
+    if(!audioStream) {
       console.log("start recording...");
       navigator.getUserMedia(
         {audio: true},
         function(stream) {
+          console.log("streaming started...");
           if (window.IsChrome) {
             stream = new window.MediaStream(stream.getAudioTracks());
           }
-          this.audioStream = stream;
+          audioStream = stream;
           
           // "audio" is a default type
-          this.recorder = window.RecordRTC(stream, {
+          recorder = window.RecordRTC(stream, {
               type: 'audio'
           });
-          this.recorder.startRecording();
+          recorder.startRecording();
         },
         function() { console.log("there was an error recording..."); } );
     } else {
       console.log("other start...");
-      audioElem.src = window.URL.createObjectURL(this.audioStream);
-      audioElem.muted = true;
-      audioElem.play();
-      if (this.recorder) this.recorder.startRecording();
+      if (recorder) recorder.startRecording();
     }
   }
   function stopRecording(audioElem) {
-    console.log("stop recording...");
+    preventLongRec = false;
     audioElem.src = '';
-    if(this.recorder) {
-      this.recorder.stopRecording(function(url) {
+    console.log(audioStream);
+    if(recorder && recorder.getBlob() === undefined) {
+      recorder.stopRecording(function(url) {
         console.log("audio data url: " + url);
         audioElem.src = url;
         audioElem.muted = false;
       });
+    } else {
+      console.log("hmm, recorder isn't recording");
     }
   }
   function playRecording(audioElem) {
-    console.log("play recording...");
-    audioElem.play();
+    // if the user presses play before stop, the recording is stopped and then played
+    if(recorder.getBlob() === undefined) {
+      stopRecording(audioElem);
+      audioElem.onloadeddata = function() { playRecording(audioElem); };
+    } else {
+      console.log("play recording...");
+      audioElem.play();
+    }
   }
 })();
 </script>
