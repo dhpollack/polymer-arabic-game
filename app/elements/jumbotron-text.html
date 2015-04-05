@@ -32,10 +32,17 @@
         value: "_____"
       }
     },
+    listeners: {
+      "click": "handleClick"
+    },
     created: function() {
     },
     ready: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
+    },
+    handleClick: function() {
+      console.log("clicking jumbotron");
+      this.calcScore2("!!!");
     },
     calcScore2: function(nextLetter) {
       console.log("updating jumbotron-text with (" + nextLetter + ")");

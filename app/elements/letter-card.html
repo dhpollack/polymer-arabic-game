@@ -9,31 +9,16 @@
       position: relative;
       float: left;
     }
-    :host:before{
-  	  content: "";
-  	  display: inline-block;
-    	padding-top: 100%; 	/* initial ratio of 1:1*/
-    }
-    .card-content {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-
     </style>
     <template>
-      <div class="card-body layout horizontal center">
-        <div class="card-content">
-          <span class="content-span"><content></content></span>
-          <paper-ripple recenters></paper-ripple>
-        </div>
-        <audio style="display: none;">
-          <source src="{{aacAudio}}">
-          <source src="{{opusAudio}}">
-        </audio>
+      <div class="card-body layout horizontal center-justified">
+        <span class="content-span"><content></content></span>
+        <paper-ripple recenters></paper-ripple>
       </div>
+      <audio style="display: none;">
+        <source src="{{aacAudio}}">
+        <source src="{{opusAudio}}">
+      </audio>
     </template>
 </dom-module>
 <script>

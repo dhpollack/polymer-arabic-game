@@ -11,7 +11,7 @@
   </style>
   <template>
     <letter-service id="lservice" currlang="{{langCode}}" lobj="{{lobj}}"></letter-service>
-    <div id="lmc">
+    <div id="lmc" class="horizontal layout flex wrap" style="width: 100vw">
       <template id="repeater" is="x-repeat" items="{{letterList}}">
         <letter-card
           class="letter-matrix"

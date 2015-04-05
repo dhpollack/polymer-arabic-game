@@ -25,6 +25,9 @@
   jumbotron-text {
     font-size: 8vh;
     text-align: center;
+    font-weight: 300;
+    width: inherit;
+    height: inherit;
   }
   .footer  {
     background: #03a9f4;
@@ -46,6 +49,7 @@
     overflow: hidden;
   }
   letter-card {
+    display: inline-block;
     width: 33.33vw;
     height: 26.66vh;
     font-weight: 300;
@@ -62,7 +66,7 @@
   .card-body {
   }
   .content-span {
-    font-size: 15vh;
+    font-size: 13vh;
     margin: 0 0 0 0;
   }
   paper-ripple {
