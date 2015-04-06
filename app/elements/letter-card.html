@@ -17,7 +17,6 @@
       </div>
       <audio style="display: none;">
         <source src="{{aacAudio}}">
-        <source src="{{opusAudio}}">
       </audio>
     </template>
 </dom-module>
@@ -48,29 +47,38 @@
       },
       aacAudio: {
         type: String,
-        computed: 'computeAacAudio(letter, currlang)'
+        observer: 'preloadAudio'
       },
       opusAudio: {
-        type: String,
-        computed: 'computeOpusAudio(letter, currlang)'
+        type: String
+      },
+      hidden: {
+        type: Boolean,
+        notify: true
       }
     },
     listeners: {
-      'click': 'handleClick'
+      'tap': 'handleClick'
     },
     handleClick: function(e) {
       var jumbotronBox = document.querySelector("jumbotron-text");
       jumbotronBox.calcScore2(this.letter);
-      var audio = this.querySelector("audio");
+      var audio = Polymer.dom(this.root).querySelector("audio");
+      console.log(audio);
       audio.play();
     },
     ready: function() {
+    },
+    preloadAudio: function() {
+      var audio = Polymer.dom(this.root).querySelector("audio");
+      audio.load();
     },
     computeAacAudio: function(letter, mylang) {
       if(letter === " " || mylang === undefined) return "";
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
     },
     computeOpusAudio: function(letter, mylang) {
+      // removing opus audio support for now
       if(this.canOpus && letter !== " " && mylang !== undefined) {
         return "/assets/audio/"+ mylang +"/" + letter + ".opus";
       } else {

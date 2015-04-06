@@ -16,12 +16,12 @@
         <letter-card
           class="letter-matrix"
           uid="[[item.uid]]"
-          audio="[[item.audio]]"
+          aac-audio="[[item.audio]]"
           letter="[[item.letter]]"
           currlang="[[item.currlang]]"
           can-opus="[[item.canOpus]]"
           regular="[[item.regular]]"
-          hidden="{{item.hidden}}">
+          hidden="[[item.hidden]]">
           <p>[[item.letter]]</p>
         </letter-card>
       </template>
@@ -61,9 +61,15 @@
         notify: true,
         value: function() { return []; }
       },
+      allLettersList: {
+        type: Array,
+        notify: true,
+        value: function() { return []; }
+      },
       setWord: {
         type: Boolean,
-        value: false
+        value: false,
+        notify: true
       }
     },
     listeners: {
@@ -72,6 +78,8 @@
     created: function() {
     },
     attached: function() {
+    },
+    ready: function() {
     },
     changeLanguage: function(event) {
       //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
@@ -83,16 +91,18 @@
         console.log("hmm, you've got an empty dataset");
       } else {
         var opus = checkOpus();
-        items.alphabet.forEach(function(entry, i) {
+        items.alphabet.forEach(function(entry, i, array) {
           entry.currlang = lang;
-          entry.canOpus = opus;
-          entry.hidden = false;
+          array[i].currlang = lang;
+          array[i].canOpus = opus;
+          array[i].audio = computeAacAudio(entry);
+          array[i].hidden = false;
         });
       }
       return items.alphabet;
     },
     onNewLetters: function() {
-      this.letterList = this.filterResults(this.$.lservice.lobj, this.filterWord[1], this.langCode);
+      this.allLettersList = this.filterResults(this.$.lservice.lobj, this.filterWord[1], this.langCode);
         this.async(function() {
           var wordBoardBox = document.querySelector('word-board');
           if(this.setWord) {
@@ -113,31 +123,35 @@
       console.log("caught new word2: " + word[0] + "| ohneAccent: " + word[1]);
       this.setWord = true;
       this.filterWord = word;
-      if(this.letterList.length > 0) {
+      if(this.allLettersList.length > 0) {
         this.shuffleLetters(word[1]);
       } else {
         console.log("this.letterList is not yet set :-/");
       }
     },
     shuffleLetters: function(word) {
-      console.log("shuffling letters...");
-      var letterParent = Polymer.dom(this.$.lmc);
-      var letterCards = letterParent.children;
+      // this is a hack because polymer doesn't update if an array's properties have changed only if the array itself
+      // has been manipulated.
+      // see http://stackoverflow.com/questions/23706775/polymer-changes-not-always-flowing-through-a-filter
+      var dummyArray = [];
       var numTiles = this.limit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
-      for(var i = 0; i < letterCards.length; i++) {
-        letterParent.appendChild(letterParent.children[Math.random() * i | 0]);
-        if(letterCards[i].letter === "!!!" || letterCards[i].letter === undefined) {
-          //do nothing for spacebar
-        } else if(word.indexOf(letterCards[i].letter) > -1) {
-          letterCards[i].hidden = false;
-        } else if(numTiles > 0 && letterCards[i].regular !== false) {
-          letterCards[i].hidden = false;
+      shuffle(this.allLettersList);
+      this.allLettersList.forEach(function(value, index) {
+        if(value.letter === "!!!" || value.letter === undefined) {
+          //do nothing
+        } else if(word.indexOf(value.letter) > -1) {
+          value.hidden = false;
+          dummyArray.push(value);
+        } else if(numTiles > 0 && value.regular !== false) {
+          value.hidden = false;
+          dummyArray.push(value);
           numTiles--;
         } else {
-          letterCards[i].hidden = true;
+          value.hidden = true;
         }
-      }
+      });
+      this.letterList = dummyArray;
     }
   });
   function checkOpus() {
@@ -169,6 +183,10 @@
       console.log("You're trying to shuffle something that is not an array.");
       return array;
     }
+  }
+  function computeAacAudio(item) {
+    if(item.letter === "!!!" || item.currlang === undefined) return "";
+    return "/assets/audio/"+ item.currlang +"/" + item.letter + ".m4a";
   }
 
 })();
