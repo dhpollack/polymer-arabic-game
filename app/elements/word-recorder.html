@@ -30,12 +30,10 @@
       var aud = this.audio;
       var recLimit = 25000;
       startRecording(aud);
-      setTimeout(function() {
-        if(preventLongRec) {
+      preventLongRec = setTimeout(function() {
           stopRecording(aud);
           console.log("recording timed out after " + (recLimit / 1000) + " seconds.");
-        }
-      }, recLimit);
+        }, recLimit);
     },
     stopRecording: function() {
       stopRecording(this.audio);
@@ -48,9 +46,8 @@
   /* RecordRTC Scripts */
   var recorder;
   var audioStream;
-  var preventLongRec = true;
+  var preventLongRec;
   function startRecording(audioElem) {
-    preventLongRec = true;
     if(!audioStream) {
       console.log("start recording...");
       navigator.getUserMedia(
@@ -70,19 +67,20 @@
         },
         function() { console.log("there was an error recording..."); } );
     } else {
-      console.log("other start...");
+      console.log("Recording overwriting...");
+      clearTimeout(preventLongRec);
+      recorder.stopRecording();
       if (recorder) recorder.startRecording();
     }
   }
   function stopRecording(audioElem) {
-    preventLongRec = false;
     audioElem.src = '';
-    console.log(audioStream);
     if(recorder && recorder.getBlob() === undefined) {
       recorder.stopRecording(function(url) {
         console.log("audio data url: " + url);
         audioElem.src = url;
         audioElem.muted = false;
+        clearTimeout(preventLongRec);
       });
     } else {
       console.log("hmm, recorder isn't recording");
