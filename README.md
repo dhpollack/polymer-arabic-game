@@ -13,3 +13,5 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [stripping diacritics](http://stackoverflow.com/questions/12118812/find-and-highlight-arabic-with-diacritics-text-in-uiwebview)  
 [arabic language chart](http://symbolcodes.tlt.psu.edu/bylanguage/arabicchart.html)  
 [recordrtc](http://recordrtc.org/)  
+[stackoverflow - polymer repeat](http://stackoverflow.com/questions/23706775/polymer-changes-not-always-flowing-through-a-filter) - reason why the polymer repeat template doesn't update as expected.  
+[stackoverflow - dyn audio update](http://stackoverflow.com/questions/7692082/loading-audio-element-after-dynamically-changing-the-source) - this is why I've updated the audio src attribute instead of a source element.  

@@ -43,8 +43,7 @@
         value: true
       },
       aacAudio: {
-        type: String,
-        observer: 'preloadAudio'
+        type: String
       },
       opusAudio: {
         type: String
@@ -55,20 +54,28 @@
       }
     },
     listeners: {
+      // gesture listeners left in as reminders.
+      // Not functioning as of 07.04.2015
+      // See https://github.com/Polymer/polymer/blob/0.8-preview/PRIMER.md#gesture-support
+      //'holdpulse': 'handlePulse',
+      //'release': 'handleRelease',
       'tap': 'handleClick'
     },
     handleClick: function(e) {
       var jumbotronBox = document.querySelector("jumbotron-text");
       jumbotronBox.calcScore2(this.letter);
       var audio = Polymer.dom(this.root).querySelector("audio");
-      console.log(audio);
       audio.play();
     },
-    ready: function() {
+    handlePulse: function(e) {
+      console.log("Hold Pulse");
+      console.log(e);
     },
-    preloadAudio: function() {
-      //var audio = Polymer.dom(this.root).querySelector("audio");
-      //audio.load();
+    handleRelease: function(e) {
+      console.log("Release");
+      console.log(e);
+    },
+    ready: function() {
     },
     computeAacAudio: function(letter, mylang) {
       if(letter === " " || mylang === undefined) return "";
