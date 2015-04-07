@@ -7,7 +7,6 @@
     :host {
       display: inline-block;
       position: relative;
-      float: left;
     }
     </style>
     <template>
@@ -15,9 +14,7 @@
         <span class="content-span"><content></content></span>
         <paper-ripple recenters></paper-ripple>
       </div>
-      <audio style="display: none;">
-        <source src="{{aacAudio}}">
-      </audio>
+      <audio style="display: none;" src="{{aacAudio}}" preload="none"></audio>
     </template>
 </dom-module>
 <script>
@@ -70,8 +67,8 @@
     ready: function() {
     },
     preloadAudio: function() {
-      var audio = Polymer.dom(this.root).querySelector("audio");
-      audio.load();
+      //var audio = Polymer.dom(this.root).querySelector("audio");
+      //audio.load();
     },
     computeAacAudio: function(letter, mylang) {
       if(letter === " " || mylang === undefined) return "";
