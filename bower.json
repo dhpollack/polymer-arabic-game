@@ -17,7 +17,6 @@
     "font-roboto": "Polymer/font-roboto#^0.5.0",
     "webcomponents": "webcomponents/webcomponentsjs#^0.5.0",
     "layout": "Polymer/layout#0.8-preview",
-    "polymer-gestures": "Polymer/polymer-gestures#master",
     "core-ajax": "Polymer/core-ajax#0.8-preview",
     "core-header-panel": "Polymer/core-header-panel#0.8-preview",
     "core-toolbar": "Polymer/core-toolbar#0.8-preview",
