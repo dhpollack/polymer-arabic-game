@@ -23,10 +23,11 @@
     "core-collapse": "Polymer/core-collapse#0.8-preview",
     "paper-ripple": "Polymer/paper-ripple#0.8-preview",
     "paper-icon-button": "Polymer/paper-icon-button#0.8-preview",
-    "polymer": "Polymer/polymer#0.8-preview",
+    "polymer": "Polymer/polymer#^0.8.0-rc.2",
     "recordrtc": "*"
   },
   "resolutions": {
-    "layout": "0.8-preview"
+    "layout": "0.8-preview",
+    "polymer": "^0.8.0-rc.2"
   }
 }

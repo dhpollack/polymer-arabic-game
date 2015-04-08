@@ -16,8 +16,7 @@
   <link rel="import" href="../bower_components/layout/layout.html">
   <link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
   <link rel="import" href="../bower_components/core-collapse/core-collapse.html">
-  <link rel="import" href="../bower_components/core-icons/core-icons.html">
-  <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../bower_components/core-icon/core-icon.html">
   <!-- Custom Elements Vulcanized -->
   <link rel="import" href="elements/elements.html">
 </head>
@@ -36,8 +35,13 @@
       <div class="horizontal layout">
         <core-collapse id="collapse1" horizontal>
           <div class="mini-menu">
-            <div>Arabic: <button id='select-ar' onclick='setLang("ar")'>select</button></div>
-            <div>English: <button id='select-en' onclick='setLang("en")'>select</button></div>
+            <div>
+              Language: 
+              <select onchange="setLang(this.value)">
+                <option value="ar">Arabic</option>
+                <option value="en">English</option>
+              </select>
+            </div>
             <br />
             <div>Nerdmodus: <button id="select-nerdmodus" onclick="setNerdModus()">select</button></div>
           </div>
@@ -46,9 +50,10 @@
       </div>
       <div class="footer horizontal justified layout center">
         <div class="footer-button">
+          <core-icon id="menu-toggle" icon="menu" onclick="toggleCoreCollapse()"></core-icon>
         </div>
         <jumbotron-text></jumbotron-text>
-        <div></div>
+        <div id="nerdmodus-div"></div>
       </div>
     </div>
   </core-header-panel>
