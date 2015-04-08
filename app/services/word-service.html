@@ -22,7 +22,8 @@
 
     properties: {
       currlang: {
-        type: String
+        type: String,
+        notify: true
       },
       warray: {
         type: Array,
@@ -34,14 +35,14 @@
       }
     },
     listeners: {
-      'change-language': 'changeJsonUrl'
+      'currlang-changed': 'changeJsonUrl'
     },
     attached: function() {
       this.jsonUrl = this.createJsonUrl(this.currlang);
       this.$.wajax.auto = true;
     },
     changeJsonUrl: function(ev) {
-      console.log("change-language heard by word-service");
+      this.jsonUrl = this.createJsonUrl(this.currlang);
     },
     createJsonUrl: function(langCode) {
       if(langCode == undefined) {

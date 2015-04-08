@@ -6,7 +6,7 @@
   </style>
   <template>
     <div class="word-board"><span>{{myWord}}</span></div>
-    <word-service id="service" currlang="{{langCode}}" warray="{{warray}}"></word-service>
+    <word-service id="wservice" currlang="{{langCode}}" warray="{{warray}}"></word-service>
   </template>
 </dom-module>
 <script>
@@ -16,8 +16,7 @@
     properties: {
       langCode: {
         type: String,
-        notify: true,
-        value: "es"
+        notify: true
       },
       myWord: {
         type: String,
@@ -33,15 +32,15 @@
       }
     },
     listeners: {
-      'new-words': 'setWords'
+      'new-words': 'setWords',
+      'lang-code-changed': 'changeLanguage'
     },
     created: function() {
     },
     ready: function() {
     },
     changeLanguage: function(event) {
-      //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
-      //this.currlang = (this.currlang == "ar") ? "en" : "ar";
+      this.$.wservice.currlang = this.langCode;
     },
     wordFilter: function() {
       this.ranWordIndex = Math.round(Math.random() * this.wordArray.length);
@@ -60,15 +59,12 @@
 
     },
     setWords: function() {
-      var items = this.$.service.warray;
+      var items = this.$.wservice.warray;
       if(items.length !== 0) {
         this.wordArray = items;
         this.wordFilter(items);
       }
       return items;
-    },
-    myTest: function() {
-      console.log("running myTest...");
     }
   });
 })();

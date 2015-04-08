@@ -65,6 +65,13 @@
   }
   .card-body {
   }
+  core-collapse {
+    background: rgba(200,170,160, 1.0);
+  }
+  .mini-menu {
+    width: 260px;
+    height: 100%;
+  }
   .content-span {
     font-size: 13vh;
     margin: 0 0 0 0;

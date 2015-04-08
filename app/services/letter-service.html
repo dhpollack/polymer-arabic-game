@@ -23,7 +23,7 @@
     properties: {
       currlang: {
         type: String,
-        notify: true,
+        notify: true
       },
       lobj: {
         type: Object,
@@ -36,14 +36,14 @@
       }
     },
     listeners: {
-      'change-language': 'changeJsonUrl'
+      'currlang-changed': 'changeJsonUrl'
     },
     attached: function() {
       this.jsonUrl = this.createJsonUrl(this.currlang);
       this.$.ajax.auto = true;
     },
     changeJsonUrl: function(ev) {
-      console.log("change-language heard by letter-service");
+      this.jsonUrl = this.createJsonUrl(this.currlang);
     },
     createJsonUrl: function(langCode) {
       if(langCode == undefined) {

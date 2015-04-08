@@ -45,9 +45,6 @@
       aacAudio: {
         type: String
       },
-      opusAudio: {
-        type: String
-      },
       hidden: {
         type: Boolean,
         notify: true
@@ -80,14 +77,6 @@
     computeAacAudio: function(letter, mylang) {
       if(letter === " " || mylang === undefined) return "";
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
-    },
-    computeOpusAudio: function(letter, mylang) {
-      // removing opus audio support for now
-      if(this.canOpus && letter !== " " && mylang !== undefined) {
-        return "/assets/audio/"+ mylang +"/" + letter + ".opus";
-      } else {
-        return '';
-      }
     }
   });
 })();

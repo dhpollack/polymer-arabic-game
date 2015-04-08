@@ -19,7 +19,6 @@
           aac-audio="[[item.audio]]"
           letter="[[item.letter]]"
           currlang="[[item.currlang]]"
-          can-opus="[[item.canOpus]]"
           regular="[[item.regular]]"
           hidden="[[item.hidden]]">
           <p>[[item.letter]]</p>
@@ -43,13 +42,7 @@
       },
       langCode: {
         type: String,
-        notify: true,
-        value: "es"
-      },
-      canOpus: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
+        notify: true
       },
       filterWord: {
         type: Array,
@@ -74,6 +67,7 @@
     },
     listeners: {
       'new-letters': 'onNewLetters',
+      'lang-code-changed': 'changeLanguage'
     },
     created: function() {
     },
@@ -82,19 +76,15 @@
     ready: function() {
     },
     changeLanguage: function(event) {
-      //console.log("Event: " + event.type + "\nFrom: " + event.srcElement.localName);
-      //this.currlang = (this.currlang == "ar") ? "en" : "ar";
+      this.$.lservice.currlang = this.langCode;
     },
     filterResults: function(items, word, lang) {
-      console.log("letter-list.filterResults().word: " + word);
       if(Object.keys(items).length === 0) {
         console.log("hmm, you've got an empty dataset");
       } else {
-        var opus = checkOpus();
         items.alphabet.forEach(function(entry, i, array) {
           entry.currlang = lang;
           array[i].currlang = lang;
-          array[i].canOpus = opus;
           array[i].audio = computeAacAudio(entry);
           array[i].hidden = false;
         });
@@ -114,7 +104,6 @@
           } else {
             if(this.filterWord.length === 0) {
               this.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]);
-              //this.fire("resend-word");
             }
           }
         });
@@ -154,14 +143,6 @@
       this.letterList = dummyArray;
     }
   });
-  function checkOpus() {
-    var audioTag = document.createElement("audio");
-    if(!!(audioTag.canPlayType && audioTag.canPlayType('audio/ogg;codecs="opus"').replace(/no/, ''))) {
-      return true;
-    } else {
-      return false;
-    }
-  }
   function shuffle(array) {
     if(array instanceof Array) {
       var currentIndex = array.length, temporaryValue, randomIndex ;
