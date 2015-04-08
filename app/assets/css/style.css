@@ -15,7 +15,6 @@
   }
   word-board {
     font-size: 7vh;
-    margin-left: 1vw;
   }
   word-recorder {
   }
@@ -71,6 +70,10 @@
   .mini-menu {
     width: 260px;
     height: 100%;
+  }
+  #menu-toggle {
+    margin-left: 1vw;
+    transform: scale(1.3,1.3);
   }
   .content-span {
     font-size: 13vh;

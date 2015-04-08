@@ -81,10 +81,11 @@ gulp.task('audio', function () {
   return gulp.src(appDir+'/assets/audio/**/*.flac')
     .pipe($.shell([
       'mkdir -p .tmp',
+      // removing opus for now
+      //'echo <%= file.path %> >> '+ tmpDir + '/opus.log',
+      //'opusenc --bitrate 8 <%= file.path %> <%= f(file.path, ".opus") %> >> '+ tmpDir + '/opus.log 2>&1',
       'echo <%= file.path %> >> '+ tmpDir + '/ffmpeg.log',
-      'echo <%= file.path %> >> '+ tmpDir + '/opus.log',
-      'ffmpeg -y -i <%= file.path %> -vbr 1 -acodec aac -strict experimental <%= f(file.path, ".m4a") %> >> '+ tmpDir + '/ffmpeg.log 2>&1',
-      'opusenc --bitrate 8 <%= file.path %> <%= f(file.path, ".opus") %> >> '+ tmpDir + '/opus.log 2>&1'
+      'ffmpeg -y -i <%= file.path %> -vbr 1 -acodec aac -strict experimental <%= f(file.path, ".m4a") %> >> '+ tmpDir + '/ffmpeg.log 2>&1'
     ], {
       templateData: {
         f: function(s, ext) {

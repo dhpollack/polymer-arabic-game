@@ -50,13 +50,16 @@
         //this.fire("check-jumbotron-word", { word: this.usertext });
         var scoreBox = document.querySelector('score-board');
         scoreBox.calcScore2(this.usertext);
-        this.scoreArray = [];
-        this.usertext = "_____";
+        this.resetBox();
       } else if(nextLetter !== "") {
         if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
         this.scoreArray.push(nextLetter);
         this.usertext = this.scoreArray.join("");
       }
+    },
+    resetBox: function() {
+        this.scoreArray = [];
+        this.usertext = "_____";
     }
   });
 })();

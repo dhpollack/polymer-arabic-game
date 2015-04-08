@@ -16,7 +16,8 @@
   <link rel="import" href="../bower_components/layout/layout.html">
   <link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
   <link rel="import" href="../bower_components/core-collapse/core-collapse.html">
-  <link rel="import" href="../bower_components/core-icon/core-icon.html">
+  <link rel="import" href="../bower_components/core-icons/core-icons.html">
+  <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
   <!-- Custom Elements Vulcanized -->
   <link rel="import" href="elements/elements.html">
 </head>
@@ -26,9 +27,9 @@
   غ	ظ	ض	ذ	خ	ث	ت	ش	ر	ق	ص	ف	ع	س	ن	م	ل	ك	ي	ط	ح	ز	و	ه	د	ج	ب	ا
   -->
   <core-header-panel id="header-panel">
-    <core-toolbar class="core-header horizontal justified layout">
-      <word-board lang-code="ar" class="horizontal start-justified layout flex"></word-board>
-      <word-recorder class="horizontal center-justified layout flex-2"></word-recorder>
+    <core-toolbar class="core-header horizontal justified layout start">
+      <word-recorder class="horizontal start-justified layout flex"></word-recorder>
+      <word-board class="horizontal center-justified layout flex-2" lang-code="ar"></word-board>
       <score-board class="horizontal end-justified layout flex"></score-board>
     </core-toolbar>
     <div class="content">
@@ -40,6 +41,7 @@
               <select onchange="setLang(this.value)">
                 <option value="ar">Arabic</option>
                 <option value="en">English</option>
+                <option value="en-US-south">English (US South)</option>
               </select>
             </div>
             <br />
@@ -50,7 +52,7 @@
       </div>
       <div class="footer horizontal justified layout center">
         <div class="footer-button">
-          <core-icon id="menu-toggle" icon="menu" onclick="toggleCoreCollapse()"></core-icon>
+          <paper-icon-button id="menu-toggle" icon="menu" onclick="toggleCoreCollapse()"></paper-icon-button>
         </div>
         <jumbotron-text></jumbotron-text>
         <div id="nerdmodus-div"></div>
@@ -58,15 +60,18 @@
     </div>
   </core-header-panel>
   <script>
+  var wordBoard = document.querySelector('word-board');
+  var letterList = document.querySelector('letter-list');
+  var jumbotron = document.querySelector('jumbotron-text');
   function toggleCoreCollapse() {
     document.querySelector('#collapse1').toggle();
   }
   function setLang(lang) {
     console.log("toggling language: " + lang);
-    var wordBoard = document.querySelector('word-board');
-    var letterList = document.querySelector('letter-list');
+    
     wordBoard.setAttribute("lang-code", lang);
     letterList.setAttribute("lang-code", lang);
+    jumbotron.resetBox();
   }
   function setNerdModus() {
     // Stub for those that want to learn good.
