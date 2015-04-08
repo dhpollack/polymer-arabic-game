@@ -67,7 +67,8 @@
     },
     listeners: {
       'new-letters': 'onNewLetters',
-      'lang-code-changed': 'changeLanguage'
+      'lang-code-changed': 'changeLanguage',
+      'filter-word-changed': 'onNewWord'
     },
     created: function() {
     },
@@ -78,10 +79,12 @@
     changeLanguage: function(event) {
       this.$.lservice.currlang = this.langCode;
     },
-    filterResults: function(items, word, lang) {
+    filterResults: function(items) {
       if(Object.keys(items).length === 0) {
         console.log("hmm, you've got an empty dataset");
       } else {
+        var lang = items.lang.code;
+        this.langCode = lang;
         items.alphabet.forEach(function(entry, i, array) {
           entry.currlang = lang;
           array[i].currlang = lang;
@@ -92,30 +95,35 @@
       return items.alphabet;
     },
     onNewLetters: function() {
-      this.allLettersList = this.filterResults(this.$.lservice.lobj, this.filterWord[1], this.langCode);
+      this.allLettersList = this.filterResults(this.$.lservice.lobj);
         this.async(function() {
+          console.log("new letters async...");
           var wordBoardBox = document.querySelector('word-board');
           if(this.setWord) {
               if(this.filterWord.length === 0) {
-                this.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]);
-                //this.fire("resend-word");
+                this.filterWord = wordBoardBox.wordArray[wordBoardBox.ranWordIndex];
+                //this.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]);
               }
               this.shuffleLetters(this.filterWord[1]);
           } else {
             if(this.filterWord.length === 0) {
-              this.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]);
+              console.log("filterWord not set yet");
+              this.filterWord = wordBoardBox.wordArray[wordBoardBox.ranWordIndex];
+              //this.onNewWord2([wordBoardBox.wordArray[wordBoardBox.ranWordIndex][0],wordBoardBox.wordArray[wordBoardBox.ranWordIndex][1]]);
             }
           }
         });
     },
-    onNewWord2: function(word) {
-      console.log("caught new word2: " + word[0] + "| ohneAccent: " + word[1]);
-      this.setWord = true;
-      this.filterWord = word;
-      if(this.allLettersList.length > 0) {
-        this.shuffleLetters(word[1]);
-      } else {
-        console.log("this.letterList is not yet set :-/");
+    onNewWord: function() {
+      var word = this.filterWord;
+      if(word !== undefined && word.length !== 0) {
+        console.log("fired filter-word-changed: " + word[0] + " | ohneAccent: " + word[1]);
+        this.setWord = true;
+        if(this.allLettersList.length > 0) {
+          this.shuffleLetters(word[1]);
+        } else {
+          console.log("this.letterList is not yet set :-/");
+        }
       }
     },
     shuffleLetters: function(word) {

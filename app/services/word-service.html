@@ -11,6 +11,7 @@
     <core-ajax id="wajax" 
       url={{jsonUrl}} 
       handleas="json" 
+      on-request="requestSent" 
       on-response="wordsLoaded">
     </core-ajax>
   </template>
@@ -41,6 +42,9 @@
       this.jsonUrl = this.createJsonUrl(this.currlang);
       this.$.wajax.auto = true;
     },
+    ready: function() {
+      this.letterList = document.querySelector("letter-list");
+    },
     changeJsonUrl: function(ev) {
       this.jsonUrl = this.createJsonUrl(this.currlang);
     },
@@ -51,11 +55,15 @@
         return "/api/"+langCode+"/words-stpacc.json";
       }
     },
+    requestSent: function(e) {
+      if(this.letterList) this.letterList.setWord = false;
+    },
     wordsLoaded: function() {
       var jsonSuccess = (this.$.wajax.lastResponse != null) ? true : false;
       console.log("loading words from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
       // Make a copy of the loaded data
       if(jsonSuccess) {
+        if(this.letterList) this.letterList.setWord = true;
         var ajaxData = this.$.wajax.lastResponse;
         this.warray = ajaxData;
         this.fire('new-words');

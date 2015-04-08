@@ -11,6 +11,7 @@
 </dom-module>
 <script>
 (function() {
+
   Polymer({
     is: "word-board",
     properties: {
@@ -25,6 +26,7 @@
       },
       wordArray: {
         type: Array,
+        notify: true,
         value: function() { return []; }
       },
       ranWordIndex: {
@@ -33,36 +35,38 @@
     },
     listeners: {
       'new-words': 'setWords',
-      'lang-code-changed': 'changeLanguage'
+      'lang-code-changed': 'changeLanguage',
+      'word-array-changed': 'wordFilter'
     },
     created: function() {
     },
     ready: function() {
+      this.jumbotronBox = document.querySelector("jumbotron-text");
+      this.scoreBox = document.querySelector('score-board');
+      this.letterListBox = document.querySelector('letter-list');
     },
     changeLanguage: function(event) {
       this.$.wservice.currlang = this.langCode;
     },
     wordFilter: function() {
-      this.ranWordIndex = Math.round(Math.random() * this.wordArray.length);
-      var word = this.wordArray[this.ranWordIndex];
-      this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
-      this.myWord = word[0];
-
-
-      var jumbotronBox = document.querySelector("jumbotron-text");
-      var scoreBox = document.querySelector('score-board');
-      var letterListBox = document.querySelector('letter-list');
-
-      letterListBox.onNewWord2([word[0], word[1]]);
-      scoreBox.checkWord = [word[0], word[1]];
-      jumbotronBox.zielWort = word[0];
+      if(this.wordArray.length !== 0) {
+        this.ranWordIndex = Math.floor(Math.random() * this.wordArray.length);
+        console.log("wordArray.length: " + this.wordArray.length + "\nthis.ranWordIndex: " + this.ranWordIndex);
+        var word = this.wordArray[this.ranWordIndex];
+        //this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
+        this.myWord = word[0];
+  
+        //letterListBox.onNewWord2([word[0], word[1]]);
+        this.letterListBox.filterWord = word;
+        this.scoreBox.checkWord = [word[0], word[1]];
+        this.jumbotronBox.zielWort = word[0];
+      }
 
     },
     setWords: function() {
       var items = this.$.wservice.warray;
       if(items.length !== 0) {
         this.wordArray = items;
-        this.wordFilter(items);
       }
       return items;
     }

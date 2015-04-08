@@ -7,7 +7,7 @@
   </style>
   <template>
     <div class="score-box">
-      <span id="score-sign" class="horizontal layout center"><span id="score-box-score">{{score}}</span> <core-icon id="star-points" icon="stars"></core-icon></span>
+      <span id="score-sign" class="horizontal layout center"><span id="score-box-score">{{score}}</span>&nbsp;<core-icon id="star-points" icon="stars"></core-icon></span>
     </div>
   </template>
 </dom-module>
@@ -31,19 +31,20 @@
       }
     },
     listeners: {
+      'last-bucket-changed': 'updateScoreBoard'
     },
     created: function() {
     },
     ready: function() {
+      this.wordBoardBox = document.querySelector('word-board');
     },
-    calcScore2: function(attempt) {
-      if(["","_____"].indexOf(attempt) === -1) {
-        console.log("Does " + attempt + " = " + this.checkWord[1]);
-        if(attempt === this.checkWord[1]) {
+    updateScoreBoard: function() {
+      if(["","_____"].indexOf(this.lastBucket) === -1) {
+        console.log("Does " + this.lastBucket + " = " + this.checkWord[1]);
+        if(this.lastBucket === this.checkWord[1]) {
           this.score += 100;
           //this.fire("correct-answer", { lastword: attempt });
-          var wordBoardBox = document.querySelector('word-board');
-          wordBoardBox.wordFilter();
+          this.wordBoardBox.wordFilter();
         } else {
           this.score -= 30;
         }

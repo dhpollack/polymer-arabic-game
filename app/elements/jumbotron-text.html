@@ -20,7 +20,6 @@
       },
       usertext: {
         type: String,
-        notify: true,
         value: "_____"
       },
       lastBucket: {
@@ -33,33 +32,35 @@
       }
     },
     listeners: {
-      "tap": "handleClick"
+      'tap': 'handleClick',
+      'last-bucket-changed': 'updateJumbotron'
     },
     created: function() {
     },
     ready: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
+      this.scoreBox = document.querySelector('score-board');
     },
     handleClick: function() {
-      console.log("clicking jumbotron");
-      this.calcScore2("!!!");
+      this.lastBucket = "!!!";
     },
-    calcScore2: function(nextLetter) {
-      console.log("updating jumbotron-text with (" + nextLetter + ")");
-      if(nextLetter == "!!!" || nextLetter.length > 2) {
-        //this.fire("check-jumbotron-word", { word: this.usertext });
-        var scoreBox = document.querySelector('score-board');
-        scoreBox.calcScore2(this.usertext);
+    updateJumbotron: function() {
+      if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
+        console.log("checking word...");
+        this.scoreBox.lastBucket = this.usertext;
         this.resetBox();
-      } else if(nextLetter !== "") {
+      } else if(this.lastBucket !== "") {
         if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
-        this.scoreArray.push(nextLetter);
+        this.scoreArray.push(this.lastBucket);
         this.usertext = this.scoreArray.join("");
+        this.lastBucket = "";
       }
     },
     resetBox: function() {
         this.scoreArray = [];
         this.usertext = "_____";
+        this.lastBucket = "";
+        this.scoreBox.lastBucket = "";
     }
   });
 })();

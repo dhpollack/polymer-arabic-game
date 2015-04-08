@@ -52,10 +52,10 @@
       </div>
       <div class="footer horizontal justified layout center">
         <div class="footer-button">
-          <paper-icon-button id="menu-toggle" icon="menu" onclick="toggleCoreCollapse()"></paper-icon-button>
+          <paper-icon-button id="menu-toggle" icon="more-vert" onclick="toggleCoreCollapse()"></paper-icon-button>
         </div>
         <jumbotron-text></jumbotron-text>
-        <div id="nerdmodus-div"></div>
+        <div id="nerdmodus-div"><paper-icon-button id="help-show" icon="help" onclick="showHelp()"></paper-icon-button></div>
       </div>
     </div>
   </core-header-panel>
@@ -72,6 +72,9 @@
     wordBoard.setAttribute("lang-code", lang);
     letterList.setAttribute("lang-code", lang);
     jumbotron.resetBox();
+  }
+  function showHelp() {
+    alert("The rules of the game are simple.\n\n1. Select (tap/click) the letters to spell the word at the top bar on the bottom bar.\n2. When you think you have it, click the word at the bottom bar to reset the word, check your answer, and if you are correct, get the next word.\n3. If you make a typo, you've gotta tap the word at the bottom to reset it and lose points.\n\n Note: Arabic is a right to left language and the letters look significantly different depending on the position of the letter in the word (solo, beginning, middle, end).  All letters in the matrix are presented in the solo form.  If you get stuck, click a letter multiple times to see all of it's forms.");
   }
   function setNerdModus() {
     // Stub for those that want to learn good.

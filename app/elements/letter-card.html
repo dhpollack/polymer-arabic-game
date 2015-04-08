@@ -58,15 +58,17 @@
       //'release': 'handleRelease',
       'tap': 'handleClick'
     },
+    ready: function() {
+    },
     handleClick: function(e) {
-      var jumbotronBox = document.querySelector("jumbotron-text");
-      jumbotronBox.calcScore2(this.letter);
-      var audio = Polymer.dom(this.root).querySelector("audio");
-      if(!audio.paused) {
-        audio.pause();
-        audio.currentTime = audio.currentTime / 3;
+      if(this.audio === undefined) this.audio = Polymer.dom(this.root).querySelector("audio");
+      if(this.jumbotronBox === undefined) this.jumbotronBox = document.querySelector("jumbotron-text");
+      this.jumbotronBox.lastBucket = this.letter;
+      if(!this.audio.paused) {
+        this.audio.pause();
+        this.audio.currentTime = this.audio.currentTime / 3;
       }
-      audio.play();
+      this.audio.play();
     },
     handlePulse: function(e) {
       console.log("Hold Pulse");

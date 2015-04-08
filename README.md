@@ -15,3 +15,4 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [recordrtc](http://recordrtc.org/)  
 [stackoverflow - polymer repeat](http://stackoverflow.com/questions/23706775/polymer-changes-not-always-flowing-through-a-filter) - reason why the polymer repeat template doesn't update as expected.  
 [stackoverflow - dyn audio update](http://stackoverflow.com/questions/7692082/loading-audio-element-after-dynamically-changing-the-source) - this is why I've updated the audio src attribute instead of a source element.  
+[default core icons available](https://www.polymer-project.org/0.8/components/core-icons/demo.html) - core-icons sets
