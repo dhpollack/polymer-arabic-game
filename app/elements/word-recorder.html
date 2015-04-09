@@ -7,12 +7,15 @@
 
 <dom-module id="word-recorder">
     <style>
+    .recording-on {
+      background-color: rgba(255, 50, 50, 0.6);
+      border-radius: 50%;
+    }
     </style>
     <template>
-      <div>
+      <div id="record-elem">
         <audio id="recAudio" src="" controls hidden></audio>
-        <paper-icon-button id="recorderInit" icon="av:mic" on-tap="startRecording"></paper-icon-button>
-        <!-- <paper-icon-button id="recorderStop" icon="av:stop" on-tap="stopRecording"></paper-icon-button>-->
+        <paper-icon-button id="recorderInit" icon="av:mic" on-tap="makeRecording"></paper-icon-button>
         <paper-icon-button id="recorderPlay" icon="av:play-circle-fill" on-tap="playRecording"></paper-icon-button>
       </div>
     </template>
@@ -25,15 +28,17 @@
     },
     ready: function() {
       this.audio = this.$.recAudio;
+      this.recordIcon = Polymer.dom(this.root).querySelector("#recorderInit");
     },
-    startRecording: function() {
-      initRec(this.audio);
-    },
-    stopRecording: function() {
-      stopRec(this.audio);
+    makeRecording: function() {
+      if(initRec(this.audio)) {
+        this.recordIcon.classList.add("recording-on");
+      } else {
+        this.recordIcon.classList.remove("recording-on");
+      }
     },
     playRecording: function() {
-      playRec(this.audio);
+      if(playRec(this.audio)) this.recordIcon.classList.remove("recording-on");
     }  
   });
   /* RecordRTC Scripts */
@@ -57,33 +62,35 @@
           recorder = window.RecordRTC(stream, {
               type: 'audio'
           });
-          recorder.startRecording();
-          preventLongRec = setTimeout(function() {
-              stopRec(audioElem);
-              console.log("recording timed out after " + (recLimit / 1000) + " seconds.");
-            }, recLimit);
-
+          startRec(audioElem);
         },
-        function() { console.log("there was an error recording..."); } );
+        function() { 
+          console.log("there was an error recording...");
+        }
+      );
+      return true;  
     } else {
       if(audioElem.readyState === 0) {
         clearTimeout(preventLongRec);
         stopRec(audioElem);
+        return false
       } else {
         audioElem.src = '';
-        recorder.startRecording();
-        preventLongRec = setTimeout(function() {
-            stopRec(audioElem);
-            console.log("recording timed out after " + (recLimit / 1000) + " seconds.");
-          }, recLimit);
+        startRec(audioElem);
+        return true;
       }
-      console.log("readyState: " + audioElem.readyState);
-      console.log("audio.src: " + audioElem.src);
-      console.log("Stopping recording...");
     }
+  }
+  function startRec(audioElem) {
+    recorder.startRecording();
+    preventLongRec = setTimeout(function() {
+        stopRec(audioElem);
+        console.log("recording timed out after " + (recLimit / 1000) + " seconds.");
+      }, recLimit);
   }
   function stopRec(audioElem) {
     if(recorder && recorder.getBlob() === undefined) {
+      
       recorder.stopRecording(function(url) {
         console.log("audio data url: " + url);
         audioElem.src = url;
@@ -98,10 +105,15 @@
     // if the user presses play before stop, the recording is stopped and then played
     if(recorder.getBlob() === undefined) {
       stopRec(audioElem);
-      audioElem.onloadeddata = function() { audioElem.play(); };
+      audioElem.onloadeddata = function() { 
+        audioElem.play();
+        audioElem.onloadeddata = function() {};
+      };
+      return true;
     } else {
       console.log("play recording...");
       audioElem.play();
+      return false;
     }
   }
 })();

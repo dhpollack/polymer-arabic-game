@@ -59,9 +59,10 @@
       'tap': 'handleClick'
     },
     ready: function() {
+      this.paperRippleElem = Polymer.dom(this.root).querySelector("paper-ripple");
+      this.audio = Polymer.dom(this.root).querySelector("audio");
     },
     handleClick: function(e) {
-      if(this.audio === undefined) this.audio = Polymer.dom(this.root).querySelector("audio");
       if(this.jumbotronBox === undefined) this.jumbotronBox = document.querySelector("jumbotron-text");
       this.jumbotronBox.lastBucket = this.letter;
       if(!this.audio.paused) {
@@ -78,11 +79,16 @@
       console.log("Release");
       console.log(e);
     },
-    ready: function() {
-    },
     computeAacAudio: function(letter, mylang) {
       if(letter === " " || mylang === undefined) return "";
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
+    },
+    firePaperRipple: function() {
+      if(this.paperRippleElem) {
+        this.paperRippleElem.mousedownAction();
+        this.paperRippleElem.mouseupAction();
+        this.audio.play();
+      }
     }
   });
 })();

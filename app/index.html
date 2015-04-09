@@ -17,6 +17,7 @@
   <link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
   <link rel="import" href="../bower_components/core-collapse/core-collapse.html">
   <link rel="import" href="../bower_components/core-icons/core-icons.html">
+  <link rel="import" href="../bower_components/core-overlay/core-overlay.html">
   <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
   <!-- Custom Elements Vulcanized -->
   <link rel="import" href="elements/elements.html">
@@ -28,9 +29,12 @@
   -->
   <core-header-panel id="header-panel">
     <core-toolbar class="core-header horizontal justified layout start">
-      <word-recorder class="horizontal start-justified layout flex"></word-recorder>
+      <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex"></score-board>
       <word-board class="horizontal center-justified layout flex-2" lang-code="ar"></word-board>
-      <score-board class="horizontal end-justified layout flex"></score-board>
+      <div class="top-right-item horizontal end-justified layout flex">
+        <score-board id="score-board-player-2" player="2" hidden></score-board>
+        <word-recorder></word-recorder>
+      </div>
     </core-toolbar>
     <div class="content">
       <div class="horizontal layout">
@@ -45,24 +49,42 @@
               </select>
             </div>
             <br />
-            <div>Nerdmodus: <button id="select-nerdmodus" onclick="setNerdModus()">select</button></div>
+            <div>Recordmodus: <button id="select-nerdmodus" onclick="toggleRecordDiv()">toggle</button></div>
+            <br />
+            <div>Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
           </div>
         </core-collapse>
         <letter-list limit="12" lang-code="ar"></letter-list>
       </div>
       <div class="footer horizontal justified layout center">
-        <div class="footer-button">
+        <div class="footer-button horizontal start-justified layout flex">
           <paper-icon-button id="menu-toggle" icon="more-vert" onclick="toggleCoreCollapse()"></paper-icon-button>
         </div>
-        <jumbotron-text></jumbotron-text>
-        <div id="nerdmodus-div"><paper-icon-button id="help-show" icon="help" onclick="showHelp()"></paper-icon-button></div>
+        <jumbotron-text class="horizontal center-justified layout flex-2"></jumbotron-text>
+        <div id="nerdmodus-div" class="horizontal end-justified layout flex">
+          <paper-icon-button id="clue-show" icon="text-format" onclick="showClue()"></paper-icon-button>
+          <paper-icon-button id="help-show" icon="help" onclick="showHelp()"></paper-icon-button>
+        </div>
       </div>
     </div>
   </core-header-panel>
+  <core-overlay id="help-overlay" class="dialog" backdrop>
+    <h3>The Rules</h3>
+    <ol>
+      <li>Select (tap/click) the letters to spell the word that you see on top bar.  What you type will show up on the bottom bar.</li>
+      <li>When you think you have the right answer, click the word on the bottom bar to check your answer.  If you are correct, you'll get points and the next word will appear, but if you're wrong, you'll lose points at the answer box resets itself.</li>
+      <li>If you make a typo, you've gotta tap the word at the bottom to reset it and lose points, so be careful!</li>
+    </ol>
+    <div id=help-lang-specific><strong>Note:</strong> Arabic is a right to left language and the letters look significantly different depending on the position of the letter in the word (solo, beginning, middle, end).  All letters in the matrix are presented in the solo form.  If you get stuck, click a letter multiple times to see all of it's forms.</div>
+  </core-overlay>
   <script>
   var wordBoard = document.querySelector('word-board');
   var letterList = document.querySelector('letter-list');
   var jumbotron = document.querySelector('jumbotron-text');
+  var overlay = document.getElementById('help-overlay');
+  var recordDiv = document.getElementById('record-elem');
+  var scoreBoard2 = document.getElementById('score-board-player-2');
+  
   function toggleCoreCollapse() {
     document.querySelector('#collapse1').toggle();
   }
@@ -74,11 +96,31 @@
     jumbotron.resetBox();
   }
   function showHelp() {
-    alert("The rules of the game are simple.\n\n1. Select (tap/click) the letters to spell the word at the top bar on the bottom bar.\n2. When you think you have it, click the word at the bottom bar to reset the word, check your answer, and if you are correct, get the next word.\n3. If you make a typo, you've gotta tap the word at the bottom to reset it and lose points.\n\n Note: Arabic is a right to left language and the letters look significantly different depending on the position of the letter in the word (solo, beginning, middle, end).  All letters in the matrix are presented in the solo form.  If you get stuck, click a letter multiple times to see all of it's forms.");
+    //alert("The rules of the game are simple.\n\n1. Select (tap/click) the letters to spell the word at the top bar on the bottom bar.\n2. When you think you have it, click the word at the bottom bar to reset the word, check your answer, and if you are correct, get the next word.\n3. If you make a typo, you've gotta tap the word at the bottom to reset it and lose points.\n\n Note: Arabic is a right to left language and the letters look significantly different depending on the position of the letter in the word (solo, beginning, middle, end).  All letters in the matrix are presented in the solo form.  If you get stuck, click a letter multiple times to see all of it's forms.");
+    overlay.toggle();
   }
-  function setNerdModus() {
+  function toggleRecordDiv() {
+    if(recordDiv.getAttribute("hidden")) {
+      recordDiv.removeAttribute("hidden");
+    } else {
+      recordDiv.setAttribute("hidden", true);
+    }
+  }
+  function toggleScoreBoard2() {
+    // not implemented yet
+    if(scoreBoard2.getAttribute("hidden")) {
+      scoreBoard2.removeAttribute("hidden");
+    } else {
+      scoreBoard2.setAttribute("hidden", true);
+    }
+  }
+  function showClue() {
+    wordBoard.revealWord();
+  }
+  function toggleNerdModus() {
     // Stub for those that want to learn good.
   }
+  
  </script>
 </body>
 </html>

@@ -42,7 +42,7 @@
     },
     ready: function() {
       this.jumbotronBox = document.querySelector("jumbotron-text");
-      this.scoreBox = document.querySelector('score-board');
+      this.scoreBox = document.getElementById('score-board-player-1');
       this.letterListBox = document.querySelector('letter-list');
     },
     changeLanguage: function(event) {
@@ -69,6 +69,15 @@
         this.wordArray = items;
       }
       return items;
+    },
+    revealWord: function() {
+      var word = this.wordArray[this.ranWordIndex][1];
+      word.split("").forEach(function(value, index) {
+        setTimeout(function() {
+          var lCard = document.querySelector('letter-card[letter="'+value+'"]');
+          lCard.firePaperRipple();
+        }, 1500 * (index + 0.5));
+      });
     }
   });
 })();

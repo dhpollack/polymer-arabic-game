@@ -67,7 +67,7 @@
     background: rgba(200,170,160, 1.0);
   }
   .mini-menu {
-    width: 260px;
+    width: 360px;
     padding: 1vh 1vw;
   }
   core-icon {
@@ -83,10 +83,19 @@
   paper-icon-button {
     font-size: 14px;
   }
-  @media (min-width: 481px) {
-    .container {
-      width: 100vw;
-    }
+  core-overlay {
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		overflow: hidden;
+		background: white;
+		padding:30px 42px;
+		outline: 1px solid rgba(0,0,0,0.2);
+		box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .container {
+    width: 100vw;
   }
   @media screen and (orientation: portrait) {
     letter-card {

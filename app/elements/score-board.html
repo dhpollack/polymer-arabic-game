@@ -7,7 +7,7 @@
   </style>
   <template>
     <div class="score-box">
-      <span id="score-sign" class="horizontal layout center"><span id="score-box-score">{{score}}</span>&nbsp;<core-icon id="star-points" icon="stars"></core-icon></span>
+      <div id="score-sign" class="horizontal layout center"><core-icon id="star-points" icon="stars"></core-icon>&nbsp;<span id="score-box-score">{{score}}</span></div>
     </div>
   </template>
 </dom-module>
@@ -28,6 +28,10 @@
       lastBucket: {
         type: String,
         notify: true
+      },
+      player: {
+        type: Number,
+        value: 1
       }
     },
     listeners: {
