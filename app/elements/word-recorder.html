@@ -73,7 +73,7 @@
       if(audioElem.readyState === 0) {
         clearTimeout(preventLongRec);
         stopRec(audioElem);
-        return false
+        return false;
       } else {
         audioElem.src = '';
         startRec(audioElem);

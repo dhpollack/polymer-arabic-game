@@ -75,7 +75,11 @@
       <li>When you think you have the right answer, click the word on the bottom bar to check your answer.  If you are correct, you'll get points and the next word will appear, but if you're wrong, you'll lose points at the answer box resets itself.</li>
       <li>If you make a typo, you've gotta tap the word at the bottom to reset it and lose points, so be careful!</li>
     </ol>
-    <div id=help-lang-specific><strong>Note:</strong> Arabic is a right to left language and the letters look significantly different depending on the position of the letter in the word (solo, beginning, middle, end).  All letters in the matrix are presented in the solo form.  If you get stuck, click a letter multiple times to see all of it's forms.</div>
+    <div id=help-lang-specific>
+      <strong>Note:</strong> Arabic is a right to left language and the letters look significantly different depending on the position of the letter in the word (solo, beginning, middle, end).  All letters in the matrix are presented in the solo form.  If you get stuck, click a letter multiple times to see all of it's forms.
+      <br>
+      Lastly, in Arabic, some letters have accents (also called diacritics).  For the purposes of this game, you do not need to enter these.  But be careful because dots are not the same as these more elaborate marks.  Think of it as the difference between "l" and "t" (one has a cross the other doesn't) vs "e" and "é" (just an accent mark, at least in English it's just an accent ;-)).
+    </div>
   </core-overlay>
   <script>
   var wordBoard = document.querySelector('word-board');
@@ -90,13 +94,11 @@
   }
   function setLang(lang) {
     console.log("toggling language: " + lang);
-    
     wordBoard.setAttribute("lang-code", lang);
     letterList.setAttribute("lang-code", lang);
     jumbotron.resetBox();
   }
   function showHelp() {
-    //alert("The rules of the game are simple.\n\n1. Select (tap/click) the letters to spell the word at the top bar on the bottom bar.\n2. When you think you have it, click the word at the bottom bar to reset the word, check your answer, and if you are correct, get the next word.\n3. If you make a typo, you've gotta tap the word at the bottom to reset it and lose points.\n\n Note: Arabic is a right to left language and the letters look significantly different depending on the position of the letter in the word (solo, beginning, middle, end).  All letters in the matrix are presented in the solo form.  If you get stuck, click a letter multiple times to see all of it's forms.");
     overlay.toggle();
   }
   function toggleRecordDiv() {
