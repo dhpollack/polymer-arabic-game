@@ -6,6 +6,7 @@
   </style>
   <template>
     <div class="word-board"><span>{{myWord}}</span></div>
+    <audio src="{{wordAudio}}" hidden></audio>
     <word-service id="wservice" currlang="{{langCode}}" warray="{{warray}}"></word-service>
   </template>
 </dom-module>
@@ -18,6 +19,9 @@
       langCode: {
         type: String,
         notify: true
+      },
+      wordAudio: {
+        type: String
       },
       myWord: {
         type: String,
@@ -36,7 +40,8 @@
     listeners: {
       'new-words': 'setWords',
       'lang-code-changed': 'changeLanguage',
-      'word-array-changed': 'wordFilter'
+      'word-array-changed': 'wordFilter',
+      'tap': 'playAudio'
     },
     created: function() {
     },
@@ -44,6 +49,8 @@
       this.jumbotronBox = document.querySelector("jumbotron-text");
       this.scoreBox = document.getElementById('score-board-player-1');
       this.letterListBox = document.querySelector('letter-list');
+      
+      this.audioBox = Polymer.dom(this.root).querySelector("audio");
     },
     changeLanguage: function(event) {
       this.$.wservice.currlang = this.langCode;
@@ -55,7 +62,7 @@
         var word = this.wordArray[this.ranWordIndex];
         //this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
         this.myWord = word[0];
-  
+        this.wordAudio = this.produceWordAudioUrl(word[0], this.langCode);
         //letterListBox.onNewWord2([word[0], word[1]]);
         this.letterListBox.filterWord = word;
         this.scoreBox.checkWord = [word[0], word[1]];
@@ -78,6 +85,12 @@
           lCard.firePaperRipple();
         }, 1500 * (index + 0.5));
       });
+    },
+    produceWordAudioUrl: function(word, lang) {
+      return "/assets/audio/"+ lang +"/words/" + word + ".m4a";
+    },
+    playAudio: function() {
+      this.audioBox.play();
     }
   });
 })();

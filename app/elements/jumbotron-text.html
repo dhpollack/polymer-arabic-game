@@ -40,6 +40,7 @@
     ready: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
       this.scoreBox = document.getElementById('score-board-player-1');
+      this.wordBoard = document.querySelector('word-board');
     },
     handleClick: function() {
       this.lastBucket = "!!!";
@@ -53,7 +54,13 @@
         if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
         this.scoreArray.push(this.lastBucket);
         this.usertext = this.scoreArray.join("");
+        if(this.usertext === this.wordBoard.myWord) {
+            setTimeout(function() {
+              this.wordBoard.playAudio();
+            }, 700);
+        }
         this.lastBucket = "";
+        
       }
     },
     resetBox: function() {
