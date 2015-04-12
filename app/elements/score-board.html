@@ -45,7 +45,7 @@
     updateScoreBoard: function() {
       if(["","_____"].indexOf(this.lastBucket) === -1) {
         console.log("Does " + this.lastBucket + " = " + this.checkWord[1]);
-        if(this.lastBucket === this.checkWord[1]) {
+        if(this.lastBucket.toLowerCase() === this.checkWord[1].toLowerCase()) {
           this.score += 100;
           //this.fire("correct-answer", { lastword: attempt });
           this.wordBoardBox.wordFilter();

@@ -120,7 +120,7 @@
         console.log("fired filter-word-changed: " + word[0] + " | ohneAccent: " + word[1]);
         this.setWord = true;
         if(this.allLettersList.length > 0) {
-          this.shuffleLetters(word[1]);
+          this.shuffleLetters(word[1].toLowerCase());
         } else {
           console.log("this.letterList is not yet set :-/");
         }
@@ -133,7 +133,6 @@
       var dummyArray = [];
       var numTiles = this.limit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
-      shuffle(this.allLettersList);
       this.allLettersList.forEach(function(value, index) {
         if(value.letter === "!!!" || value.letter === undefined) {
           //do nothing

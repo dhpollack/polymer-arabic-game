@@ -87,7 +87,7 @@
       });
     },
     produceWordAudioUrl: function(word, lang) {
-      return "/assets/audio/"+ lang +"/words/" + word + ".m4a";
+      return "/assets/audio/"+ lang +"/words/" + word.toLowerCase() + ".m4a";
     },
     playAudio: function() {
       this.audioBox.play();

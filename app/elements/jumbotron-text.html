@@ -11,6 +11,7 @@
 </dom-module>
 <script>
 (function() {
+  var checkTimeout;
   Polymer({
     is: "jumbotron-text",
     properties: {
@@ -52,10 +53,11 @@
         this.resetBox();
       } else if(this.lastBucket !== "") {
         if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
+        window.clearTimeout(checkTimeout);
         this.scoreArray.push(this.lastBucket);
         this.usertext = this.scoreArray.join("");
         if(this.usertext === this.wordBoard.myWord) {
-            setTimeout(function() {
+            checkTimeout = setTimeout(function() {
               this.wordBoard.playAudio();
             }, 700);
         }
