@@ -15,7 +15,14 @@ newjson = []
 with codecs.open(filetoread[1],'r', 'utf-8') as data_file:    
     data = json.load(data_file)
     for word in data:
-        entry = [ word[0], strip_accents(word[0]), word[1] ]
+        entry = []
+        for val in word:
+            i = word.index(val)
+            if i == 0:
+                entry.append(val)
+                entry.append(strip_accents(val))
+            else:
+                entry.append(val)
         newjson.append(entry)
     with codecs.open(filetoread[1].replace(".json", "-stpacc.json"), 'w', 'utf-8') as writejson:
         json.dump(newjson, writejson, ensure_ascii=False)

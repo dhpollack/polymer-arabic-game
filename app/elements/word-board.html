@@ -5,7 +5,7 @@
   <style>
   </style>
   <template>
-    <div class="word-board"><span>{{myWord}}</span></div>
+    <div id="word-board-word" class="word-board"><span>{{myWord}}</span></div>
     <audio src="{{wordAudio}}" hidden></audio>
     <word-service id="wservice" currlang="{{langCode}}" warray="{{warray}}"></word-service>
   </template>
@@ -50,6 +50,8 @@
       this.scoreBox = document.getElementById('score-board-player-1');
       this.letterListBox = document.querySelector('letter-list');
       
+      this.wordBoardWord = document.getElementById("word-board-word");
+      
       this.audioBox = Polymer.dom(this.root).querySelector("audio");
     },
     changeLanguage: function(event) {
@@ -68,8 +70,13 @@
         console.log("wordArray.length: " + this.wordArray.length + "\nthis.ranWordIndex: " + this.ranWordIndex);
         var word = this.wordArray[this.ranWordIndex];
         //this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
+        if(word[2] !== (undefined || null) && typeof word[2] === 'object') {
+          this.wordBoardWord.className = "";
+          this.setGrammarStyles(word[2].grammar);
+        }
+        
         this.myWord = word[0];
-        this.wordAudio = this.produceWordAudioUrl(word[0], this.langCode);
+        this.wordAudio = this.produceWordAudioUrl(word[0].toLowerCase(), this.langCode);
         //letterListBox.onNewWord2([word[0], word[1]]);
         this.letterListBox.filterWord = word;
         this.scoreBox.checkWord = [word[0], word[1]];
@@ -95,10 +102,47 @@
       });
     },
     produceWordAudioUrl: function(word, lang) {
-      return "/assets/audio/"+ lang +"/words/" + word.toLowerCase() + ".m4a";
+      return "/assets/audio/"+ lang +"/words/" + word + ".m4a";
     },
     playAudio: function() {
+      if(!this.audioBox.paused) {
+        this.audioBox.pause();
+        this.audioBox.currentTime = this.audioBox.currentTime / 3;
+      }
       this.audioBox.play();
+    },
+    setGrammarStyles: function(grammar) {
+      var classesToAdd = [];
+      // this should probably be a map of some sort
+      classesToAdd.push("word-board");
+      if(grammar.partofs !== undefined) {
+        switch(grammar.partofs) {
+          case "adjective":
+          case "adverb":
+            if(classesToAdd.indexOf(grammar.partofs) === -1) classesToAdd.push("word-board-adj-adv");
+            break;
+          case "verb":
+            if(classesToAdd.indexOf(grammar.partofs) === -1) classesToAdd.push("word-board-verb");
+            break;
+          case "noun":
+            // doing nothing with nouns, but theoretical could change
+            break;
+        }
+      }
+      if(grammar.number) {
+        switch(grammar.number) {
+          case "plural":
+            if(classesToAdd.indexOf(grammar.number) === -1) classesToAdd.push("word-board-plural");
+            break;
+          case "singular":
+            // already in default so nothing.  this is a stub
+            break;
+        }        
+      }
+      for(var i = 0; i < classesToAdd.length; i++) {
+        if(i !== 0)  this.wordBoardWord.className += ' ';
+        this.wordBoardWord.className += classesToAdd[i];
+      }
     }
   });
 })();

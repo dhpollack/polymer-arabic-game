@@ -8,7 +8,7 @@
     height: 100vh;
   }
   .core-header {
-    background: #03a9f4;
+    background: #16B38B;
     color: white;
     height: 10vh;
     font-size: 5vh;
@@ -16,6 +16,30 @@
   }
   word-board {
     font-size: 7vh;
+  }
+  .word-board {
+    border-bottom-style: solid;
+    border-bottom-color: white;
+  }
+  .word-board-male {
+    border-bottom-color: #03a9f4;
+  }
+  .word-board-female {
+    border-bottom-color: #FF80CE;
+  }
+  .word-board-singular {
+    border-bottom-style: solid;
+  }
+  .word-board-plural {
+    border-bottom-style: dotted;
+  }
+  .word-board-verb {
+    border-bottom-style: solid;
+    border-bottom-color: #CC2200;
+  }
+  .word-board-adj-adv {
+    border-bottom-style: solid;
+    border-bottom-color: #52FF66;
   }
   word-recorder {
   }
@@ -27,7 +51,7 @@
     font-weight: 300;
   }
   .footer  {
-    background: #03a9f4;
+    background: #16B38B;
     color: white;
     height: 10vh;
     font-size: 0;
@@ -45,6 +69,9 @@
     line-height: 0px;
     vertical-align: top;
     overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
   }
   letter-card {
     display: inline-block;
@@ -71,7 +98,8 @@
     padding: 1vh 1vw;
   }
   core-icon {
-    transform: scale(1.3,1.3);
+    height: 7vh;
+    width: 7vh;
     color: white;
   }
   .content-span {
