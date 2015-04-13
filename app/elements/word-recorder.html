@@ -27,18 +27,24 @@
     properties: {
     },
     ready: function() {
+      this.scoreBoard = document.getElementById("score-board-player-1").querySelector("core-icon");
       this.audio = this.$.recAudio;
       this.recordIcon = Polymer.dom(this.root).querySelector("#recorderInit");
     },
     makeRecording: function() {
       if(initRec(this.audio)) {
+        this.scoreBoard.style.color = "yellow";
         this.recordIcon.classList.add("recording-on");
       } else {
         this.recordIcon.classList.remove("recording-on");
       }
     },
     playRecording: function() {
-      if(playRec(this.audio)) this.recordIcon.classList.remove("recording-on");
+      if(playRec(this.audio)) {
+        this.recordIcon.classList.remove("recording-on");
+      } else {
+        this.scoreBoard.style.color = "green";
+      }
     }  
   });
   /* RecordRTC Scripts */

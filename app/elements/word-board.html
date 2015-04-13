@@ -34,8 +34,7 @@
         value: function() { return []; }
       },
       ranWordIndex: {
-        type: Number,
-        value: 0
+        type: Number
       }
     },
     listeners: {
@@ -57,11 +56,13 @@
       this.$.wservice.currlang = this.langCode;
     },
     wordFilter: function() {
-      var randomIndex = 0;
+      var randomIndex = Math.floor(Math.random() * this.wordArray.length);
       if(this.wordArray.length !== 0) {
-        while(this.ranWordIndex === randomIndex) {
-          randomIndex = Math.floor(Math.random() * this.wordArray.length);
-          console.log("randomIndex: " + randomIndex);
+        if(this.ranWordIndex !== undefined) {
+          for(var i=0;this.ranWordIndex === randomIndex;i++) {
+            randomIndex = Math.floor(Math.random() * this.wordArray.length);
+            if(i > 20) break;
+          }
         }
         this.ranWordIndex = randomIndex;
         console.log("wordArray.length: " + this.wordArray.length + "\nthis.ranWordIndex: " + this.ranWordIndex);
@@ -72,6 +73,7 @@
         //letterListBox.onNewWord2([word[0], word[1]]);
         this.letterListBox.filterWord = word;
         this.scoreBox.checkWord = [word[0], word[1]];
+        
         this.jumbotronBox.zielWort = word[0];
       }
 
