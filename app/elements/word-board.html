@@ -93,13 +93,17 @@
       return items;
     },
     revealWord: function() {
+      var pauseLength = 1500;
       var word = this.wordArray[this.ranWordIndex][1];
       word.split("").forEach(function(value, index) {
         setTimeout(function() {
           var lCard = document.querySelector('letter-card[letter="'+value+'"]');
           lCard.firePaperRipple();
-        }, 1500 * (index + 0.5));
+        }, pauseLength * (index + 0.5));
       });
+      setTimeout(function() {
+        this.playAudio();
+      }.bind(this), pauseLength * (word.length + 0.5))
     },
     produceWordAudioUrl: function(word, lang) {
       return "/assets/audio/"+ lang +"/words/" + word + ".m4a";

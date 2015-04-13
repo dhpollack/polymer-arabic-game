@@ -44,7 +44,8 @@ validation-report.json
 node_modules
 bower_components
 
-# Ignore Audio Files
+# Ignore Specific File Types
 *.flac
 *.m4a
 *.opus
+*.manifest

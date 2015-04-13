@@ -219,9 +219,22 @@ gulp.task('serve:dist', ['default'], function () {
   });
 });
 
+gulp.task('manifest', function(){
+  gulp.src([appDir + '/**/*.m4a', appDir + '/**/*.json'])
+    .pipe($.manifest({
+      hash: true,
+      preferOnline: true,
+      network: ['http://*', 'https://*', '*'],
+      filename: 'app.manifest',
+      exclude: 'app.manifest'
+     }))
+    .pipe(gulp.dest(appDir));
+});
+
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
   runSequence(
+    'manifest',
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
