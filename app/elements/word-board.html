@@ -103,7 +103,7 @@
       });
       setTimeout(function() {
         this.playAudio();
-      }.bind(this), pauseLength * (word.length + 0.5))
+      }.bind(this), pauseLength * (word.length + 0.5));
     },
     produceWordAudioUrl: function(word, lang) {
       return "/assets/audio/"+ lang +"/words/" + word + ".m4a";

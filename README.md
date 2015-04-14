@@ -19,3 +19,5 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [intro.js](https://github.com/usablica/intro.js) - site introduction library (jquery required)  
 [0.8 repo status](http://chuckh.github.io/road-to-polymer/repos.html) - checks whether a Polymer repo has a 0.8 branch yet  
 [glowing text](http://codepen.io/NobodyRocks/pen/qzfoc) - this is an example of glowing text.  neon4 is what I am looking for.
+[cloud icon](http://www.iconarchive.com/show/100-flat-2-icons-by-graphicloads/clouds-1-icon.html) - freeware
+[pt engine](https://ptengine.com) - heatmaps

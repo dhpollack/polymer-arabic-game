@@ -1,6 +1,6 @@
 {
-  "name": "polymer-arabic-game",
-  "version": "0.1",
+  "name": "this-is-not-a-vocabulary-game",
+  "version": "0.1.0",
   "authors": [
     "David Pollack <sent@da3.net>"
   ],
@@ -15,7 +15,7 @@
   ],
   "dependencies": {
     "font-roboto": "Polymer/font-roboto#^0.5.0",
-    "webcomponents": "webcomponents/webcomponentsjs#^0.5.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
     "layout": "Polymer/layout#0.8-preview",
     "core-ajax": "Polymer/core-ajax#0.8-preview",
     "core-header-panel": "Polymer/core-header-panel#0.8-preview",
@@ -24,12 +24,13 @@
     "core-overlay": "Polymer/core-overlay#0.8-preview-wip-layer",
     "paper-ripple": "Polymer/paper-ripple#0.8-preview",
     "paper-icon-button": "Polymer/paper-icon-button#0.8-preview",
-    "polymer": "Polymer/polymer#^0.8.0-rc.2",
+    "polymer": "Polymer/polymer#^0.8.0-rc.4",
     "recordrtc": "*"
   },
   "resolutions": {
     "layout": "0.8-preview",
     "polymer": "^0.8.0-rc.2",
-    "core-meta": "0.8-preview"
+    "core-meta": "0.8-preview",
+    "webcomponentsjs": "^0.6.0"
   }
 }

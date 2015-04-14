@@ -85,7 +85,7 @@ gulp.task('audio', function () {
       //'echo <%= file.path %> >> '+ tmpDir + '/opus.log',
       //'opusenc --bitrate 8 <%= file.path %> <%= f(file.path, ".opus") %> >> '+ tmpDir + '/opus.log 2>&1',
       'echo <%= file.path %> >> '+ tmpDir + '/ffmpeg.log',
-      'ffmpeg -y -i <%= file.path %> -vbr 1 -acodec aac -strict experimental <%= f(file.path, ".m4a") %> >> '+ tmpDir + '/ffmpeg.log 2>&1'
+      'ffmpeg -y -i <%= file.path %> -strict experimental -acodec aac -b:a 64k -ac 1 <%= f(file.path, ".m4a") %> >> '+ tmpDir + '/ffmpeg.log 2>&1'
     ], {
       templateData: {
         f: function(s, ext) {
@@ -165,6 +165,13 @@ gulp.task('html', function () {
     .pipe($.size({title: 'html'}));
 });
 
+gulp.task('offlineapp', function(){
+  return gulp.src(appDir + '/index.html')
+    .pipe($.replace('<html>', '<html manifest="app.manifest">'))
+    .pipe($.rename('offline.html'))
+    .pipe(gulp.dest(appDir));
+});
+
 // Vulcanize imports
 gulp.task('vulcanize', function () {
   return gulp.src(distDir + '/index.vulcanized.html')
@@ -220,7 +227,8 @@ gulp.task('serve:dist', ['default'], function () {
 });
 
 gulp.task('manifest', function(){
-  gulp.src([appDir + '/**/*.m4a', appDir + '/**/*.json'])
+  
+  gulp.src([appDir + '/index.html', appDir + '/**/*.m4a', appDir + '/**/*.json'])
     .pipe($.manifest({
       hash: true,
       preferOnline: true,
@@ -234,7 +242,7 @@ gulp.task('manifest', function(){
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
   runSequence(
-    'manifest',
+    ['manifest', 'offlineapp'],
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
@@ -246,7 +254,7 @@ gulp.task('default', ['clean'], function (cb) {
 // Update `url` below to the public URL for your site
 gulp.task('pagespeed', function (cb) {
   // Update the below URL to the public URL of your site
-  pagespeed.output('example.com', {
+  pagespeed.output('arabic.da3.net', {
     strategy: 'mobile',
     // By default we use the PageSpeed Insights free (no API key) tier.
     // Use a Google Developer API key if you have one: http://goo.gl/RkN0vE

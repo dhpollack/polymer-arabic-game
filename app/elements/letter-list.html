@@ -127,6 +127,7 @@
       }
     },
     shuffleLetters: function(word) {
+      if(document.body.hasAttribute("unresolved")) document.body.removeAttribute("unresolved");
       // this is a hack because polymer doesn't update if an array's properties have changed only if the array itself
       // has been manipulated.
       // see http://stackoverflow.com/questions/23706775/polymer-changes-not-always-flowing-through-a-filter
