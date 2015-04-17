@@ -83,11 +83,11 @@
       if(letter === " " || mylang === undefined) return "";
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
     },
-    firePaperRipple: function() {
+    firePaperRipple: function(playAudio) {
       if(this.paperRippleElem) {
         this.paperRippleElem.mousedownAction();
         this.paperRippleElem.mouseupAction();
-        this.audio.play();
+        if(playAudio) this.audio.play();
       }
     }
   });

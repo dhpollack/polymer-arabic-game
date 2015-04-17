@@ -56,7 +56,10 @@
       }
     },
     requestSent: function(e) {
-      if(this.letterList) this.letterList.setWord = false;
+      if(!this.letterList) {
+        this.letterList = document.querySelector("letter-list");
+      }
+      this.letterList.setWord = false;
     },
     wordsLoaded: function() {
       var jsonSuccess = (this.$.wajax.lastResponse != null) ? true : false;

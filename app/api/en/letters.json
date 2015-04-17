@@ -1,7 +1,8 @@
 [
   {
     "lang": {
-      "code": "en"
+      "code": "en",
+      "stripDiacritics": true
     },
     "alphabet": [
       {

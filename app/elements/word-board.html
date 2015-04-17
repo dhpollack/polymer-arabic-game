@@ -58,6 +58,7 @@
       this.$.wservice.currlang = this.langCode;
     },
     wordFilter: function() {
+      if(!this.letterListBox) this.letterListBox = document.querySelector('letter-list');
       var randomIndex = Math.floor(Math.random() * this.wordArray.length);
       if(this.wordArray.length !== 0) {
         if(this.ranWordIndex !== undefined) {
@@ -74,16 +75,20 @@
           this.wordBoardWord.className = "";
           this.setGrammarStyles(word[2].grammar);
         }
-        
+
         this.myWord = word[0];
         this.wordAudio = this.produceWordAudioUrl(word[0].toLowerCase(), this.langCode);
-        //letterListBox.onNewWord2([word[0], word[1]]);
-        this.letterListBox.filterWord = word;
-        this.scoreBox.checkWord = [word[0], word[1]];
-        
+        this.letterListBox.setWord = true;
+        this.letterListBox.runLetters();
+
         this.jumbotronBox.zielWort = word[0];
       }
-
+    },
+    getCheckWord: function() {
+      var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+      var word = this.wordArray[this.ranWordIndex];
+      return word[findex];
+      
     },
     setWords: function() {
       var items = this.$.wservice.warray;
@@ -94,11 +99,13 @@
     },
     revealWord: function() {
       var pauseLength = 1500;
-      var word = this.wordArray[this.ranWordIndex][1];
+      var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+
+      var word = this.wordArray[this.ranWordIndex][findex].toLowerCase();
       word.split("").forEach(function(value, index) {
         setTimeout(function() {
           var lCard = document.querySelector('letter-card[letter="'+value+'"]');
-          lCard.firePaperRipple();
+          lCard.firePaperRipple(true);
         }, pauseLength * (index + 0.5));
       });
       setTimeout(function() {
@@ -123,10 +130,10 @@
         switch(grammar.partofs) {
           case "adjective":
           case "adverb":
-            if(classesToAdd.indexOf(grammar.partofs) === -1) classesToAdd.push("word-board-adj-adv");
+            classesToAdd.push("word-board-adj-adv");
             break;
           case "verb":
-            if(classesToAdd.indexOf(grammar.partofs) === -1) classesToAdd.push("word-board-verb");
+            classesToAdd.push("word-board-verb");
             break;
           case "noun":
             // doing nothing with nouns, but theoretical could change
@@ -136,10 +143,23 @@
       if(grammar.number) {
         switch(grammar.number) {
           case "plural":
-            if(classesToAdd.indexOf(grammar.number) === -1) classesToAdd.push("word-board-plural");
+            classesToAdd.push("word-board-plural");
             break;
           case "singular":
             // already in default so nothing.  this is a stub
+            break;
+        }        
+      }
+      if(grammar.gender) {
+        switch(grammar.gender) {
+          case "male":
+            classesToAdd.push("word-board-male");
+            break;
+          case "female":
+            classesToAdd.push("word-board-female");
+            break;
+          case "neuter":
+            classesToAdd.push("word-board-neuter");
             break;
         }        
       }

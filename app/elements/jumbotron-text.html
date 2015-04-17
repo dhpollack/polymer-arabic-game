@@ -56,7 +56,7 @@
         window.clearTimeout(checkTimeout);
         this.scoreArray.push(this.lastBucket);
         this.usertext = this.scoreArray.join("");
-        if(this.usertext === this.wordBoard.myWord) {
+        if(this.usertext.toLowerCase() === this.wordBoard.myWord.toLowerCase()) {
             checkTimeout = setTimeout(function() {
               this.wordBoard.playAudio();
             }, 700);

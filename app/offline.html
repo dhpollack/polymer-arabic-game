@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html manifest="app.manifest">
 
 <head>
 
@@ -54,15 +54,12 @@
                 <option value="ar">Arabic</option>
                 <option value="en">English</option>
                 <option value="en-US-south">English (US South)</option>
-                <!--
-                <option value="de">German</option>
-                <option value="tr">Turkish</option>
-                -->
               </select>
             </div>
-            <div><br />Recordmodus: <button id="select-recordmodus" onclick="toggleRecordDiv()">toggle</button></div>
-            <div hidden><br />BuggyFill: <button id="select-buggyfill" onclick="refreshBuggyFill()">toggle</button></div>
-            <div><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
+            <br />
+            <div>Recordmodus: <button id="select-nerdmodus" onclick="toggleRecordDiv()">toggle</button></div>
+            <br />
+            <div>Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
           </div>
         </core-collapse>
         <letter-list limit="12" lang-code="ar"></letter-list>
@@ -164,9 +161,7 @@
     // but this stub is in case I want to move it here.
     document.body.removeAttribute("unresolved");
   }
-  function refreshBuggyFill() {
-    window.viewportUnitsBuggyfill.init(true);
-  }
+  window.viewportUnitsBuggyfill.init();
  </script>
 
 </body>

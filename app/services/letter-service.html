@@ -11,6 +11,7 @@
     <core-ajax id="ajax" 
       url="{{jsonUrl}}" 
       handleas="json" 
+      on-request="lettersRequest"
       on-response="lettersLoaded">
     </core-ajax>
   </template>
@@ -52,6 +53,12 @@
         return "/api/"+langCode+"/letters.json";
       }
     },
+    lettersRequest: function() {
+      if(!this.letterListBox) {
+        this.letterListBox = document.querySelector("letter-list");
+      }
+      this.letterListBox.setLetters = false;
+    },
     lettersLoaded: function() {
       var jsonSuccess = (this.$.ajax.lastResponse != null) ? true : false;
       console.log("loading letters from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
@@ -60,6 +67,7 @@
         var ajaxData = this.$.ajax.lastResponse.slice()[0];
         this.lobj = ajaxData;
         this.fire('new-letters', { jsonLang:  ajaxData.lang.code });
+        this.letterListBox.setLetters = true;
       }
     }
   });

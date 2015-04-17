@@ -43,6 +43,9 @@
   .word-board-female {
     border-bottom-color: #FF80CE;
   }
+  .word-board-neuter {
+    border-bottom-color: #8A8A8A;
+  }
   .word-board-singular {
     border-bottom-style: solid;
   }
@@ -106,6 +109,18 @@
   }
   .card-body {
   }
+  #menu-toggle {
+    transition: 0.3s ease-in-out;
+  }
+  #close-help-overlay {
+    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  #help-overlay core-icon {
+    color: black;
+  }
   core-collapse {
     background: rgba(200,170,160, 1.0);
   }
@@ -117,6 +132,7 @@
     height: 7vh;
     width: 7vh;
     color: white;
+    content: 'viewport-units-buggyfill; width: 7vh; height: 7vh;';
   }
   .content-span {
     font-size: 13vh;
@@ -135,8 +151,8 @@
 		-moz-user-select: none;
 		overflow: hidden;
 		background: white;
-		padding: 30px 42px;
-		margin: 20px;
+		padding: 10px;
+		margin: 30px;
 		outline: 1px solid rgba(0,0,0,0.2);
 		box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 		overflow: auto;
@@ -158,6 +174,7 @@
       height: 7vw;
       width: 7vw;
       color: white;
+      content: 'viewport-units-buggyfill; width: 7vw; height: 7vw;';
     }
 
   }
