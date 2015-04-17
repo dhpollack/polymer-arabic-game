@@ -109,18 +109,6 @@
   }
   .card-body {
   }
-  #menu-toggle {
-    transition: 0.3s ease-in-out;
-  }
-  #close-help-overlay {
-    float: left;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  #help-overlay core-icon {
-    color: black;
-  }
   core-collapse {
     background: rgba(200,170,160, 1.0);
   }
@@ -162,6 +150,18 @@
   }
   .container {
     width: 100vw;
+  }
+  #menu-toggle {
+    transition: 0.3s ease-in-out;
+  }
+  #close-help-overlay {
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  #help-overlay core-icon {
+    color: black;
   }
   @media screen and (orientation: portrait) {
     letter-card {

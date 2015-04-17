@@ -148,6 +148,7 @@
       var dummyArray = [];
       var numTiles = this.limit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
+      shuffle(this.allLettersList);
       this.allLettersList.forEach(function(value, index) {
         if(value.letter === "!!!" || value.letter === undefined) {
           //do nothing
