@@ -26,6 +26,7 @@
     "paper-icon-button": "Polymer/paper-icon-button#0.8-preview",
     "polymer": "Polymer/polymer#^0.8.0-rc.4",
     "recordrtc": "*",
+    "p5-js": "processing/p5.js#master",
     "viewport-units-buggyfill": "~0.5.2"
   },
   "resolutions": {

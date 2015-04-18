@@ -65,7 +65,7 @@
             <div><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
           </div>
         </core-collapse>
-        <letter-list limit="12" lang-code="ar"></letter-list>
+        <letter-list id="letter-grid" limit="12" lang-code="ar"></letter-list>
       </div>
       <div class="footer horizontal justified layout center">
         <div class="footer-button horizontal start-justified layout flex">
@@ -165,7 +165,7 @@
     document.body.removeAttribute("unresolved");
   }
   function refreshBuggyFill() {
-    window.viewportUnitsBuggyfill.init(true);
+    window.viewportUnitsBuggyfill.refresh();
   }
  </script>
 

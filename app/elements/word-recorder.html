@@ -3,7 +3,8 @@
 <link rel="import" href="../../bower_components/core-icons/core-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/core-icons/av-icons.html">
-<script src="../../bower_components/recordrtc/RecordRTC.js"></script>
+<script src="../assets/js/p5.js"></script>
+<script src="../assets/js/p5.sound.js"></script>
 
 <dom-module id="word-recorder">
     <style>
@@ -32,7 +33,7 @@
       this.recordIcon = Polymer.dom(this.root).querySelector("#recorderInit");
     },
     makeRecording: function() {
-      if(initRec(this.audio)) {
+      if(initRec()) {
         this.scoreBoard.style.color = "yellow";
         this.recordIcon.classList.add("recording-on");
       } else {
@@ -40,85 +41,72 @@
       }
     },
     playRecording: function() {
-      if(playRec(this.audio)) {
+      if(playRec()) {
         this.recordIcon.classList.remove("recording-on");
       } else {
         this.scoreBoard.style.color = "green";
       }
     }  
   });
-  /* RecordRTC Scripts */
-  var recorder;
-  var audioStream;
+  
+  // p5.sound.js
+  var mic, recorder, soundFile;
+
   var preventLongRec;
   var recLimit = 15000;
-  function initRec(audioElem) {
-    if(!audioStream) {
-      // sets up recording environment
-      navigator.getUserMedia(
-        {audio: true},
-        function(stream) {
-          console.log("streaming started...");
-          if (window.IsChrome) {
-            stream = new window.MediaStream(stream.getAudioTracks());
-          }
-          audioStream = stream;
-          
-          // "audio" is a default type
-          recorder = window.RecordRTC(stream, {
-              type: 'audio'
-          });
-          startRec(audioElem);
-        },
-        function() { 
-          console.log("there was an error recording...");
-        }
-      );
-      return true;  
+  function initRec() {
+    console.log(mic);
+    if(mic === undefined) {
+      // create an audio in
+      mic = new p5.AudioIn();
+    
+      // users must manually enable their browser microphone for recording to work properly!
+      mic.start();
+
+      // create a sound recorder
+      recorder = new p5.SoundRecorder();
+    
+      // connect the mic to the recorder
+      recorder.setInput(mic);
+      
+      startRec();
+
+      return true;
     } else {
-      if(audioElem.readyState === 0) {
+      if(!soundFile.isLoaded()) {
         clearTimeout(preventLongRec);
-        stopRec(audioElem);
+        stopRec();
         return false;
       } else {
-        audioElem.src = '';
-        startRec(audioElem);
+        console.log(soundFile.isLoaded());
+        startRec();
         return true;
       }
     }
   }
-  function startRec(audioElem) {
-    recorder.startRecording();
+  function startRec() {
+    soundFile = new p5.SoundFile();
+    recorder.record(soundFile);
     preventLongRec = setTimeout(function() {
-        stopRec(audioElem);
+        stopRec();
         console.log("recording timed out after " + (recLimit / 1000) + " seconds.");
       }, recLimit);
   }
-  function stopRec(audioElem) {
-    if(recorder && audioElem.readyState === 0) {
-      
-      recorder.stopRecording(function(url) {
-        console.log("audio data url: " + url);
-        audioElem.src = url;
-        audioElem.muted = false;
-        clearTimeout(preventLongRec);
-      });
+  function stopRec() {
+    if(recorder) {
+      recorder.stop();
     } else {
       console.log("hmm, recorder isn't recording");
     }
   }
-  function playRec(audioElem) {
+  function playRec() {
     // if the user presses play before stop, the recording is stopped and then played
-    if(audioElem.readyState === 0) {
-      stopRec(audioElem);
-      audioElem.onloadeddata = function() { 
-        audioElem.play();
-        audioElem.onloadeddata = function() {};
-      };
+    if(!soundFile.isLoaded()) {
+      stopRec();
+      soundFile.play();
       return true;
     } else {
-      console.log("play recording...");
-      audioElem.play();
+      soundFile.play();
       return false;
     }
   }

@@ -141,6 +141,7 @@
       if(!this.pageRevealed) {
         if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
+        window.viewportUnitsBuggyfill.init();
       }
       // this is a hack because polymer doesn't update if an array's properties have changed only if the array itself
       // has been manipulated.
