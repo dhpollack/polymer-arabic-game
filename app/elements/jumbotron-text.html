@@ -4,7 +4,7 @@
   <style>
   </style>
   <template>
-    <div class="jumbotron">
+    <div id="jumbotron-div" class="jumbotron">
       <span id="jumbotron-text">{{usertext}}</span>
     </div>
   </template>
@@ -42,6 +42,8 @@
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
       this.scoreBox = document.getElementById('score-board-player-1');
       this.wordBoard = document.querySelector('word-board');
+      this.jtext = document.getElementById('jumbotron-text');
+      console.log(this.jtext);
     },
     handleClick: function() {
       this.lastBucket = "!!!";
@@ -49,6 +51,7 @@
     updateJumbotron: function() {
       if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
         console.log("checking word...");
+        this.jtext.classList.remove("glow-text");
         this.scoreBox.lastBucket = this.usertext;
         this.resetBox();
       } else if(this.lastBucket !== "") {
@@ -59,7 +62,10 @@
         if(this.usertext.toLowerCase() === this.wordBoard.myWord.toLowerCase()) {
             checkTimeout = setTimeout(function() {
               this.wordBoard.playAudio();
-            }, 700);
+              this.jtext.classList.add("glow-text");
+            }.bind(this), 700);
+        } else {
+          this.jtext.classList.remove("glow-text");
         }
         this.lastBucket = "";
         

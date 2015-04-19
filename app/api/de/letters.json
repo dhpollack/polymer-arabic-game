@@ -154,7 +154,13 @@
         "uid": 30,
         "hidden": true,
         "letter": "ß"
-      }    
+      },
+      {
+        "uid": 31,
+        "hidden": true,
+        "letter": "'",
+        "regular": false
+      }
     ]
   }
 ]

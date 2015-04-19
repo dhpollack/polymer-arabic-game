@@ -1,5 +1,11 @@
 {
   "name": "TINAVG - This is Not A Vocabulary Game",
+  "short_name": "tinavg",
+  "version": "0.1.0",
+  "lang": "en",
+  "description": "A language game to learn the alphabet and improve pronounciation.",
+  "author": "David Pollack",
+  "url": "https://www.tinavg.com",
   "icons": [
     {
       "src": "launcher-icon.png",

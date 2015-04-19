@@ -121,7 +121,6 @@
     },
     runNewLetters: function(){
       console.log("switching up letters");
-      var findex = (this.stripDiacritics) ? 1 : 0;
       this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase());
     },
     onNewWord: function() {
@@ -130,7 +129,6 @@
         console.log("fired filter-word-changed: " + word + " | ohneAccent: " + this.stripDiacritics);
         this.setWord = true;
         if(this.allLettersList.length > 0) {
-          var findex = (this.stripDiacritics) ? 1 : 0;
           this.shuffleLetters(word.toLowerCase());
         } else {
           console.log("this.letterList is not yet set :-/");
@@ -141,7 +139,10 @@
       if(!this.pageRevealed) {
         if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
-        window.viewportUnitsBuggyfill.init();
+        window.viewportUnitsBuggyfill.init({
+          refreshDebounceWait: 50,
+          hacks: window.viewportUnitsBuggyfillHacks
+        });
       }
       // this is a hack because polymer doesn't update if an array's properties have changed only if the array itself
       // has been manipulated.

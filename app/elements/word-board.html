@@ -5,7 +5,7 @@
   <style>
   </style>
   <template>
-    <div id="word-board-word" class="word-board"><span>{{myWord}}</span></div>
+    <div id="word-board-word" class="word-board"><span id="my-word">{{myWord}}</span></div>
     <audio src="{{wordAudio}}" hidden></audio>
     <word-service id="wservice" currlang="{{langCode}}" warray="{{warray}}"></word-service>
   </template>
@@ -41,7 +41,7 @@
       'new-words': 'setWords',
       'lang-code-changed': 'changeLanguage',
       'word-array-changed': 'wordFilter',
-      'tap': 'playAudio'
+      'tap': 'tapWord'
     },
     created: function() {
     },
@@ -51,8 +51,12 @@
       this.letterListBox = document.querySelector('letter-list');
       
       this.wordBoardWord = document.getElementById("word-board-word");
-      
+      this.myWordSpan = document.getElementById("my-word");
+      var wordSpan = this.wordBoardWord;
       this.audioBox = Polymer.dom(this.root).querySelector("audio");
+      this.audioBox.onended = function() { 
+          wordSpan.classList.remove("flip-text");
+        };
     },
     changeLanguage: function(event) {
       this.$.wservice.currlang = this.langCode;
@@ -75,8 +79,8 @@
           this.wordBoardWord.className = "";
           this.setGrammarStyles(word[2].grammar);
         }
-
         this.myWord = word[0];
+        
         this.wordAudio = this.produceWordAudioUrl(word[0].toLowerCase(), this.langCode);
         this.letterListBox.setWord = true;
         this.letterListBox.runLetters();
@@ -85,10 +89,13 @@
       }
     },
     getCheckWord: function() {
-      var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
-      var word = this.wordArray[this.ranWordIndex];
-      return word[findex];
-      
+      if(this.wordArray.length !== 0) {
+        var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+        var word = this.wordArray[this.ranWordIndex];
+        return word[findex];
+      } else {
+        return;
+      }
     },
     setWords: function() {
       var items = this.$.wservice.warray;
@@ -113,6 +120,12 @@
     },
     produceWordAudioUrl: function(word, lang) {
       return "/assets/audio/"+ lang +"/words/" + word + ".m4a";
+    },
+    tapWord: function() {
+      console.log(this.audioBox.duration);
+      this.wordBoardWord.classList.add("flip-text");
+      if(this.audioBox.paused) this.scoreBox.score++;
+      this.playAudio();
     },
     playAudio: function() {
       if(!this.audioBox.paused) {

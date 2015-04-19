@@ -1,7 +1,8 @@
 [
   {
     "lang": {
-      "code": "en-US-south"
+      "code": "en-US-south",
+      "stripDiacritics": true
     },
     "alphabet": [
       {
@@ -34,21 +35,18 @@
         "letter": "e",
         "en": "e"
       },
-    
       {
         "uid": 6,
         "hidden": true,
         "letter": "f",
         "en": "f"
       },
-    
       {
         "uid": 7,
         "hidden": true,
         "letter": "g",
         "en": "g"
       },
-    
       {
         "uid": 8,
         "hidden": true,
@@ -61,7 +59,6 @@
         "letter": "i",
         "en": "i"
       },
-    
       {
         "uid": 10,
         "hidden": true,
@@ -74,63 +71,54 @@
         "letter": "k",
         "en": "k"
       },
-    
       {
         "uid": 12,
         "hidden": true,
         "letter": "l",
         "en": "l"
       },
-    
       {
         "uid": 13,
         "hidden": true,
         "letter": "m",
         "en": "m"
       },
-    
       {
         "uid": 14,
         "hidden": true,
         "letter": "n",
         "en": "n"
       },
-    
       {
         "uid": 15,
         "hidden": true,
         "letter": "o",
         "en": "o"
       },
-    
       {
         "uid": 16,
         "hidden": true,
         "letter": "p",
         "en": "p"
       },
-    
       {
         "uid": 17,
         "hidden": true,
         "letter": "q",
         "en": "q"
       },
-    
       {
         "uid": 18,
         "hidden": true,
         "letter": "r",
         "en": "r"
       },
-    
       {
         "uid": 19,
         "hidden": true,
         "letter": "s",
         "en": "s"
       },
-    
       {
         "uid": 20,
         "hidden": true,
@@ -172,7 +160,14 @@
         "hidden": true,
         "letter": "z",
         "en": "z"
-      }    
+      },
+      {
+        "uid": 27,
+        "hidden": true,
+        "letter": "'",
+        "en": "'",
+        "regular": false
+      }
     ]
   }
 ]

@@ -11,7 +11,7 @@
   <!-- mobile app stuff -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <link rel="manifest" href="mobileapp-manifest.json">
+  <link rel="manifest" href="tinavg-webapp.json">
   <link rel="icon" href="launcher-icon.png">
   <!-- App CSS -->
   <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
@@ -29,6 +29,7 @@
   <link rel="import" href="elements/elements.html">
   <!-- Fix for Viewport Units -->
   <script src="../bower_components/viewport-units-buggyfill/viewport-units-buggyfill.js"></script>
+  <script src="../bower_components/viewport-units-buggyfill/viewport-units-buggyfill.hacks.js"></script>
 </head>
 
 <body fullbleed unresolved>
@@ -38,7 +39,7 @@
   <core-header-panel id="header-panel">
     <core-toolbar class="core-header horizontal justified layout start">
       <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex"></score-board>
-      <word-board class="horizontal center-justified layout flex-2" lang-code="ar"></word-board>
+      <word-board class="horizontal center-justified layout flex-2" lang-code="de"></word-board>
       <div class="top-right-item horizontal end-justified layout flex">
         <score-board id="score-board-player-2" player="2" hidden></score-board>
         <word-recorder></word-recorder>
@@ -51,11 +52,11 @@
             <div>
               Language: 
               <select onchange="setLang(this.value)">
-                <option value="ar">Arabic</option>
                 <option value="en">English</option>
+                <option value="de">German</option>
+                <option value="ar">Arabic</option>
                 <option value="en-US-south">English (US South)</option>
                 <!--
-                <option value="de">German</option>
                 <option value="tr">Turkish</option>
                 -->
               </select>
@@ -65,7 +66,7 @@
             <div><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
           </div>
         </core-collapse>
-        <letter-list id="letter-grid" limit="12" lang-code="ar"></letter-list>
+        <letter-list id="letter-grid" limit="12" lang-code="de"></letter-list>
       </div>
       <div class="footer horizontal justified layout center">
         <div class="footer-button horizontal start-justified layout flex">

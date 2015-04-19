@@ -9,199 +9,165 @@
         "uid": 1,
         "hidden": true,
         "letter": "a",
-        "en": "a",
-        "audio": "/assets/audio/en/a.opus"
+        "en": "a"
       },
       {
         "uid": 2,
         "hidden": true,
         "letter": "b",
-        "en": "b",
-        "audio": "/assets/audio/en/b.opus"
+        "en": "b"
       },
       {
         "uid": 3,
         "hidden": true,
         "letter": "c",
-        "en": "c",
-        "audio": "/assets/audio/en/c.opus"
+        "en": "c"
       },
       {
         "uid": 4,
         "hidden": true,
         "letter": "d",
-        "en": "d",
-        "audio": "/assets/audio/en/d.opus"
+        "en": "d"
       },
       {
         "uid": 5,
         "hidden": true,
         "letter": "e",
-        "en": "e",
-        "audio": "/assets/audio/en/e.opus"
+        "en": "e"
       },
-    
       {
         "uid": 6,
         "hidden": true,
         "letter": "f",
-        "en": "f",
-        "audio": "/assets/audio/en/f.opus"
+        "en": "f"
       },
-    
       {
         "uid": 7,
         "hidden": true,
         "letter": "g",
-        "en": "g",
-        "audio": "/assets/audio/en/g.opus"
+        "en": "g"
       },
-    
       {
         "uid": 8,
         "hidden": true,
         "letter": "h",
-        "en": "h",
-        "audio": "/assets/audio/en/h.opus"
+        "en": "h"
       },
-    
       {
         "uid": 9,
         "hidden": true,
         "letter": "i",
-        "en": "i",
-        "audio": "/assets/audio/en/i.opus"
+        "en": "i"
       },
-    
       {
         "uid": 10,
         "hidden": true,
         "letter": "j",
-        "en": "j",
-        "audio": "/assets/audio/en/j.opus"
+        "en": "j"
       },
-    
       {
         "uid": 11,
         "hidden": true,
         "letter": "k",
-        "en": "k",
-        "audio": "/assets/audio/en/k.opus"
+        "en": "k"
       },
-    
       {
         "uid": 12,
         "hidden": true,
         "letter": "l",
-        "en": "l",
-        "audio": "/assets/audio/en/l.opus"
+        "en": "l"
       },
-    
       {
         "uid": 13,
         "hidden": true,
         "letter": "m",
-        "en": "m",
-        "audio": "/assets/audio/en/m.opus"
+        "en": "m"
       },
-    
       {
         "uid": 14,
         "hidden": true,
         "letter": "n",
-        "en": "n",
-        "audio": "/assets/audio/en/n.opus"
+        "en": "n"
       },
-    
       {
         "uid": 15,
         "hidden": true,
         "letter": "o",
-        "en": "o",
-        "audio": "/assets/audio/en/o.opus"
+        "en": "o"
       },
-    
       {
         "uid": 16,
         "hidden": true,
         "letter": "p",
-        "en": "p",
-        "audio": "/assets/audio/en/p.opus"
+        "en": "p"
       },
-    
       {
         "uid": 17,
         "hidden": true,
         "letter": "q",
-        "en": "q",
-        "audio": "/assets/audio/en/q.opus"
+        "en": "q"
       },
-    
       {
         "uid": 18,
         "hidden": true,
         "letter": "r",
-        "en": "r",
-        "audio": "/assets/audio/en/r.opus"
+        "en": "r"
       },
-    
       {
         "uid": 19,
         "hidden": true,
         "letter": "s",
-        "en": "s",
-        "audio": "/assets/audio/en/s.opus"
+        "en": "s"
       },
-    
       {
         "uid": 20,
         "hidden": true,
         "letter": "t",
-        "en": "t",
-        "audio": "/assets/audio/en/t.opus"
+        "en": "t"
       },
       {
         "uid": 21,
         "hidden": true,
         "letter": "u",
-        "en": "u",
-        "audio": "/assets/audio/en/u.opus"
+        "en": "u"
       },
       {
         "uid": 22,
         "hidden": true,
         "letter": "v",
-        "en": "v",
-        "audio": "/assets/audio/en/v.opus"
+        "en": "v"
       },
       {
         "uid": 23,
         "hidden": true,
         "letter": "w",
-        "en": "w",
-        "audio": "/assets/audio/en/w.opus"
+        "en": "w"
       },
       {
         "uid": 24,
         "hidden": true,
         "letter": "x",
-        "en": "x",
-        "audio": "/assets/audio/en/x.opus"
+        "en": "x"
       },
       {
         "uid": 25,
         "hidden": true,
         "letter": "y",
-        "en": "y",
-        "audio": "/assets/audio/en/y.opus"
+        "en": "y"
       },
       {
         "uid": 26,
         "hidden": true,
         "letter": "z",
-        "en": "z",
-        "audio": "/assets/audio/en/z.opus"
-      }    
+        "en": "z"
+      },
+      {
+        "uid": 27,
+        "hidden": true,
+        "letter": "'",
+        "en": "'",
+        "regular": false
+      }
     ]
   }
 ]

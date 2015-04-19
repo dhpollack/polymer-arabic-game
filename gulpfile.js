@@ -97,6 +97,14 @@ gulp.task('audio', function () {
     }));
 });
 
+// Optimize Audio - create .mp4 and .opus
+gulp.task('diacritics', function () {
+  return gulp.src(appDir+'/api/**/words.json')
+    .pipe($.shell([
+      'utils/diacritics.py <%= file.path %>'
+    ]));
+});
+
 // Copy All Files At The Root Level (app)
 gulp.task('copy', function () {
   var app = gulp.src([
