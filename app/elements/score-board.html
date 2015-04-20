@@ -20,6 +20,10 @@
         type: Number,
         value: 0
       },
+      streak: {
+        type: Number,
+        value: 0
+      },
       lastBucket: {
         type: String,
         notify: true
@@ -48,9 +52,27 @@
     },
     ready: function() {
       this.starIcon = Polymer.dom(this.root).querySelector("core-icon");
+      this.clueShow = document.getElementById('clue-show');
+    },
+    updateStreak: function(correct) {
+      if(correct) {
+        if(this.streak >= 0) {
+          this.streak++;
+        } else {
+          this.streak = 1;
+        }
+      } else {
+        if(this.streak <= 0) {
+          this.streak--;
+        } else {
+          this.streak = -1;
+        }
+      }
+      if(this.streak == -3) this.helpPlayer();
     },
     updateScoreBoard: function() {
       if(!this.wordBoardBox) this.wordBoardBox = document.querySelector('word-board');
+      if(!this.clueShow) this.clueShow = document.getElementById('clue-show');
       if(["","_____"].indexOf(this.lastBucket) === -1) {
         console.log("Does " + this.lastBucket.toLowerCase() + " = " + this.wordBoardBox.getCheckWord().toLowerCase());
         if(this.lastBucket.toLowerCase() === this.wordBoardBox.getCheckWord().toLowerCase()) {
@@ -59,10 +81,13 @@
           } else {
             this.score += this.correctPts;
           }
+          this.updateStreak(true);
           this.resetStar();
 
           this.wordBoardBox.wordFilter();
+          if(this.clueShow.classList.contains("glow-yellow")) this.clueShow.classList.remove("glow-yellow");
         } else {
+          this.updateStreak(false);
           this.score -= this.incorrectPts;
         }
       }
@@ -71,6 +96,9 @@
       if(this.starIcon.style.color !== "white") {
         this.starIcon.style.color = "white";
       }
+    },
+    helpPlayer: function() {
+      this.clueShow.classList.add("glow-yellow");
     }
   });
 })();

@@ -182,6 +182,9 @@
   #jumbotron-text {
     border:solid 0px;
   }
+  .capitalize {
+    text-transform: capitalize;
+  }
   .glow-text {
     -webkit-animation: glowtext 1.5s infinite alternate;
     -moz-animation: glowtext 1.5s infinite alternate;
@@ -196,6 +199,7 @@
       color: #E0E639;
       padding: 5px;
       border:solid 2px rgba(224,230,57,0.7);
+      border-radius: 10px;
     }
   }
   @-moz-keyframes glowtext {
@@ -207,6 +211,7 @@
       color: #E0E639;
       padding: 5px;
       border:solid 2px rgba(224,230,57,0.7);
+      border-radius: 10px;
     }
   }
   @keyframes glowtext {
@@ -218,6 +223,7 @@
       color: #E0E639;
       padding: 5px;
       border:solid 2px rgba(224,230,57,0.7);
+      border-radius: 10px;
     }
   }
   .flip-text {
@@ -303,6 +309,39 @@
       transform: scale(1, 1);
     }
   }
+  .glow-yellow {
+    -webkit-animation: glowyellow 1.5s ease-in-out infinite alternate;
+    -moz-animation: glowyellow 1.5s ease-in-out infinite alternate;
+    animation: glowyellow 1.5s ease-in-out infinite alternate;
+  }
+  @-webkit-keyframes glowyellow {
+    from {
+
+    }
+    to {
+      background-color: rgba(224,230,57,0.7);
+      border-radius: 50%;
+    }
+  }
+  @-moz-keyframes glowyellow {
+    from {
+
+    }
+    to {
+      background-color: rgba(224,230,57,0.7);
+      border-radius: 50%;
+    }
+  }
+  @keyframes glowyellow {
+    from {
+
+    }
+    to {
+      background-color: rgba(224,230,57,0.7);
+      border-radius: 50%;
+    }
+  }
+
   @media screen and (orientation: portrait) {
     letter-card {
       height: 20vh;

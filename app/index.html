@@ -74,7 +74,7 @@
         </div>
         <jumbotron-text class="horizontal center-justified layout flex-2"></jumbotron-text>
         <div id="nerdmodus-div" class="horizontal end-justified layout flex">
-          <paper-icon-button id="clue-show" icon="text-format" onclick="showClue()"></paper-icon-button>
+          <div id="clue-show-div"><paper-icon-button id="clue-show" icon="text-format" onclick="showClue()"></paper-icon-button></div>
           <paper-icon-button id="help-show" icon="help" onclick="showHelp()"></paper-icon-button>
         </div>
       </div>
@@ -121,6 +121,7 @@
   var scoreBoard2 = document.getElementById('score-board-player-2');
   var collapseMenu = document.getElementById('collapse1');
   var menuToggleButton = document.getElementById('menu-toggle');
+  var clueShow = document.getElementById('clue-show');
   
   function toggleCoreCollapse() {
     collapseMenu.toggle();
@@ -156,6 +157,7 @@
   }
   function showClue() {
     wordBoard.revealWord();
+    if(clueShow.classList.contains("glow-yellow")) clueShow.classList.remove("glow-yellow");
   }
   function toggleNerdModus() {
     // Stub for those that want to learn good.
@@ -168,6 +170,11 @@
   function refreshBuggyFill() {
     window.viewportUnitsBuggyfill.refresh();
   }
+  window.viewportUnitsBuggyfill.init({
+    refreshDebounceWait: 50,
+    hacks: window.viewportUnitsBuggyfillHacks
+  });
+
  </script>
 
 </body>

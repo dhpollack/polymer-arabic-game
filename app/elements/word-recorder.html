@@ -3,7 +3,7 @@
 <link rel="import" href="../../bower_components/core-icons/core-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/core-icons/av-icons.html">
-<script src="../assets/js/p5.js"></script>
+<script src="../assets/js/p5.min.js"></script>
 <script src="../assets/js/p5.sound.js"></script>
 
 <dom-module id="word-recorder">
@@ -34,28 +34,30 @@
     },
     makeRecording: function() {
       if(initRec()) {
-        this.scoreBoard.style.color = "yellow";
-        this.recordIcon.classList.add("recording-on");
+        //this.scoreBoard.style.color = "yellow";
+        //this.recordIcon.classList.add("recording-on");
       } else {
-        this.recordIcon.classList.remove("recording-on");
+        //this.recordIcon.classList.remove("recording-on");
       }
     },
     playRecording: function() {
       if(playRec()) {
-        this.recordIcon.classList.remove("recording-on");
+        //this.recordIcon.classList.remove("recording-on");
       } else {
-        this.scoreBoard.style.color = "green";
+        //this.scoreBoard.style.color = "green";
       }
-    }  
+    }
   });
   
+  var recordIcon, scoreBoard;
   // p5.sound.js
   var mic, recorder, soundFile;
-
   var preventLongRec;
   var recLimit = 15000;
   function initRec() {
-    console.log(mic);
+    if(!scoreBoard) scoreBoard = document.getElementById("score-board-player-1").querySelector("core-icon");
+    if(!recordIcon) recordIcon = document.getElementById("recorderInit");
+    
     if(mic === undefined) {
       // create an audio in
       mic = new p5.AudioIn();
@@ -70,6 +72,8 @@
       recorder.setInput(mic);
       
       startRec();
+      scoreBoard.style.color = "yellow";
+      recordIcon.classList.add("recording-on");
 
       return true;
     } else {
@@ -80,6 +84,8 @@
       } else {
         console.log(soundFile.isLoaded());
         startRec();
+        if(scoreBoard.style.color != "green") scoreBoard.style.color = "yellow";
+        recordIcon.classList.add("recording-on");
         return true;
       }
     }
@@ -98,16 +104,20 @@
     } else {
       console.log("hmm, recorder isn't recording");
     }
+    recordIcon.classList.remove("recording-on");
   }
   function playRec() {
     // if the user presses play before stop, the recording is stopped and then played
-    if(!soundFile.isLoaded()) {
-      stopRec();
-      soundFile.play();
-      return true;
-    } else {
-      soundFile.play();
-      return false;
+    if(mic !== undefined) {
+      if(scoreBoard.style.color == "yellow") scoreBoard.style.color = "green";
+      if(!soundFile.isLoaded()) {
+        stopRec();
+        soundFile.play();
+        return true;
+      } else {
+        soundFile.play();
+        return false;
+      }
     }
   }
 })();

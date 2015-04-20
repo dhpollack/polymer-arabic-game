@@ -49,6 +49,11 @@
       this.lastBucket = "!!!";
     },
     updateJumbotron: function() {
+      if(this.wordBoard.myWord.charAt(0) === this.wordBoard.myWord.charAt(0).toUpperCase()) {
+        this.jtext.classList.add('capitalize');
+      } else if(this.jtext.classList.contains('capitalize')) {
+        this.jtext.classList.remove('capitalize');
+      }
       if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
         console.log("checking word...");
         this.jtext.classList.remove("glow-text");
@@ -68,7 +73,6 @@
           this.jtext.classList.remove("glow-text");
         }
         this.lastBucket = "";
-        
       }
     },
     resetBox: function() {
@@ -76,6 +80,7 @@
         this.usertext = "_____";
         this.lastBucket = "";
         this.scoreBox.lastBucket = "";
+        this.jtext.classList.remove("glow-text");
     }
   });
 })();
