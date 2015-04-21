@@ -45,7 +45,7 @@
     },
     created: function() {
     },
-    ready: function() {
+    init: function() {
       this.jumbotronBox = document.querySelector("jumbotron-text");
       this.scoreBox = document.getElementById('score-board-player-1');
       this.letterListBox = document.querySelector('letter-list');
@@ -86,6 +86,8 @@
         this.letterListBox.runLetters();
 
         this.jumbotronBox.zielWort = word[0];
+        
+        if(this.myWordSpan.classList.contains('invisible-text')) this.audioBox.play();
       }
     },
     getCheckWord: function() {
@@ -98,6 +100,7 @@
       }
     },
     setWords: function() {
+      if(!this.wordBoardWord) this.init();
       var items = this.$.wservice.warray;
       if(items.length !== 0) {
         this.wordArray = items;
@@ -118,13 +121,20 @@
         this.playAudio();
       }.bind(this), pauseLength * (word.length + 0.5));
     },
+    hideWord: function() {
+      if(!this.myWordSpan.classList.contains('invisible-text')) {
+        this.myWordSpan.classList.add('invisible-text')
+      } else {
+        this.myWordSpan.classList.remove('invisible-text')
+      }
+    },
     produceWordAudioUrl: function(word, lang) {
       return "/assets/audio/"+ lang +"/words/" + word + ".m4a";
     },
-    tapWord: function() {
+    tapWord: function(tapped) {
       console.log(this.audioBox.duration);
       this.wordBoardWord.classList.add("flip-text");
-      if(this.audioBox.paused) this.scoreBox.score++;
+      if(this.audioBox.paused && tapped) this.scoreBox.score++;
       this.playAudio();
     },
     playAudio: function() {

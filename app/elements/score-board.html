@@ -50,9 +50,10 @@
     },
     created: function() {
     },
-    ready: function() {
+    init: function() {
       this.starIcon = Polymer.dom(this.root).querySelector("core-icon");
       this.clueShow = document.getElementById('clue-show');
+      this.wordBoardBox = document.querySelector('word-board');
     },
     updateStreak: function(correct) {
       if(correct) {
@@ -71,8 +72,7 @@
       if(this.streak <= -3) this.helpPlayer();
     },
     updateScoreBoard: function() {
-      if(!this.wordBoardBox) this.wordBoardBox = document.querySelector('word-board');
-      if(!this.clueShow) this.clueShow = document.getElementById('clue-show');
+      if(!this.wordBoardBox) this.init();
       if(["","_____"].indexOf(this.lastBucket) === -1) {
         console.log("Does " + this.lastBucket.toLowerCase() + " = " + this.wordBoardBox.getCheckWord().toLowerCase());
         if(this.lastBucket.toLowerCase() === this.wordBoardBox.getCheckWord().toLowerCase()) {

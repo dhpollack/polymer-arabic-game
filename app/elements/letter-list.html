@@ -83,13 +83,15 @@
     },
     attached: function() {
     },
-    ready: function() {
+    init: function() {
       this.wordBoardBox = document.querySelector('word-board');
+      this.webapp = document.querySelector('tinavg-webapp');
     },
     changeLanguage: function(event) {
       this.$.lservice.currlang = this.langCode;
     },
     runLetters: function() {
+      if(!this.wordBoardWord) this.init();
       if(this.setWord) {
         this.onNewWord();
       }
@@ -139,6 +141,7 @@
       if(!this.pageRevealed) {
         if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
+        this.webapp.init();
         /* gonna move this to index.html
         window.viewportUnitsBuggyfill.init({
           refreshDebounceWait: 50,

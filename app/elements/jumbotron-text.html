@@ -38,17 +38,18 @@
     },
     created: function() {
     },
-    ready: function() {
+    init: function() {
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
       this.scoreBox = document.getElementById('score-board-player-1');
       this.wordBoard = document.querySelector('word-board');
       this.jtext = document.getElementById('jumbotron-text');
-      console.log(this.jtext);
+      this.first = true;
     },
     handleClick: function() {
       this.lastBucket = "!!!";
     },
     updateJumbotron: function() {
+      if(!this.wordBoard) this.init();
       if(this.wordBoard.myWord.charAt(0) === this.wordBoard.myWord.charAt(0).toUpperCase()) {
         this.jtext.classList.add('capitalize');
       } else if(this.jtext.classList.contains('capitalize')) {
@@ -66,7 +67,12 @@
         this.usertext = this.scoreArray.join("");
         if(this.usertext.toLowerCase() === this.wordBoard.myWord.toLowerCase()) {
             checkTimeout = setTimeout(function() {
-              this.wordBoard.playAudio();
+              if(this.first) {
+                this.wordBoard.tapWord(false);
+              } else {
+                this.wordBoard.playAudio();
+              }
+              this.first=false;
               this.jtext.classList.add("glow-text");
             }.bind(this), 700);
         } else {

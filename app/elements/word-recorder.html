@@ -27,10 +27,7 @@
     is: 'word-recorder',
     properties: {
     },
-    ready: function() {
-      this.scoreBoard = document.getElementById("score-board-player-1").querySelector("core-icon");
-      this.audio = this.$.recAudio;
-      this.recordIcon = Polymer.dom(this.root).querySelector("#recorderInit");
+    init: function() {
     },
     makeRecording: function() {
       if(initRec()) {
@@ -55,8 +52,10 @@
   var preventLongRec;
   var recLimit = 15000;
   function initRec() {
-    if(!scoreBoard) scoreBoard = document.getElementById("score-board-player-1").querySelector("core-icon");
-    if(!recordIcon) recordIcon = document.getElementById("recorderInit");
+    if(!scoreBoard || !recordIcon) {
+      scoreBoard = document.getElementById("score-board-player-1").querySelector("core-icon");
+      recordIcon = document.getElementById("recorderInit");
+    }
     
     if(mic === undefined) {
       // create an audio in
