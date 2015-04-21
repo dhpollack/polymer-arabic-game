@@ -68,7 +68,7 @@
           this.streak = -1;
         }
       }
-      if(this.streak == -3) this.helpPlayer();
+      if(this.streak <= -3) this.helpPlayer();
     },
     updateScoreBoard: function() {
       if(!this.wordBoardBox) this.wordBoardBox = document.querySelector('word-board');

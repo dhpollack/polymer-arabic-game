@@ -52,18 +52,19 @@
             <div>
               Language: 
               <select onchange="setLang(this.value)">
-                <option value="en">English</option>
                 <option value="de">German</option>
-                <option value="ar">Arabic</option>
+                <option value="en">English</option>
                 <option value="en-US-south">English (US South)</option>
+                <option value="ar">Arabic</option>
                 <!--
                 <option value="tr">Turkish</option>
                 -->
               </select>
             </div>
-            <div><br />Recordmodus: <button id="select-recordmodus" onclick="toggleRecordDiv()">toggle</button></div>
-            <div hidden><br />BuggyFill: <button id="select-buggyfill" onclick="refreshBuggyFill()">toggle</button></div>
-            <div><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
+            <div><br />Expertmodus: <button id="select-recordmodus" onclick="toggleExpertModus(myWord)">toggle</button></div>
+            <div><br />Recordmodus: <button id="select-recordmodus" onclick="toggleEl(recordDiv)">toggle</button></div>
+            <div><br />BuggyFill: <button id="select-buggyfill" onclick="refreshBuggyFill()">toggle</button></div>
+            <div hidden><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
           </div>
         </core-collapse>
         <letter-list id="letter-grid" limit="12" lang-code="de"></letter-list>
@@ -113,67 +114,82 @@
     </section>
   </core-overlay>
   <script type="text/javascript">
-  var wordBoard = document.querySelector('word-board');
-  var letterList = document.querySelector('letter-list');
-  var jumbotron = document.querySelector('jumbotron-text');
-  var overlay = document.getElementById('help-overlay');
-  var recordDiv = document.getElementById('record-elem');
-  var scoreBoard2 = document.getElementById('score-board-player-2');
-  var collapseMenu = document.getElementById('collapse1');
-  var menuToggleButton = document.getElementById('menu-toggle');
-  var clueShow = document.getElementById('clue-show');
-  
-  function toggleCoreCollapse() {
-    collapseMenu.toggle();
-    if(collapseMenu.opened) {
-      menuToggleButton.style.transform = "rotateY(180deg)";
-    } else {
-      menuToggleButton.style.transform = "rotateY(0deg)";
+    var wordBoard = document.querySelector('word-board');
+    var letterList = document.querySelector('letter-list');
+    var jumbotron = document.querySelector('jumbotron-text');
+    var overlay = document.getElementById('help-overlay');
+    var recordDiv = document.getElementById('record-elem');
+    var scoreBoard2 = document.getElementById('score-board-player-2');
+    var collapseMenu = document.getElementById('collapse1');
+    var menuToggleButton = document.getElementById('menu-toggle');
+    var clueShow = document.getElementById('clue-show');
+    var myWord = document.getElementById('my-word');
+    
+    function toggleCoreCollapse() {
+      collapseMenu.toggle();
+      if(collapseMenu.opened) {
+        menuToggleButton.style.transform = "rotateY(180deg)";
+      } else {
+        menuToggleButton.style.transform = "rotateY(0deg)";
+      }
     }
-  }
-  function setLang(lang) {
-    console.log("toggling language: " + lang);
-    wordBoard.setAttribute("lang-code", lang);
-    letterList.setAttribute("lang-code", lang);
-    jumbotron.resetBox();
-  }
-  function showHelp() {
-    overlay.toggle();
-  }
-  function toggleRecordDiv() {
-    if(recordDiv.getAttribute("hidden")) {
-      recordDiv.removeAttribute("hidden");
-    } else {
-      recordDiv.setAttribute("hidden", true);
+    function setLang(lang) {
+      console.log("toggling language: " + lang);
+      wordBoard.setAttribute("lang-code", lang);
+      letterList.setAttribute("lang-code", lang);
+      jumbotron.resetBox();
     }
-  }
-  function toggleScoreBoard2() {
-    // not implemented yet
-    if(scoreBoard2.getAttribute("hidden")) {
-      scoreBoard2.removeAttribute("hidden");
-    } else {
-      scoreBoard2.setAttribute("hidden", true);
+    function showHelp() {
+      overlay.toggle();
     }
-  }
-  function showClue() {
-    wordBoard.revealWord();
-    if(clueShow.classList.contains("glow-yellow")) clueShow.classList.remove("glow-yellow");
-  }
-  function toggleNerdModus() {
-    // Stub for those that want to learn good.
-  }
-  function removeUnresolved() {
-    // not used, rather done directly in letter-list.html
-    // but this stub is in case I want to move it here.
-    document.body.removeAttribute("unresolved");
-  }
-  function refreshBuggyFill() {
-    window.viewportUnitsBuggyfill.refresh();
-  }
-  window.viewportUnitsBuggyfill.init({
-    refreshDebounceWait: 50,
-    hacks: window.viewportUnitsBuggyfillHacks
-  });
+    function toggleEl(el) {
+      if(el.getAttribute("hidden")) {
+        el.removeAttribute("hidden");
+      } else {
+        el.setAttribute("hidden", true);
+      }
+    }
+    function toggleRecordDiv() {
+      if(recordDiv.getAttribute("hidden")) {
+        recordDiv.removeAttribute("hidden");
+      } else {
+        recordDiv.setAttribute("hidden", true);
+      }
+    }
+    function toggleScoreBoard2() {
+      // not implemented yet
+      if(scoreBoard2.getAttribute("hidden")) {
+        scoreBoard2.removeAttribute("hidden");
+      } else {
+        scoreBoard2.setAttribute("hidden", true);
+      }
+    }
+    function showClue() {
+      wordBoard.revealWord();
+      if(clueShow.classList.contains("glow-yellow")) clueShow.classList.remove("glow-yellow");
+    }
+    function toggleNerdModus() {
+      // Stub for those that want to learn good.
+    }
+    function toggleExpertModus(el) {
+      if(!el.classList.contains('invisible-text')) {
+        el.classList.add('invisible-text')
+      } else {
+        el.classList.remove('invisible-text')
+      }
+    }
+    function removeUnresolved() {
+      // not used, rather done directly in letter-list.html
+      // but this stub is in case I want to move it here.
+      document.body.removeAttribute("unresolved");
+    }
+    function refreshBuggyFill() {
+      window.viewportUnitsBuggyfill.refresh();
+    }
+    window.viewportUnitsBuggyfill.init({
+      refreshDebounceWait: 50,
+      hacks: window.viewportUnitsBuggyfillHacks
+    });
 
  </script>
 
