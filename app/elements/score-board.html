@@ -43,6 +43,10 @@
       selfRecMult: {
         type: Number,
         value: 2.5
+      },
+      learnmodus: {
+        type: Boolean,
+        value: false
       }
     },
     listeners: {
@@ -75,20 +79,25 @@
       if(!this.wordBoardBox) this.init();
       if(["","_____"].indexOf(this.lastBucket) === -1) {
         console.log("Does " + this.lastBucket.toLowerCase() + " = " + this.wordBoardBox.getCheckWord().toLowerCase());
-        if(this.lastBucket.toLowerCase() === this.wordBoardBox.getCheckWord().toLowerCase()) {
-          if(this.starIcon.style.color === "green") {
-            this.score += this.correctPts * this.selfRecMult;
-          } else {
-            this.score += this.correctPts;
-          }
-          this.updateStreak(true);
+        if(this.learnmodus && this.lastBucket === "(^_^)") {
           this.resetStar();
-
           this.wordBoardBox.wordFilter();
           if(this.clueShow.classList.contains("glow-yellow")) this.clueShow.classList.remove("glow-yellow");
         } else {
-          this.updateStreak(false);
-          this.score -= this.incorrectPts;
+          if(this.lastBucket.toLowerCase() === this.wordBoardBox.getCheckWord().toLowerCase()) {
+            if(this.starIcon.style.color === "green") {
+              this.score += this.correctPts * this.selfRecMult;
+            } else {
+              this.score += this.correctPts;
+            }
+            this.updateStreak(true);
+            this.resetStar();
+            this.wordBoardBox.wordFilter();
+            if(this.clueShow.classList.contains("glow-yellow")) this.clueShow.classList.remove("glow-yellow");
+          } else {
+            this.updateStreak(false);
+            if(!this.learnmodus) this.score -= this.incorrectPts;
+          }
         }
       }
     },

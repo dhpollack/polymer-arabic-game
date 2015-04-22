@@ -34,6 +34,10 @@
       tabindex: {
         type: Number,
         reflectToAttribute: true
+      },
+      learnmodus: {
+        type: Boolean,
+        value: false
       }
     },
     listeners: {
@@ -59,35 +63,40 @@
       } else if(this.jtext.classList.contains('capitalize')) {
         this.jtext.classList.remove('capitalize');
       }
-      if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
-        console.log("checking word...");
-        this.jtext.classList.remove("glow-yellow");
+      if(this.learnmodus && this.lastBucket === "!!!") {
         this.scoreBox.lastBucket = this.usertext;
         this.resetBox();
-      } else if(this.lastBucket !== "") {
-        if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
-        window.clearTimeout(checkTimeout);
-        this.scoreArray.push(this.lastBucket);
-        this.usertext = this.scoreArray.join("");
-        if(this.usertext.toLowerCase() === this.wordBoard.myWord.toLowerCase()) {
-            checkTimeout = setTimeout(function() {
-              if(this.first) {
-                this.wordBoard.tapWord(false);
-              } else {
-                this.wordBoard.playAudio();
-              }
-              this.first=false;
-              this.jtext.classList.add("glow-yellow");
-            }.bind(this), 700);
-        } else {
+      } else {
+        if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
+          console.log("checking word...");
           this.jtext.classList.remove("glow-yellow");
+          this.scoreBox.lastBucket = this.usertext;
+          this.resetBox();
+        } else if(this.lastBucket !== "") {
+          if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
+          window.clearTimeout(checkTimeout);
+          this.scoreArray.push(this.lastBucket);
+          this.usertext = this.scoreArray.join("");
+          if(this.usertext.toLowerCase() === this.wordBoard.myWord.toLowerCase()) {
+              checkTimeout = setTimeout(function() {
+                if(this.first) {
+                  this.wordBoard.tapWord(false);
+                } else {
+                  this.wordBoard.playAudio();
+                }
+                this.first=false;
+                this.jtext.classList.add("glow-yellow");
+              }.bind(this), 700);
+          } else {
+            this.jtext.classList.remove("glow-yellow");
+          }
+          this.lastBucket = "";
         }
-        this.lastBucket = "";
       }
     },
     resetBox: function() {
         this.scoreArray = [];
-        this.usertext = "_____";
+        this.usertext = (this.learnmodus) ? "(^_^)" : "_____";
         this.lastBucket = "";
         this.scoreBox.lastBucket = "";
         this.jtext.classList.remove("glow-yellow");

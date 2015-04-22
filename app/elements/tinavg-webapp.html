@@ -18,7 +18,7 @@
     <template>
       <core-header-panel id="header-panel">
         <core-toolbar class="core-header horizontal justified layout start">
-          <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex"></score-board>
+          <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex" learnmodus="{{learnmodus}}"></score-board>
           <word-board class="horizontal center-justified layout flex-2" lang-code="{{currLang}}"></word-board>
           <div class="top-right-item horizontal end-justified layout flex">
             <score-board id="score-board-player-2" player="2" hidden></score-board>
@@ -41,7 +41,8 @@
                     -->
                   </select>
                 </div>
-                <div><br />Expertmodus: <button id="select-recordmodus" onclick="toggleExpertModus(myWord)">toggle</button></div>
+                <div><br />Expertmodus: <button id="select-expertmodus" onclick="toggleExpertModus(myWord)">toggle</button></div>
+                <div><br />Learnmodus: <button id="select-learnmodus" onclick="toggleLearnModus()">toggle</button></div>
                 <div><br />Recordmodus: <button id="select-recordmodus" onclick="toggleEl(recordDiv)">toggle</button></div>
                 <div><br />BuggyFill: <button id="select-buggyfill" onclick="refreshBuggyFill()">toggle</button></div>
                 <div hidden><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
@@ -53,7 +54,7 @@
             <div class="footer-button horizontal start-justified layout flex">
               <paper-icon-button id="menu-toggle" icon="trending-neutral" onclick="toggleCoreCollapse()"></paper-icon-button>
             </div>
-            <jumbotron-text tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2"></jumbotron-text>
+            <jumbotron-text tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
             <div id="nerdmodus-div" class="horizontal end-justified layout flex">
               <div id="clue-show-div"><paper-icon-button id="clue-show" icon="text-format" onclick="showClue()"></paper-icon-button></div>
               <paper-icon-button id="help-show" icon="help" onclick="showHelp()"></paper-icon-button>
@@ -112,6 +113,10 @@
       jumbotronIndex: {
         type: Number,
         value: 13
+      },
+      learnmodus: {
+        type: Boolean,
+        value: false
       }
     },
     listeners: {
@@ -146,11 +151,8 @@
     }
   }
   function setLang(lang) {
-    console.log("toggling language: " + lang);
-    console.log(this.currLang);
+    console.log("toggling language: " + lang + " | chars: " + webapp.letterLimit);
     webapp.currLang = lang;
-    //wordBoard.setAttribute("lang-code", lang);
-    //letterList.setAttribute("lang-code", lang);
     jumbotron.resetBox();
   }
   function showHelp() {
@@ -178,6 +180,10 @@
       scoreBoard2.setAttribute("hidden", true);
     }
   }
+  function toggleLearnModus() {
+    webapp.learnmodus = !webapp.learnmodus;
+    jumbotron.resetBox();
+  }
   function showClue() {
     wordBoard.revealWord();
     if(clueShow.classList.contains("glow-yellow")) clueShow.classList.remove("glow-yellow");
@@ -199,6 +205,7 @@
   });
   Mousetrap.bind('enter', function() {
     document.activeElement.click();
+    if(typeof document.activeElement.firePaperRipple === 'function') document.activeElement.firePaperRipple(false);
   });
   Mousetrap.bind('a', function() {
     console.log(window.innerHeight > window.innerWidth);

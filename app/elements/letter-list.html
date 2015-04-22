@@ -102,13 +102,11 @@
     },
     runLetters: function() {
       if(!this.wordBoardWord) this.init();
-      if(this.setWord) {
-        this.onNewWord();
-      }
       if(this.setWord && this.setLetters) {
         this.runNewLetters();
         this.setWord = false;
-        this.setLetters = false;
+      } else if(this.setWord) {
+        this.onNewWord();
       }
     },
     filterResults: function(items) {
@@ -132,23 +130,22 @@
       this.setLetters = true;
     },
     runNewLetters: function(){
-      console.log("switching up letters");
-      this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase());
+      console.log("switching up letters: " + this.wordBoardBox.getCheckWord().toLowerCase());
+      this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase(), this.limit);
     },
     onNewWord: function() {
-      this.itemIndex = 1;
       var word = this.wordBoardBox.getCheckWord();
       if(word !== undefined && word.length !== 0) {
         console.log("fired filter-word-changed: " + word + " | ohneAccent: " + this.stripDiacritics);
         this.setWord = true;
-        if(this.allLettersList.length > 0) {
-          this.shuffleLetters(word.toLowerCase());
+        if(this.allLettersList.length > 0 && this.setLetters) {
+          this.shuffleLetters(word.toLowerCase(), this.limit);
         } else {
           console.log("this.letterList is not yet set :-/");
         }
       }
     },
-    shuffleLetters: function(word) {
+    shuffleLetters: function(word, numTiles) {
       if(!this.pageRevealed) {
         if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
@@ -164,8 +161,8 @@
       // this is a hack because polymer doesn't update if an array's properties have changed only if the array itself
       // has been manipulated.
       // see http://stackoverflow.com/questions/23706775/polymer-changes-not-always-flowing-through-a-filter
+      this.itemIndex = 1;
       var dummyArray = [];
-      var numTiles = this.limit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
       shuffle(this.allLettersList);
       this.allLettersList.forEach(function(value, index) {
