@@ -104,7 +104,6 @@
 ["zurück",  {"grammar": {"partofs": "adverb"}}],
 ["Rakete",  {"grammar": {"partofs": "noun", "gender": "female"}}],
 ["Augenblick",  {"grammar": {"partofs": "noun", "gender": "male"}}],
-["Funkstille",  {"grammar": {"partofs": "noun", "gender": "female"}}],
 ["Weile",  {"grammar": {"partofs": "noun", "gender": "female"}}],
 ["oder",  {"grammar": {"partofs": "adverb"}}],
 ["Flugzeug",  {"grammar": {"partofs": "noun", "gender": "neuter"}}],

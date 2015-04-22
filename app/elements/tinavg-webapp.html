@@ -9,6 +9,8 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <!-- Custom Elements Vulcanized -->
 <link rel="import" href="elements.html">
+<!-- keyboard shortcuts -->
+<script src="../assets/js/mousetrap.min.js"></script>
 
 <dom-module id="tinavg-webapp">
     <style>
@@ -45,13 +47,13 @@
                 <div hidden><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
               </div>
             </core-collapse>
-            <letter-list id="letter-grid" limit="12" lang-code="{{currLang}}"></letter-list>
+            <letter-list id="letter-grid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list>
           </div>
           <div class="footer horizontal justified layout center">
             <div class="footer-button horizontal start-justified layout flex">
               <paper-icon-button id="menu-toggle" icon="trending-neutral" onclick="toggleCoreCollapse()"></paper-icon-button>
             </div>
-            <jumbotron-text class="horizontal center-justified layout flex-2"></jumbotron-text>
+            <jumbotron-text tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2"></jumbotron-text>
             <div id="nerdmodus-div" class="horizontal end-justified layout flex">
               <div id="clue-show-div"><paper-icon-button id="clue-show" icon="text-format" onclick="showClue()"></paper-icon-button></div>
               <paper-icon-button id="help-show" icon="help" onclick="showHelp()"></paper-icon-button>
@@ -102,6 +104,14 @@
         type: String,
         value: "de",
         notify: true
+      },
+      letterLimit: {
+        type: Number,
+        value: 12
+      },
+      jumbotronIndex: {
+        type: Number,
+        value: 13
       }
     },
     listeners: {
@@ -183,5 +193,38 @@
     // but this stub is in case I want to move it here.
     document.body.removeAttribute("unresolved");
   }
+  
+  Mousetrap.bind('shift+enter', function() { 
+    jumbotron.click(); 
+  });
+  Mousetrap.bind('enter', function() {
+    document.activeElement.click();
+  });
+  Mousetrap.bind('a', function() {
+    console.log(window.innerHeight > window.innerWidth);
+  });
+  Mousetrap.bind('p', function() {
+    wordBoard.tapWord(false);
+    console.log(window.innerHeight > window.innerWidth);
+  });
+  Mousetrap.bind('left', function() {
+    var prevIndex = (document.activeElement.tabIndex === -1) ? webapp.letterLimit : (document.activeElement.tabIndex - 1 > 0) ? document.activeElement.tabIndex - 1 : webapp.letterLimit;
+    document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
+  });
+  Mousetrap.bind('right', function() {
+    var nextIndex = (document.activeElement.tabIndex === -1 || document.activeElement.tabIndex + 1 > webapp.letterLimit) ? 1 : document.activeElement.tabIndex + 1;
+    document.querySelector('[tabindex="'+ (nextIndex) + '"]').focus();
+  });
+  Mousetrap.bind('up', function() {
+    var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
+    var prevIndex = (document.activeElement.tabIndex === -1) ? webapp.jumbotronIndex : (document.activeElement.tabIndex - moveFocus > 0) ? document.activeElement.tabIndex - moveFocus : (moveFocus === 4) ? document.activeElement.tabIndex + moveFocus * 2 : document.activeElement.tabIndex + moveFocus * 3;
+    document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
+  });
+  Mousetrap.bind('down', function() {
+    var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
+    var newFocus = (document.activeElement.tabIndex + moveFocus < webapp.jumbotronIndex) ? document.activeElement.tabIndex + moveFocus : webapp.jumbotronIndex;
+    var downIndex = (document.activeElement.tabIndex === -1) ? 1 : newFocus;
+    document.querySelector('[tabindex="'+ (downIndex) + '"]').focus();
+  });
 
 </script>

@@ -123,16 +123,15 @@
     },
     hideWord: function() {
       if(!this.myWordSpan.classList.contains('invisible-text')) {
-        this.myWordSpan.classList.add('invisible-text')
+        this.myWordSpan.classList.add('invisible-text');
       } else {
-        this.myWordSpan.classList.remove('invisible-text')
+        this.myWordSpan.classList.remove('invisible-text');
       }
     },
     produceWordAudioUrl: function(word, lang) {
       return "/assets/audio/"+ lang +"/words/" + word + ".m4a";
     },
     tapWord: function(tapped) {
-      console.log(this.audioBox.duration);
       this.wordBoardWord.classList.add("flip-text");
       if(this.audioBox.paused && tapped) this.scoreBox.score++;
       this.playAudio();
@@ -146,6 +145,7 @@
     },
     setGrammarStyles: function(grammar) {
       var classesToAdd = [];
+      var wordDiv = this.wordBoardWord;
       // this should probably be a map of some sort
       classesToAdd.push("word-board");
       if(grammar.partofs !== undefined) {
@@ -185,10 +185,9 @@
             break;
         }        
       }
-      for(var i = 0; i < classesToAdd.length; i++) {
-        if(i !== 0)  this.wordBoardWord.className += ' ';
-        this.wordBoardWord.className += classesToAdd[i];
-      }
+      classesToAdd.forEach(function(value) {
+        wordDiv.classList.add(value);
+      });
     }
   });
 })();
