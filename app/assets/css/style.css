@@ -112,6 +112,9 @@
     content: 'viewport-units-buggyfill; width: 33.33vw; height: 26.66vh;';
 
   }
+  letter-card:focus {
+    z-index: 10;
+  }
   .space-bar {
     width: inherit;
     height: 10vh;

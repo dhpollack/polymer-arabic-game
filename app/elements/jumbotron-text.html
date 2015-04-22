@@ -46,7 +46,7 @@
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
       this.scoreBox = document.getElementById('score-board-player-1');
       this.wordBoard = document.querySelector('word-board');
-      this.jtext = document.getElementById('jumbotron-text');
+      this.jtext = document.querySelector('jumbotron-text');
       this.first = true;
     },
     handleClick: function() {
@@ -61,7 +61,7 @@
       }
       if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
         console.log("checking word...");
-        this.jtext.classList.remove("glow-text");
+        this.jtext.classList.remove("glow-yellow");
         this.scoreBox.lastBucket = this.usertext;
         this.resetBox();
       } else if(this.lastBucket !== "") {
@@ -77,10 +77,10 @@
                 this.wordBoard.playAudio();
               }
               this.first=false;
-              this.jtext.classList.add("glow-text");
+              this.jtext.classList.add("glow-yellow");
             }.bind(this), 700);
         } else {
-          this.jtext.classList.remove("glow-text");
+          this.jtext.classList.remove("glow-yellow");
         }
         this.lastBucket = "";
       }
@@ -90,7 +90,7 @@
         this.usertext = "_____";
         this.lastBucket = "";
         this.scoreBox.lastBucket = "";
-        this.jtext.classList.remove("glow-text");
+        this.jtext.classList.remove("glow-yellow");
     }
   });
 })();

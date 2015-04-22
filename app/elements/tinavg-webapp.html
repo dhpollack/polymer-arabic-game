@@ -226,5 +226,15 @@
     var downIndex = (document.activeElement.tabIndex === -1) ? 1 : newFocus;
     document.querySelector('[tabindex="'+ (downIndex) + '"]').focus();
   });
+  Mousetrap.bind('backspace', function(e) {
+    // stub to play a wawa sound
+    if (e.preventDefault) {
+      e.preventDefault();
+    } else {
+      // internet explorer
+      e.returnValue = false;
+    }
+    console.log("backspace...");
+  });
 
 </script>
