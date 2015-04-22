@@ -152,6 +152,7 @@
       if(!this.pageRevealed) {
         if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
+        this.init();
         this.webapp.init();
         /* gonna move this to index.html
         window.viewportUnitsBuggyfill.init({
