@@ -77,7 +77,7 @@
           window.clearTimeout(checkTimeout);
           this.scoreArray.push(this.lastBucket);
           this.usertext = this.scoreArray.join("");
-          if(this.usertext.toLowerCase() === this.wordBoard.myWord.toLowerCase()) {
+          if(this.usertext.toLowerCase() === this.wordBoard.getCheckWord().toLowerCase()) {
               checkTimeout = setTimeout(function() {
                 if(this.first) {
                   this.wordBoard.tapWord(false);

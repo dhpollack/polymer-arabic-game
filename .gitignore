@@ -48,4 +48,8 @@ bower_components
 *.flac
 *.m4a
 *.opus
+*.mp3
 *.manifest
+
+# Data files to ignore
+api/

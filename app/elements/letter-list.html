@@ -145,13 +145,13 @@
         }
       }
     },
-    shuffleLetters: function(word, numTiles) {
+    shuffleLetters: function(word, tileLimit) {
       if(!this.pageRevealed) {
         if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
         this.init();
         this.webapp.init();
-        /* gonna move this to index.html
+        /*
         window.viewportUnitsBuggyfill.init({
           refreshDebounceWait: 50,
           hacks: window.viewportUnitsBuggyfillHacks
@@ -163,6 +163,7 @@
       // see http://stackoverflow.com/questions/23706775/polymer-changes-not-always-flowing-through-a-filter
       this.itemIndex = 1;
       var dummyArray = [];
+      var numTiles = tileLimit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
       shuffle(this.allLettersList);
       this.allLettersList.forEach(function(value, index) {
@@ -179,6 +180,10 @@
           value.hidden = true;
         }
       });
+      if(dummyArray.length < tileLimit) {
+        console.log("Not enough tiles");
+        console.log(this.dummyArray);
+      }
       this.letterList = shuffle(dummyArray);
       this.webapp.letterLimit = this.letterList.length;
       this.webapp.jumbotronIndex = this.letterList.length + 1;
