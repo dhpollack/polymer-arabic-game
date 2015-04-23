@@ -35,6 +35,14 @@
       },
       ranWordIndex: {
         type: Number
+      },
+      phraseArray: {
+        type: Array,
+        value: function() { return []; }
+      },
+      phraseIndex: {
+        type: Number,
+        value: 0
       }
     },
     listeners: {
@@ -60,32 +68,44 @@
     },
     changeLanguage: function(event) {
       this.$.wservice.currlang = this.langCode;
+      this.phraseArray = [];
+      this.phraseIndex = 0;
     },
     wordFilter: function() {
-      if(!this.letterListBox) this.letterListBox = document.querySelector('letter-list');
+      if(!this.letterListBox) this.init();
       var randomIndex = Math.floor(Math.random() * this.wordArray.length);
+      this.phraseIndex++;
       if(this.wordArray.length !== 0) {
-        if(this.ranWordIndex !== undefined) {
-          for(var i=0;this.ranWordIndex === randomIndex;i++) {
-            randomIndex = Math.floor(Math.random() * this.wordArray.length);
-            if(i > 20) break;
+        if(this.phraseArray[this.phraseIndex] === undefined) {
+          if(this.ranWordIndex !== undefined) {
+            for(var i=0;this.ranWordIndex === randomIndex;i++) {
+              randomIndex = Math.floor(Math.random() * this.wordArray.length);
+              if(i > 20) break;
+            }
+          }
+          this.ranWordIndex = randomIndex;
+          console.log("wordArray.length: " + this.wordArray.length + "\nthis.ranWordIndex: " + this.ranWordIndex);
+          
+          //word = this.wordArray[this.ranWordIndex];
+          var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+          this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
+          this.phraseIndex = 0;
+        }
+        if(this.wordArray[this.ranWordIndex][2] !== (undefined || null) && typeof this.wordArray[this.ranWordIndex][2] === 'object') {
+          this.wordBoardWord.className = "";
+          if(this.wordArray[this.ranWordIndex][2].grammar.segments === undefined) {
+            this.setGrammarStyles(this.wordArray[this.ranWordIndex][2].grammar);
+          } else {
+            this.setGrammarStyles(this.wordArray[this.ranWordIndex][2].grammar.segments[this.phraseIndex]);
           }
         }
-        this.ranWordIndex = randomIndex;
-        console.log("wordArray.length: " + this.wordArray.length + "\nthis.ranWordIndex: " + this.ranWordIndex);
-        var word = this.wordArray[this.ranWordIndex];
-        //this.fire("random-word-selected", { value: word[0], valueOhneAccent: word[1], langCode: this.langCode });
-        if(word[2] !== (undefined || null) && typeof word[2] === 'object') {
-          this.wordBoardWord.className = "";
-          this.setGrammarStyles(word[2].grammar);
-        }
-        this.myWord = word[0];
+        this.myWord = this.phraseArray[this.phraseIndex];
         
-        this.wordAudio = this.produceWordAudioUrl(word[0].toLowerCase(), this.langCode);
+        this.wordAudio = this.produceWordAudioUrl(this.phraseArray[this.phraseIndex].toLowerCase(), this.langCode);
         this.letterListBox.setWord = true;
         this.letterListBox.runLetters();
 
-        this.jumbotronBox.zielWort = word[0];
+        this.jumbotronBox.zielWort = this.phraseArray[this.phraseIndex];
         
         if(this.myWordSpan.classList.contains('invisible-text')) this.audioBox.play();
       }
@@ -93,9 +113,10 @@
     getCheckWord: function() {
       if(this.wordArray.length !== 0) {
         var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
-        var word = this.wordArray[this.ranWordIndex];
-        return word[findex];
+        var word = this.wordArray[this.ranWordIndex][findex].split(" ");
+        return word[this.phraseIndex];
       } else {
+        console.log("words not set yet");
         return;
       }
     },

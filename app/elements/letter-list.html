@@ -130,8 +130,12 @@
       this.setLetters = true;
     },
     runNewLetters: function(){
-      console.log("switching up letters: " + this.wordBoardBox.getCheckWord().toLowerCase());
-      this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase(), this.limit);
+      if(this.wordBoardBox.getCheckWord() !== undefined) {
+        console.log("switching up letters: " + this.wordBoardBox.getCheckWord());
+        this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase(), this.limit);
+      } else {
+        console.log("check word still not set");
+      }
     },
     onNewWord: function() {
       var word = this.wordBoardBox.getCheckWord();
@@ -147,7 +151,7 @@
     },
     shuffleLetters: function(word, tileLimit) {
       if(!this.pageRevealed) {
-        if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
+        this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
         this.init();
         this.webapp.init();
@@ -185,8 +189,8 @@
         console.log(this.dummyArray);
       }
       this.letterList = shuffle(dummyArray);
-      this.webapp.letterLimit = this.letterList.length;
-      this.webapp.jumbotronIndex = this.letterList.length + 1;
+      //this.webapp.letterLimit = tileLimit;
+      //this.webapp.jumbotronIndex = tileLimit + 1;
       
     }
   });

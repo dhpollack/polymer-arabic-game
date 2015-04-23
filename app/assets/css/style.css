@@ -354,7 +354,7 @@
       content: 'viewport-units-buggyfill; height: 20vh;';
     }
     .content-span {
-      font-size: 12vh;
+      font-size: 10vh;
       content: 'viewport-units-buggyfill; font-size: 12vh;';
     }
     core-icon {

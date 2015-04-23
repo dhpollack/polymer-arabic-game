@@ -182,13 +182,11 @@ gulp.task('offlineapp', function(){
 
 // Vulcanize imports
 gulp.task('vulcanize', function () {
-  return gulp.src(distDir + '/index.vulcanized.html')
+  return gulp.src(distDir + '/index.html')
     .pipe($.vulcanize({
-      dest: distDir,
-      strip: true,
-      csp: true,
-      inline: true
+      dest: distDir
     }))
+    .pipe($.rename('index.vulcanized.html'))
     .pipe(gulp.dest(distDir))
     .pipe($.size({title: 'vulcanize'}));
 });

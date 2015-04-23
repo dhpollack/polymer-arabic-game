@@ -249,5 +249,8 @@
     }
     console.log("backspace...");
   });
+  document.body.addEventListener("polymer-ready", function() {
+    document.body.removeAttribute("unresolved");
+  });
 
 </script>
