@@ -1,8 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
 <link rel="import" href="../../bower_components/core-icons/core-icons.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/core-icons/av-icons.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
 <script src="../assets/js/p5.min.js"></script>
 <script src="../assets/js/p5.sound.js"></script>
 
@@ -16,8 +16,8 @@
     <template>
       <div id="record-elem">
         <audio id="recAudio" src="" hidden></audio>
-        <paper-icon-button id="recorderInit" icon="av:mic" on-tap="makeRecording"></paper-icon-button>
-        <paper-icon-button id="recorderPlay" icon="av:play-circle-fill" on-tap="playRecording"></paper-icon-button>
+        <core-icon id="recorderInit" icon="av:mic" on-tap="makeRecording"></core-icon>
+        <core-icon id="recorderPlay" icon="av:play-circle-fill" on-tap="playRecording"><paper-ripple recenters></paper-ripple></core-icon>
       </div>
     </template>
 </dom-module>

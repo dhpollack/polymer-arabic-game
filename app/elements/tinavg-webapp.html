@@ -6,7 +6,7 @@
 <link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
 <link rel="import" href="../../bower_components/core-icons/core-icons.html">
 <link rel="import" href="../../bower_components/core-overlay/core-overlay.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
 <!-- Custom Elements Vulcanized -->
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
@@ -52,19 +52,19 @@
           </div>
           <div class="footer horizontal justified layout center">
             <div class="footer-button horizontal start-justified layout flex">
-              <paper-icon-button id="menu-toggle" icon="trending-neutral" onclick="toggleCoreCollapse()"></paper-icon-button>
+              <core-icon id="menu-toggle" icon="trending-neutral" onclick="toggleCoreCollapse()"><paper-ripple recenters></paper-ripple></core-icon>
             </div>
             <jumbotron-text tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
             <div id="nerdmodus-div" class="horizontal end-justified layout flex">
-              <div id="clue-show-div"><paper-icon-button id="clue-show" icon="text-format" onclick="showClue()"></paper-icon-button></div>
-              <paper-icon-button id="help-show" icon="help" onclick="showHelp()"></paper-icon-button>
+              <div id="clue-show-div"><core-icon id="clue-show" icon="text-format" onclick="showClue()"><paper-ripple recenters></paper-ripple></core-icon></div>
+              <core-icon id="help-show" icon="help" onclick="showHelp()"><paper-ripple recenters></paper-ripple></core-icon>
             </div>
           </div>
         </div>
       </core-header-panel>
       <core-overlay id="help-overlay" class="dialog" backdrop>
         <section>
-        <div id="close-help-overlay"><paper-icon-button id="close-help-overlay-icon" icon="cancel" onclick="showHelp()"></core-icon></div>
+        <div id="close-help-overlay"><core-icon id="close-help-overlay-icon" icon="cancel" onclick="showHelp()"></core-icon></div>
         <center><h1>This Is Not A Vocabulary Game</h1></center>
         The current language is <span>{{currLang}}</span>
         <h3>The Goal</h3>
@@ -78,7 +78,7 @@
         <h3>Scoring and Tips</h3>
         <ol>
           <li>100 points for each correct answer and -30 points for each wrong answer.</li>
-          <li>If you need help, click the <paper-icon-button id="help-overlay-a" icon="text-format"></paper-icon-button> button in the bottom right corner.</li>
+          <li>If you need help, click the <core-icon id="help-overlay-a" icon="text-format"></core-icon> button in the bottom right corner.</li>
           <li>When you spell the word correctly, you will automatically hear the word.</li>
           <li>However, you still must click the word at the bottom to check it.</li>
           <li>There is no delete button, so be careful!</li>
