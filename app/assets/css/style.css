@@ -170,7 +170,7 @@
     width: 100vw;
     content: 'viewport-units-buggyfill; width: 100vw;';
   }
-  #menu-toggle {
+  .spin-flip-transition {
     transition: 0.3s ease-in-out;
   }
   #close-help-overlay {
@@ -179,7 +179,7 @@
     top: 0;
     right: 0;
   }
-  #help-overlay core-icon {
+  #helpoverlay core-icon {
     color: black;
   }
   #jumbotron-text {
@@ -195,6 +195,11 @@
     -webkit-animation: glowtext 1.5s infinite alternate;
     -moz-animation: glowtext 1.5s infinite alternate;
     animation: glowtext 1.5s infinite alternate;
+    /*
+    -webkit-animation: fliptext 2s ease-in-out 2;
+    -moz-animation: fliptext 2s ease-in-out 2;
+    animation: fliptext 2s ease-in-out 2;
+    */
   }
   @-webkit-keyframes glowtext {
     from {
@@ -319,6 +324,12 @@
     -webkit-animation: glowyellow 1.5s ease-in-out infinite alternate;
     -moz-animation: glowyellow 1.5s ease-in-out infinite alternate;
     animation: glowyellow 1.5s ease-in-out infinite alternate;
+    /*
+    this would be a less CPU intensive operation
+    -webkit-animation: fliptext 2s ease-in-out 2;
+    -moz-animation: fliptext 2s ease-in-out 2;
+    animation: fliptext 2s ease-in-out 2;
+    */
   }
   @-webkit-keyframes glowyellow {
     from {

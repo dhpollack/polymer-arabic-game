@@ -37,10 +37,6 @@
         type: Number,
         value: 12
       },
-      clicked: {
-        type: Number,
-        notify: true
-      },
       langCode: {
         type: String,
         notify: true
@@ -95,7 +91,6 @@
     },
     init: function() {
       this.wordBoardBox = document.querySelector('word-board');
-      this.webapp = document.querySelector('tinavg-webapp');
     },
     changeLanguage: function(event) {
       this.$.lservice.currlang = this.langCode;
@@ -116,6 +111,7 @@
         var lang = items.lang.code;
         this.langCode = lang;
         this.stripDiacritics = items.lang.stripDiacritics;
+        this.fire("stripdia-set",{stripdia: this.stripDiacritics });
         items.alphabet.forEach(function(entry, i, array) {
           entry.currlang = lang;
           array[i].currlang = lang;
@@ -151,10 +147,9 @@
     },
     shuffleLetters: function(word, tileLimit) {
       if(!this.pageRevealed) {
-        this.pageRevealed = true;
+        if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
         document.body.removeAttribute("unresolved");
         this.init();
-        this.webapp.init();
         /*
         window.viewportUnitsBuggyfill.init({
           refreshDebounceWait: 50,

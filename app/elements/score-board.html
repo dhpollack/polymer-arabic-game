@@ -56,7 +56,7 @@
     },
     init: function() {
       this.starIcon = Polymer.dom(this.root).querySelector("core-icon");
-      this.clueShow = document.getElementById('clue-show');
+      this.clueShow = document.getElementById('clueshow');
       this.wordBoardBox = document.querySelector('word-board');
     },
     updateStreak: function(correct) {
@@ -82,7 +82,7 @@
         if(this.learnmodus && this.lastBucket === "(^_^)") {
           this.resetStar();
           this.wordBoardBox.wordFilter();
-          if(this.clueShow.classList.contains("glow-yellow")) this.clueShow.classList.remove("glow-yellow");
+          if(document.getElementById('clueshow').classList.contains("glow-yellow")) document.getElementById('clueshow').classList.remove("glow-yellow");
         } else {
           if(this.lastBucket.toLowerCase() === this.wordBoardBox.getCheckWord().toLowerCase()) {
             if(this.starIcon.style.color === "green") {
@@ -93,7 +93,7 @@
             this.updateStreak(true);
             this.resetStar();
             this.wordBoardBox.wordFilter();
-            if(this.clueShow.classList.contains("glow-yellow")) this.clueShow.classList.remove("glow-yellow");
+            if(document.getElementById('clueshow').classList.contains("glow-yellow")) document.getElementById('clueshow').classList.remove("glow-yellow");
           } else {
             this.updateStreak(false);
             if(!this.learnmodus) this.score -= this.incorrectPts;

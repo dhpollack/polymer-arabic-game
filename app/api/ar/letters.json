@@ -2,7 +2,8 @@
   {
     "lang": {
       "code": "ar",
-      "stripDiacritics": true
+      "stripDiacritics": true,
+      "langHelpInfo": "<h3><u>Arabic</u></h3><ol><li>Right to left language </li><li>Letters change depending on position within the word (solo, beginning, middle, end)</li><li>Ignore the symbols (non-dots only) above and below certain letters in your answer</li><li>These are called diacritics (like accent marks in latin languages) and are used for pronounciation, but are not considered different letters and they are not included past the learning stage of the language</li><li>Arabic is like the Flappy Bird of languages... Good Luck!</li></ol>"
     },
     "alphabet": [
       {

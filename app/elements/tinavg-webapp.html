@@ -13,89 +13,80 @@
 <script src="../assets/js/mousetrap.min.js"></script>
 
 <dom-module id="tinavg-webapp">
-    <style>
-    </style>
-    <template>
-      <core-header-panel id="header-panel">
-        <core-toolbar class="core-header horizontal justified layout start">
-          <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex" learnmodus="{{learnmodus}}"></score-board>
-          <word-board class="horizontal center-justified layout flex-2" lang-code="{{currLang}}"></word-board>
-          <div class="top-right-item horizontal end-justified layout flex">
-            <score-board id="score-board-player-2" player="2" hidden></score-board>
-            <word-recorder></word-recorder>
-          </div>
-        </core-toolbar>
-        <div class="content">
-          <div class="horizontal layout">
-            <core-collapse id="collapse1" horizontal>
-              <div class="mini-menu">
-                <div>
-                  Language: 
-                  <select onchange="setLang(this.value)">
-                    <option value="de">German</option>
-                    <option value="en">English</option>
-                    <option value="en-US-south">English (US South)</option>
-                    <option value="ar">Arabic</option>
-                    <!--
-                    <option value="tr">Turkish</option>
-                    -->
-                  </select>
-                </div>
-                <div><br />Earmodus: <button id="select-earmodus" onclick="toggleEarModus(myWord)">toggle</button></div>
-                <div><br />Learnmodus: <button id="select-learnmodus" onclick="toggleLearnModus()">toggle</button></div>
-                <div><br />Recordmodus: <button id="select-recordmodus" onclick="toggleEl(recordDiv)">toggle</button></div>
-                <div><br />BuggyFill: <button id="select-buggyfill" onclick="refreshBuggyFill()">toggle</button></div>
-                <div hidden><br />Nerdmodus: <button id="select-nerdmodus" onclick="toggleNerdModus()">toggle</button></div>
+  <style>
+  </style>
+  <template>
+    <core-header-panel id="header-panel">
+      <core-toolbar class="core-header horizontal justified layout start">
+        <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex" learnmodus="{{learnmodus}}"></score-board>
+        <word-board id="wboard" class="horizontal center-justified layout flex-2" lang-code="{{currLang}}"></word-board>
+        <div class="top-right-item horizontal end-justified layout flex">
+          <score-board id="score-board-player-2" player="2" hidden></score-board>
+          <word-recorder id="wrecorder"></word-recorder>
+        </div>
+      </core-toolbar>
+      <div class="content">
+        <div class="horizontal layout">
+          <core-collapse id="collapse" horizontal>
+            <div class="mini-menu">
+              <div>
+                Language: 
+                <select on-change="setLang">
+                  <option value="de">German</option>
+                  <option value="en">English</option>
+                  <option value="en-US-south">English (US South)</option>
+                  <option value="ar">Arabic</option>
+                  <!--
+                  <option value="tr">Turkish</option>
+                  -->
+                </select>
               </div>
-            </core-collapse>
-            <letter-list id="letter-grid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list>
+              <div><br />Earmodus: <button id="select-earmodus" on-tap="toggleEarModus">toggle</button></div>
+              <div><br />Learnmodus: <button id="select-learnmodus" on-tap="toggleLearnModus">toggle</button></div>
+              <div><br />Recordmodus: <button id="select-recordmodus" on-tap="toggleRecordModus">toggle</button></div>
+              <div><br />BuggyFill: <button id="select-buggyfill" on-tap="refreshBuggyFill">toggle</button></div>
+              <div hidden><br />Nerdmodus: <button id="select-nerdmodus" on-tap="toggleNerdModus">toggle</button></div>
+            </div>
+          </core-collapse>
+          <letter-list id="letter-grid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list>
+        </div>
+        <div class="footer horizontal justified layout center">
+          <div class="footer-button horizontal start-justified layout flex">
+            <core-icon id="menutoggle" class="spin-flip-transition" icon="trending-neutral" on-tap="toggleCoreCollapse"></core-icon>
           </div>
-          <div class="footer horizontal justified layout center">
-            <div class="footer-button horizontal start-justified layout flex">
-              <core-icon id="menu-toggle" icon="trending-neutral" onclick="toggleCoreCollapse()"><paper-ripple recenters></paper-ripple></core-icon>
-            </div>
-            <jumbotron-text tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
-            <div id="nerdmodus-div" class="horizontal end-justified layout flex">
-              <div id="clue-show-div"><core-icon id="clue-show" icon="text-format" onclick="showClue()"><paper-ripple recenters></paper-ripple></core-icon></div>
-              <core-icon id="help-show" icon="help" onclick="showHelp()"><paper-ripple recenters></paper-ripple></core-icon>
-            </div>
+          <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
+          <div id="nerdmodus-div" class="horizontal end-justified layout flex">
+            <div id="clue-show-div"><core-icon id="clueshow" class="spin-flip-transition" icon="text-format" on-tap="showClue"></core-icon></div>
+            <core-icon id="help-show" icon="help" on-tap="showHelp"></core-icon>
           </div>
         </div>
-      </core-header-panel>
-      <core-overlay id="help-overlay" class="dialog" backdrop>
-        <section>
-        <div id="close-help-overlay"><core-icon id="close-help-overlay-icon" icon="cancel" onclick="showHelp()"></core-icon></div>
-        <center><h1>This Is Not A Vocabulary Game</h1></center>
-        The current language is <span>{{currLang}}</span>
-        <h3>The Goal</h3>
-        <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
-        <h3>The Rules</h3>
-        <ol>
-          <li>Look at the word at the top of the page.</li>
-          <li>Spell the word by tapping the letters in the grid.</li>
-          <li>Check your answer by tapping the word at the bottom of the page.</li>
-        </ol>
-        <h3>Scoring and Tips</h3>
-        <ol>
-          <li>100 points for each correct answer and -30 points for each wrong answer.</li>
-          <li>If you need help, click the <core-icon id="help-overlay-a" icon="text-format"></core-icon> button in the bottom right corner.</li>
-          <li>When you spell the word correctly, you will automatically hear the word.</li>
-          <li>However, you still must click the word at the bottom to check it.</li>
-          <li>There is no delete button, so be careful!</li>
-        </ol>
-        <div id="help-lang-specific">
-        <h3><u>Arabic</u></h3>
-        <ol>
-          <li>Right to left language </li>
-          <li>Letters change depending on position within the word (solo, beginning, middle, end)</li>
-          <li>Ignore the symbols (non-dots only) above and below certain letters in your answer</li>
-          <li>These are called diacritics (like accent marks in latin languages) and are used for pronounciation, but are not considered different letters and they are not included past the learning stage of the language</li>
-          <li>Arabic is like the Flappy Bird of languages... Good Luck!</li>
-        </ol>
-        </div>
-        </section>
-      </core-overlay>
-    </template>
+      </div>
+    </core-header-panel>
+    <core-overlay id="helpoverlay" class="dialog" backdrop>
+      <section>
+      <div id="close-help-overlay"><core-icon id="close-help-overlay-icon" icon="cancel" on-tap="showHelp"></core-icon></div>
+      <center><h1>This Is Not A Vocabulary Game</h1></center>
+      The current language is <span>{{currLang}}</span>
+      <h3>The Goal</h3>
+      <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
+      <h3>The Rules</h3>
+      <ol>
+        <li>Look at the word at the top of the page.</li>
+        <li>Spell the word by tapping the letters in the grid.</li>
+        <li>Check your answer by tapping the word at the bottom of the page.</li>
+      </ol>
+      <h3>Scoring and Tips</h3>
+      <ol>
+        <li>100 points for each correct answer and -30 points for each wrong answer.</li>
+        <li>If you need help, click the <core-icon id="help-overlay-a" icon="text-format"></core-icon> button in the bottom right corner.</li>
+        <li>When you spell the word correctly, you will automatically hear the word.</li>
+        <li>However, you still must click the word at the bottom to check it.</li>
+        <li>There is no delete button, so be careful!</li>
+      </ol>
+      <div id="help-lang-specific"></div>
+      </section>
+    </core-overlay>
+  </template>
 </dom-module>
 <script>
   Polymer({
@@ -117,140 +108,120 @@
       learnmodus: {
         type: Boolean,
         value: false
+      },
+      langHelp: {
+        type: String,
+        value: ""
       }
     },
     listeners: {
+      'letter-card-tapped': 'letterTapped',
+      'stripdia-set': 'setWBoardDisplay',
+      'lang-help': 'setLangHelp'
     },
-    init: function() {
-      init();
+    ready: function() {
+      Mousetrap.bind('shift+enter', function() { 
+        this.$.jt.click(); 
+      }.bind(this));
+      Mousetrap.bind('enter', function() {
+        document.activeElement.click();
+        if(typeof document.activeElement.firePaperRipple === 'function') document.activeElement.firePaperRipple(false);
+      });
+      Mousetrap.bind('a', function() {
+        console.log(window.innerHeight > window.innerWidth);
+      });
+      Mousetrap.bind('p', function() {
+        this.$.wboard.tapWord(false);
+        console.log(window.innerHeight > window.innerWidth);
+      }.bind(this));
+      Mousetrap.bind('left', function() {
+        var prevIndex = (document.activeElement.tabIndex === -1) ? this.letterLimit : (document.activeElement.tabIndex - 1 > 0) ? document.activeElement.tabIndex - 1 : this.letterLimit;
+        document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
+      }.bind(this));
+      Mousetrap.bind('right', function() {
+        var nextIndex = (document.activeElement.tabIndex === -1 || document.activeElement.tabIndex + 1 > this.letterLimit) ? 1 : document.activeElement.tabIndex + 1;
+        document.querySelector('[tabindex="'+ (nextIndex) + '"]').focus();
+      }.bind(this));
+      Mousetrap.bind('up', function() {
+        var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
+        var prevIndex = (document.activeElement.tabIndex === -1) ? this.jumbotronIndex : (document.activeElement.tabIndex - moveFocus > 0) ? document.activeElement.tabIndex - moveFocus : (moveFocus === 4) ? document.activeElement.tabIndex + moveFocus * 2 : document.activeElement.tabIndex + moveFocus * 3;
+        document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
+      }.bind(this));
+      Mousetrap.bind('down', function() {
+        var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
+        var newFocus = (document.activeElement.tabIndex + moveFocus < this.jumbotronIndex) ? document.activeElement.tabIndex + moveFocus : this.jumbotronIndex;
+        var downIndex = (document.activeElement.tabIndex === -1) ? 1 : newFocus;
+        document.querySelector('[tabindex="'+ (downIndex) + '"]').focus();
+      }.bind(this));
+      Mousetrap.bind('backspace', function(e) {
+        // stub to play a wawa sound
+        if (e.preventDefault) {
+          e.preventDefault();
+        } else {
+          // internet explorer
+          e.returnValue = false;
+        }
+        console.log("backspace...");
+      });      
+    },
+    setLangHelp: function(e) {
+      var langHtml  = e.detail.langHtml;
+      if(langHtml) {
+        document.getElementById("help-lang-specific").innerHTML = langHtml;
+      } else {
+        document.getElementById("help-lang-specific").innerHTML = "";
+      }
+      //this.langHelp = e.detail.langHtml;
+    },
+    letterTapped: function(e) {
+      this.$.jt.lastBucket = e.detail.letter;
+    },
+    showHelp: function(e) {
+      this.$.helpoverlay.toggle();
+    },
+    showClue: function(e) {
+      this.$.wboard.revealWord();
+      if(this.$.clueshow.classList.contains("glow-yellow")) this.$.clueshow.classList.remove("glow-yellow");
+      if(this.$.clueshow.style.transform === "rotateX(360deg)") {
+        this.$.clueshow.style.transform = "rotateX(0deg)";
+      } else {
+        this.$.clueshow.style.transform = "rotateX(360deg)";
+      }
+    },
+    toggleCoreCollapse: function(e) {
+      this.$.collapse.toggle();
+      if(this.$.collapse.opened) {
+        this.$.menutoggle.style.transform = "rotateY(180deg)";
+      } else {
+        this.$.menutoggle.style.transform = "rotateY(0deg)";
+      }
+    },
+    toggleEarModus: function() {
+      this.$.wboard.hideWord();
+    },
+    toggleLearnModus: function() {
+      this.learnmodus = !this.learnmodus;
+      this.$.jt.resetBox();
+    },
+    toggleRecordModus: function() {
+      this.$.wrecorder.hidden = !this.$.wrecorder.hidden;
+    },
+    refreshBuggyFill: function() {
+      window.viewportUnitsBuggyfill.init({force: true});
+      window.viewportUnitsBuggyfill.refresh();
+      window.viewportUnitsBuggyfill.findProperties();
+      console.log(window.viewportUnitsBuggyfill.getCss());
+    },
+    setLang: function(ev) {
+      console.log("toggling language: " + ev.target.value + " | chars: " + this.letterLimit);
+      this.currLang = ev.target.value;
+      this.$.jt.resetBox();
+    },
+    setWBoardDisplay: function(ev) {
+      console.log("changing diacritics");
+      this.$.wboard.setDisplayWord();
     }
   });
-  
-  var wordBoard, myWord, letterList, jumbotron, overlay, recordDiv, scoreBoard2, collapseMenu, menuToggleButton, clueShow, webapp;
-  
-  
-  function init() {
-    webapp = document.querySelector('tinavg-webapp');
-    wordBoard = document.querySelector('word-board');
-    letterList = document.querySelector('letter-list');
-    jumbotron = document.querySelector('jumbotron-text');
-    overlay = document.getElementById('help-overlay');
-    recordDiv = document.getElementById('record-elem');
-    scoreBoard2 = document.getElementById('score-board-player-2');
-    collapseMenu = document.getElementById('collapse1');
-    menuToggleButton = document.getElementById('menu-toggle');
-    clueShow = document.getElementById('clue-show');
-  }
-  
-  function toggleCoreCollapse() {
-    collapseMenu.toggle();
-    if(collapseMenu.opened) {
-      menuToggleButton.style.transform = "rotateY(180deg)";
-    } else {
-      menuToggleButton.style.transform = "rotateY(0deg)";
-    }
-  }
-  function setLang(lang) {
-    console.log("toggling language: " + lang + " | chars: " + webapp.letterLimit);
-    webapp.currLang = lang;
-    jumbotron.resetBox();
-  }
-  function showHelp() {
-    overlay.toggle();
-  }
-  function toggleEl(el) {
-    if(el.getAttribute("hidden")) {
-      el.removeAttribute("hidden");
-    } else {
-      el.setAttribute("hidden", true);
-    }
-  }
-  function toggleRecordDiv() {
-    if(recordDiv.getAttribute("hidden")) {
-      recordDiv.removeAttribute("hidden");
-    } else {
-      recordDiv.setAttribute("hidden", true);
-    }
-  }
-  function toggleScoreBoard2() {
-    // not implemented yet
-    if(scoreBoard2.getAttribute("hidden")) {
-      scoreBoard2.removeAttribute("hidden");
-    } else {
-      scoreBoard2.setAttribute("hidden", true);
-    }
-  }
-  function toggleLearnModus() {
-    webapp.learnmodus = !webapp.learnmodus;
-    jumbotron.resetBox();
-  }
-  function showClue() {
-    wordBoard.revealWord();
-    if(clueShow.classList.contains("glow-yellow")) clueShow.classList.remove("glow-yellow");
-  }
-  function toggleNerdModus() {
-    // Stub for those that want to learn good.
-  }
-  function toggleEarModus() {
-    wordBoard.hideWord();
-  }
-  function removeUnresolved() {
-    // not used, rather done directly in letter-list.html
-    // but this stub is in case I want to move it here.
-    document.body.removeAttribute("unresolved");
-  }
-  function refreshBuggyFill() {
-    window.viewportUnitsBuggyfill.init({force: true});
-    window.viewportUnitsBuggyfill.refresh();
-    window.viewportUnitsBuggyfill.findProperties();
-    console.log(window.viewportUnitsBuggyfill.getCss());
-  }
 
-  Mousetrap.bind('shift+enter', function() { 
-    jumbotron.click(); 
-  });
-  Mousetrap.bind('enter', function() {
-    document.activeElement.click();
-    if(typeof document.activeElement.firePaperRipple === 'function') document.activeElement.firePaperRipple(false);
-  });
-  Mousetrap.bind('a', function() {
-    console.log(window.innerHeight > window.innerWidth);
-  });
-  Mousetrap.bind('p', function() {
-    wordBoard.tapWord(false);
-    console.log(window.innerHeight > window.innerWidth);
-  });
-  Mousetrap.bind('left', function() {
-    var prevIndex = (document.activeElement.tabIndex === -1) ? webapp.letterLimit : (document.activeElement.tabIndex - 1 > 0) ? document.activeElement.tabIndex - 1 : webapp.letterLimit;
-    document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
-  });
-  Mousetrap.bind('right', function() {
-    var nextIndex = (document.activeElement.tabIndex === -1 || document.activeElement.tabIndex + 1 > webapp.letterLimit) ? 1 : document.activeElement.tabIndex + 1;
-    document.querySelector('[tabindex="'+ (nextIndex) + '"]').focus();
-  });
-  Mousetrap.bind('up', function() {
-    var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
-    var prevIndex = (document.activeElement.tabIndex === -1) ? webapp.jumbotronIndex : (document.activeElement.tabIndex - moveFocus > 0) ? document.activeElement.tabIndex - moveFocus : (moveFocus === 4) ? document.activeElement.tabIndex + moveFocus * 2 : document.activeElement.tabIndex + moveFocus * 3;
-    document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
-  });
-  Mousetrap.bind('down', function() {
-    var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
-    var newFocus = (document.activeElement.tabIndex + moveFocus < webapp.jumbotronIndex) ? document.activeElement.tabIndex + moveFocus : webapp.jumbotronIndex;
-    var downIndex = (document.activeElement.tabIndex === -1) ? 1 : newFocus;
-    document.querySelector('[tabindex="'+ (downIndex) + '"]').focus();
-  });
-  Mousetrap.bind('backspace', function(e) {
-    // stub to play a wawa sound
-    if (e.preventDefault) {
-      e.preventDefault();
-    } else {
-      // internet explorer
-      e.returnValue = false;
-    }
-    console.log("backspace...");
-  });
-  document.body.addEventListener("polymer-ready", function() {
-    document.body.removeAttribute("unresolved");
-  });
 
 </script>

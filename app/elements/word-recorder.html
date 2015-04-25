@@ -17,7 +17,7 @@
       <div id="record-elem">
         <audio id="recAudio" src="" hidden></audio>
         <core-icon id="recorderInit" icon="av:mic" on-tap="makeRecording"></core-icon>
-        <core-icon id="recorderPlay" icon="av:play-circle-fill" on-tap="playRecording"><paper-ripple recenters></paper-ripple></core-icon>
+        <core-icon id="recorderPlay" class="spin-flip-transition" icon="av:play-circle-fill" on-tap="playRecording"></core-icon>
       </div>
     </template>
 </dom-module>
@@ -43,6 +43,12 @@
       } else {
         //this.scoreBoard.style.color = "green";
       }
+      if(this.$.recorderPlay.style.transform === "rotateY(360deg)") {
+        this.$.recorderPlay.style.transform = "rotateY(0deg)";
+      } else {
+        this.$.recorderPlay.style.transform = "rotateY(360deg)";
+      }
+
     }
   });
   

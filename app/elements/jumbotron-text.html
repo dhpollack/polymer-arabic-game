@@ -5,7 +5,7 @@
   </style>
   <template>
     <div id="jumbotron-div" class="jumbotron">
-      <span id="jumbotron-text">{{usertext}}</span>
+      <span id="jtext">{{usertext}}</span>
     </div>
   </template>
 </dom-module>
@@ -50,7 +50,7 @@
       //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
       this.scoreBox = document.getElementById('score-board-player-1');
       this.wordBoard = document.querySelector('word-board');
-      this.jtext = document.querySelector('jumbotron-text');
+      //this.jtext = document.querySelector('jumbotron-text');
       this.first = true;
     },
     handleClick: function() {
@@ -59,9 +59,9 @@
     updateJumbotron: function() {
       if(!this.wordBoard) this.init();
       if(this.wordBoard.myWord.charAt(0) === this.wordBoard.myWord.charAt(0).toUpperCase()) {
-        this.jtext.classList.add('capitalize');
-      } else if(this.jtext.classList.contains('capitalize')) {
-        this.jtext.classList.remove('capitalize');
+        this.$.jtext.classList.add('capitalize');
+      } else if(this.$.jtext.classList.contains('capitalize')) {
+        this.$.jtext.classList.remove('capitalize');
       }
       if(this.learnmodus && this.lastBucket === "!!!") {
         this.scoreBox.lastBucket = this.usertext;
@@ -69,7 +69,7 @@
       } else {
         if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
           console.log("checking word...");
-          this.jtext.classList.remove("glow-yellow");
+          this.$.jtext.classList.remove("glow-yellow");
           this.scoreBox.lastBucket = this.usertext;
           this.resetBox();
         } else if(this.lastBucket !== "") {
@@ -85,10 +85,10 @@
                   this.wordBoard.playAudio();
                 }
                 this.first=false;
-                this.jtext.classList.add("glow-yellow");
+                this.$.jtext.classList.add("glow-yellow");
               }.bind(this), 700);
           } else {
-            this.jtext.classList.remove("glow-yellow");
+            this.$.jtext.classList.remove("glow-yellow");
           }
           this.lastBucket = "";
         }
@@ -99,7 +99,7 @@
         this.usertext = (this.learnmodus) ? "(^_^)" : "_____";
         this.lastBucket = "";
         this.scoreBox.lastBucket = "";
-        this.jtext.classList.remove("glow-yellow");
+        this.$.jtext.classList.remove("glow-yellow");
     }
   });
 })();

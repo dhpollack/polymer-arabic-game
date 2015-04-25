@@ -12,9 +12,9 @@
     <template>
       <div class="card-body layout horizontal center-justified">
         <span class="content-span"><content></content></span>
-        <paper-ripple recenters></paper-ripple>
+        <paper-ripple id="letterpr" recenters></paper-ripple>
       </div>
-      <audio style="display: none;" src="{{aacAudio}}"></audio>
+      <audio id="letteraudio" style="display: none;" src="{{aacAudio}}"></audio>
     </template>
 </dom-module>
 <script>
@@ -64,17 +64,14 @@
       'tap': 'handleClick'
     },
     ready: function() {
-      this.paperRippleElem = Polymer.dom(this.root).querySelector("paper-ripple");
-      this.audio = Polymer.dom(this.root).querySelector("audio");
     },
     handleClick: function(e) {
-      if(this.jumbotronBox === undefined) this.jumbotronBox = document.querySelector("jumbotron-text");
-      this.jumbotronBox.lastBucket = this.letter;
-      if(!this.audio.paused) {
-        this.audio.pause();
-        this.audio.currentTime = this.audio.currentTime / 3;
+      this.fire("letter-card-tapped", {letter: this.letter});
+      if(!this.$.letteraudio.paused) {
+        this.$.letteraudio.pause();
+        this.$.letteraudio.currentTime = this.$.letteraudio.currentTime / 3;
       }
-      this.audio.play();
+      this.$.letteraudio.play();
     },
     handlePulse: function(e) {
       console.log("Hold Pulse");
@@ -89,11 +86,9 @@
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
     },
     firePaperRipple: function(playAudio) {
-      if(this.paperRippleElem) {
-        this.paperRippleElem.mousedownAction();
-        this.paperRippleElem.mouseupAction();
-        if(playAudio) this.audio.play();
-      }
+      this.$.letterpr.mousedownAction();
+      this.$.letterpr.mouseupAction();
+      if(playAudio) this.$.letteraudio.play();
     }
   });
 })();

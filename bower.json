@@ -22,15 +22,13 @@
     "core-toolbar": "Polymer/core-toolbar#0.8-preview",
     "core-collapse": "Polymer/core-collapse#0.8-preview",
     "core-overlay": "Polymer/core-overlay#0.8-preview-wip-layer",
-    "core-a11y-keys": "dhpollack/core-a11y-keys#0.8-preview",
     "paper-ripple": "Polymer/paper-ripple#0.8-preview",
-    "paper-icon-button": "Polymer/paper-icon-button#0.8-preview",
-    "polymer": "Polymer/polymer#^0.8.0-rc.4",
+    "core-icons": "Polymer/core-icons#0.8-preview",
+    "polymer": "Polymer/polymer#v0.8.0-rc.2",
     "viewport-units-buggyfill": "~0.5.2"
   },
   "resolutions": {
     "layout": "0.8-preview",
-    "polymer": "^0.8.0-rc.2",
     "core-meta": "0.8-preview",
     "webcomponentsjs": "^0.6.0"
   }

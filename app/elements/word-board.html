@@ -87,8 +87,7 @@
           console.log("wordArray.length: " + this.wordArray.length + "\nthis.ranWordIndex: " + this.ranWordIndex);
           
           //word = this.wordArray[this.ranWordIndex];
-          var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
-          this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
+          //this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
           this.phraseIndex = 0;
         }
         if(this.wordArray[this.ranWordIndex][2] !== (undefined || null) && typeof this.wordArray[this.ranWordIndex][2] === 'object') {
@@ -99,15 +98,13 @@
             this.setGrammarStyles(this.wordArray[this.ranWordIndex][2].grammar.segments[this.phraseIndex]);
           }
         }
-        this.myWord = this.phraseArray[this.phraseIndex];
-        
-        this.wordAudio = this.produceWordAudioUrl(this.phraseArray[this.phraseIndex].toLowerCase(), this.langCode);
+        this.setDisplayWord();
+
         this.letterListBox.setWord = true;
         this.letterListBox.runLetters();
 
-        this.jumbotronBox.zielWort = this.phraseArray[this.phraseIndex];
         
-        if(this.myWordSpan.classList.contains('invisible-text')) this.audioBox.play();
+        if(this.myWordSpan.classList.contains('invisible-text') || this.jumbotronBox.usertext === "(^_^)") this.audioBox.play();
       }
     },
     getCheckWord: function() {
@@ -119,6 +116,13 @@
         console.log("words not set yet");
         return;
       }
+    },
+    setDisplayWord: function() {
+      var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+      this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
+      this.myWord = this.phraseArray[this.phraseIndex];
+      this.wordAudio = this.produceWordAudioUrl(this.phraseArray[this.phraseIndex].toLowerCase(), this.langCode);
+      this.jumbotronBox.zielWort = this.phraseArray[this.phraseIndex];
     },
     setWords: function() {
       if(!this.wordBoardWord) this.init();

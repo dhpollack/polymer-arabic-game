@@ -67,6 +67,7 @@
         var ajaxData = this.$.ajax.lastResponse.slice()[0];
         this.lobj = ajaxData;
         this.fire('new-letters', { jsonLang:  ajaxData.lang.code });
+        this.fire('lang-help', {langHtml: ajaxData.lang.langHelpInfo})
         this.letterListBox.setLetters = true;
       }
     }
