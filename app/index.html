@@ -23,6 +23,16 @@
   <script src="../bower_components/viewport-units-buggyfill/viewport-units-buggyfill.hacks.js"></script>
   <!-- tinavg-webapp -->
   <link rel="import" href="elements/tinavg-webapp.html">
+  <script type="text/javascript">
+    window.viewportUnitsBuggyfill.init({
+      // milliseconds to delay between updates of viewport-units
+      // caused by orientationchange, pageshow, resize events
+      refreshDebounceWait: 250,
+    
+      // provide hacks plugin to make the contentHack property work correctly.
+      hacks: window.viewportUnitsBuggyfillHacks
+    });
+  </script>
   
 </head>
 
@@ -31,9 +41,6 @@
   غ	ظ	ض	ذ	خ	ث	ت	ش	ر	ق	ص	ف	ع	س	ن	م	ل	ك	ي	ط	ح	ز	و	ه	د	ج	ب	ا
   -->
   <tinavg-webapp></tinavg-webapp>
-  <script type="text/javascript">
-  window.viewportUnitsBuggyfill.init();
-  </script>
 
 </body>
 </html>

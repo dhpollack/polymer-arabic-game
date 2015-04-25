@@ -80,18 +80,21 @@ gulp.task('images', function () {
 gulp.task('audio', function () {
   return gulp.src(appDir+'/assets/audio/**/*.flac')
     .pipe($.shell([
-      'mkdir -p .tmp',
+      "mkdir -p .tmp",
       // removing opus for now
       //'echo <%= file.path %> >> '+ tmpDir + '/opus.log',
       //'opusenc --bitrate 8 <%= file.path %> <%= f(file.path, ".opus") %> >> '+ tmpDir + '/opus.log 2>&1',
-      'echo <%= file.path %> >> '+ tmpDir + '/ffmpeg.log',
-      'ffmpeg -y -i <%= file.path %> -strict experimental -acodec aac -b:a 64k -ac 1 <%= f(file.path, ".m4a") %> >> '+ tmpDir + '/ffmpeg.log 2>&1'
+      "echo <%= g(file.path) %> >> "+ tmpDir + "/ffmpeg.log",
+      "ffmpeg -y -i <%= g(file.path) %> -strict experimental -acodec aac -b:a 64k -ac 1 <%= f(g(file.path), \".m4a\") %> >> "+ tmpDir + "/ffmpeg.log 2>&1"
     ], {
       templateData: {
         f: function(s, ext) {
           var dest = s.replace('.flac', ext).replace('/originals', '');
           mkpath(path.dirname(dest));
           return dest;
+        },
+        g: function(s) {
+          return s.replace(/[\\$'"]/g, "\\$&");
         }
       }
     }));

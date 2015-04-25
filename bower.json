@@ -1,5 +1,6 @@
 {
   "name": "this-is-not-a-vocabulary-game",
+  "private": true,
   "version": "0.1.0",
   "authors": [
     "David Pollack <sent@da3.net>"
