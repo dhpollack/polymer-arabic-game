@@ -70,8 +70,7 @@
         value: false
       },
       itemIndex: {
-        type: Number,
-        value: 1
+        type: Number
       }
     },
     listeners: {
@@ -82,12 +81,10 @@
     },
     created: function() {
     },
-    attached: function() {
+    ready: function() {
     },
     addIndex: function(item) {
-      item.index = this.itemIndex;
-      this.itemIndex++;
-      return item;
+      return hackIndex(item);
     },
     init: function() {
       this.wordBoardBox = document.querySelector('word-board');
@@ -189,7 +186,9 @@
       
     }
   });
+  var itemIndex;
   function shuffle(array) {
+    itemIndex = 1;
     if(array instanceof Array) {
       var currentIndex = array.length, temporaryValue, randomIndex ;
     
@@ -214,6 +213,11 @@
   function computeAacAudio(item) {
     if(item.letter === "!!!" || item.currlang === undefined) return "";
     return "/assets/audio/"+ item.currlang +"/" + item.letter + ".m4a";
+  }
+  function hackIndex(item) {
+      item.index = itemIndex;
+      itemIndex++;
+      return item;
   }
 
 })();

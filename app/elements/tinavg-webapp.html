@@ -1,12 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
 <!-- Layout/Polymer Elements -->
-<link rel="import" href="../../bower_components/layout/layout.html">
-<link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
-<link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
-<link rel="import" href="../../bower_components/core-icons/core-icons.html">
-<link rel="import" href="../../bower_components/core-overlay/core-overlay.html">
-<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <!-- Custom Elements Vulcanized -->
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
@@ -16,18 +15,40 @@
   <style>
   </style>
   <template>
-    <core-header-panel id="header-panel">
-      <core-toolbar class="core-header horizontal justified layout start">
-        <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex" learnmodus="{{learnmodus}}"></score-board>
+    <paper-header-panel id="header-panel">
+      <div class="core-header horizontal justified layout center">
+        <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex" learnmodus="{{learnmodus}}" recordmodus="{{recordmodus}}"></score-board>
         <word-board id="wboard" class="horizontal center-justified layout flex-2" lang-code="{{currLang}}"></word-board>
         <div class="top-right-item horizontal end-justified layout flex">
           <score-board id="score-board-player-2" player="2" hidden></score-board>
-          <word-recorder id="wrecorder"></word-recorder>
         </div>
-      </core-toolbar>
+      </div>
       <div class="content">
+        <section id="overlaycontainer">
+          <div id="helpoverlay" class="help-box" hidden>
+            <div id="close-help-overlay"><iron-icon id="close-help-overlay-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
+            <center><h1>This Is Not A Vocabulary Game</h1></center>
+            <h3>The Goal</h3>
+            <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
+            <h3>The Rules</h3>
+            <ol>
+              <li>Look at the word at the top of the page.</li>
+              <li>Spell the word by tapping the letters in the grid.</li>
+              <li>Check your answer by tapping the word at the bottom of the page.</li>
+            </ol>
+            <h3>Scoring and Tips</h3>
+            <ol>
+              <li>100 points for each correct answer and -30 points for each wrong answer.</li>
+              <li>If you need help, click the <iron-icon id="help-overlay-a" icon="text-format"></iron-icon> button in the bottom right corner.</li>
+              <li>When you spell the word correctly, you will automatically hear the word.</li>
+              <li>However, you still must click the word at the bottom to check it.</li>
+              <li>There is no delete button, so be careful!</li>
+            </ol>
+            <div id="help-lang-specific"></div>
+          </div>
+        </section>
         <div class="horizontal layout">
-          <core-collapse id="collapse" horizontal>
+          <iron-collapse id="collapse" horizontal>
             <div class="mini-menu">
               <div>
                 Language: 
@@ -47,45 +68,21 @@
               <div><br />BuggyFill: <button id="select-buggyfill" on-tap="refreshBuggyFill">toggle</button></div>
               <div hidden><br />Nerdmodus: <button id="select-nerdmodus" on-tap="toggleNerdModus">toggle</button></div>
             </div>
-          </core-collapse>
-          <letter-list id="letter-grid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list>
+          </iron-collapse>
+          <div id="maincontentarea"><word-recorder id="wrecorder" hidden></word-recorder><letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list></div>
         </div>
         <div class="footer horizontal justified layout center">
           <div class="footer-button horizontal start-justified layout flex">
-            <core-icon id="menutoggle" class="spin-flip-transition" icon="trending-neutral" on-tap="toggleCoreCollapse"></core-icon>
+            <iron-icon id="menutoggle" class="spin-flip-transition" icon="trending-neutral" on-tap="toggleCoreCollapse"></iron-icon>
           </div>
           <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
           <div id="nerdmodus-div" class="horizontal end-justified layout flex">
-            <div id="clue-show-div"><core-icon id="clueshow" class="spin-flip-transition" icon="text-format" on-tap="showClue"></core-icon></div>
-            <core-icon id="help-show" icon="help" on-tap="showHelp"></core-icon>
+            <div id="clue-show-div"><iron-icon id="clueshow" class="spin-flip-transition" icon="text-format" on-tap="showClue"></iron-icon></div>
+            <iron-icon id="help-show" icon="help" on-tap="showHelp"></iron-icon>
           </div>
         </div>
       </div>
-    </core-header-panel>
-    <core-overlay id="helpoverlay" class="dialog" backdrop>
-      <section>
-      <div id="close-help-overlay"><core-icon id="close-help-overlay-icon" icon="cancel" on-tap="showHelp"></core-icon></div>
-      <center><h1>This Is Not A Vocabulary Game</h1></center>
-      The current language is <span>{{currLang}}</span>
-      <h3>The Goal</h3>
-      <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
-      <h3>The Rules</h3>
-      <ol>
-        <li>Look at the word at the top of the page.</li>
-        <li>Spell the word by tapping the letters in the grid.</li>
-        <li>Check your answer by tapping the word at the bottom of the page.</li>
-      </ol>
-      <h3>Scoring and Tips</h3>
-      <ol>
-        <li>100 points for each correct answer and -30 points for each wrong answer.</li>
-        <li>If you need help, click the <core-icon id="help-overlay-a" icon="text-format"></core-icon> button in the bottom right corner.</li>
-        <li>When you spell the word correctly, you will automatically hear the word.</li>
-        <li>However, you still must click the word at the bottom to check it.</li>
-        <li>There is no delete button, so be careful!</li>
-      </ol>
-      <div id="help-lang-specific"></div>
-      </section>
-    </core-overlay>
+    </paper-header-panel>
   </template>
 </dom-module>
 <script>
@@ -106,6 +103,10 @@
         value: 13
       },
       learnmodus: {
+        type: Boolean,
+        value: false
+      },
+      recordmodus: {
         type: Boolean,
         value: false
       },
@@ -177,7 +178,7 @@
       this.$.jt.lastBucket = e.detail.letter;
     },
     showHelp: function(e) {
-      this.$.helpoverlay.toggle();
+      this.$.helpoverlay.hidden = !this.$.helpoverlay.hidden;
     },
     showClue: function(e) {
       this.$.wboard.revealWord();
@@ -204,7 +205,11 @@
       this.$.jt.resetBox();
     },
     toggleRecordModus: function() {
+      this.recordmodus = !this.recordmodus;
       this.$.wrecorder.hidden = !this.$.wrecorder.hidden;
+      this.$.lettergrid.hidden = !this.$.lettergrid.hidden;
+      this.learnmodus = true;
+      this.$.jt.resetBox();
     },
     refreshBuggyFill: function() {
       window.viewportUnitsBuggyfill.init({force: true});

@@ -52,7 +52,7 @@
       tabindex: {
         type: Number,
         reflectToAttribute: true,
-        value: null
+        value: 0
       }
     },
     listeners: {
@@ -67,6 +67,15 @@
     },
     handleClick: function(e) {
       this.fire("letter-card-tapped", {letter: this.letter});
+      var card = Polymer.dom(this.root).querySelector(".card-body");
+      /*
+      If I want a less expensive animation.  Also add the spin-flip-class
+      if(card.style.transform === "rotateX(360deg)") {
+        card.style.transform = "rotateX(0deg)";
+      } else {
+        card.style.transform = "rotateX(360deg)";
+      }
+      */
       if(!this.$.letteraudio.paused) {
         this.$.letteraudio.pause();
         this.$.letteraudio.currentTime = this.$.letteraudio.currentTime / 3;
@@ -81,14 +90,16 @@
       console.log("Release");
       console.log(e);
     },
-    computeAacAudio: function(letter, mylang) {
-      if(letter === " " || mylang === undefined) return "";
-      return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
-    },
+    
     firePaperRipple: function(playAudio) {
       this.$.letterpr.mousedownAction();
       this.$.letterpr.mouseupAction();
       if(playAudio) this.$.letteraudio.play();
+    },
+    
+    computeAacAudio: function(letter, mylang) {
+      if(letter === " " || mylang === undefined) return "";
+      return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
     }
   });
 })();

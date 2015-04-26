@@ -1,8 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
-<link rel="import" href="../../bower_components/core-icons/core-icons.html">
-<link rel="import" href="../../bower_components/core-icons/av-icons.html">
-<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/av-icons.html">
 <script src="../assets/js/p5.min.js"></script>
 <script src="../assets/js/p5.sound.js"></script>
 
@@ -14,10 +13,10 @@
     }
     </style>
     <template>
-      <div id="record-elem">
+      <div id="record-elem" class="horizontal center-justified layout center">
         <audio id="recAudio" src="" hidden></audio>
-        <core-icon id="recorderInit" icon="av:mic" on-tap="makeRecording"></core-icon>
-        <core-icon id="recorderPlay" class="spin-flip-transition" icon="av:play-circle-fill" on-tap="playRecording"></core-icon>
+        <iron-icon id="recorderInit" icon="av:mic" on-tap="makeRecording"></iron-icon>
+        <iron-icon id="recorderPlay" class="spin-flip-transition" icon="av:play-circle-fill" on-tap="playRecording"></iron-icon>
       </div>
     </template>
 </dom-module>
@@ -59,7 +58,7 @@
   var recLimit = 15000;
   function initRec() {
     if(!scoreBoard || !recordIcon) {
-      scoreBoard = document.getElementById("score-board-player-1").querySelector("core-icon");
+      scoreBoard = document.getElementById("score-board-player-1").querySelector("iron-icon");
       recordIcon = document.getElementById("recorderInit");
     }
     

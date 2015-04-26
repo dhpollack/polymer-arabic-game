@@ -5,7 +5,7 @@
   <style>
   </style>
   <template>
-    <div id="word-board-word" class="word-board"><span id="my-word">{{myWord}}</span></div>
+    <div id="word-board-word"><span id="my-word">{{myWord}}</span></div>
     <audio src="{{wordAudio}}" hidden></audio>
     <word-service id="wservice" currlang="{{langCode}}" warray="{{warray}}"></word-service>
   </template>
@@ -92,6 +92,7 @@
         }
         if(this.wordArray[this.ranWordIndex][2] !== (undefined || null) && typeof this.wordArray[this.ranWordIndex][2] === 'object') {
           this.wordBoardWord.className = "";
+          this.myWordSpan.className = "";
           if(this.wordArray[this.ranWordIndex][2].grammar.segments === undefined) {
             this.setGrammarStyles(this.wordArray[this.ranWordIndex][2].grammar);
           } else {
@@ -158,7 +159,7 @@
     },
     tapWord: function(tapped) {
       this.wordBoardWord.classList.add("flip-text");
-      if(this.audioBox.paused && tapped) this.scoreBox.score++;
+      if(this.audioBox.paused && tapped) this.scoreBox.audioPlayPts();
       this.playAudio();
     },
     playAudio: function() {

@@ -17,20 +17,14 @@
   "dependencies": {
     "font-roboto": "Polymer/font-roboto#^0.5.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
-    "layout": "Polymer/layout#0.8-preview",
-    "core-ajax": "Polymer/core-ajax#0.8-preview",
-    "core-header-panel": "Polymer/core-header-panel#0.8-preview",
-    "core-toolbar": "Polymer/core-toolbar#0.8-preview",
-    "core-collapse": "Polymer/core-collapse#0.8-preview",
-    "core-overlay": "Polymer/core-overlay#0.8-preview-wip-layer",
-    "paper-ripple": "Polymer/paper-ripple#0.8-preview",
-    "core-icons": "Polymer/core-icons#0.8-preview",
-    "polymer": "Polymer/polymer#v0.8.0-rc.2",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#master",
+    "iron-ajax": "PolymerElements/iron-ajax#master",
+    "paper-header-panel": "PolymerElements/paper-header-panel#master",
+    "paper-toolbar": "PolymerElements/paper-toolbar#master",
+    "iron-collapse": "PolymerElements/iron-collapse#master",
+    "paper-ripple": "PolymerElements/paper-ripple#master",
+    "iron-icons": "PolymerElements/iron-icons#master",
+    "polymer": "Polymer/polymer#0.8-preview",
     "viewport-units-buggyfill": "~0.5.2"
-  },
-  "resolutions": {
-    "layout": "0.8-preview",
-    "core-meta": "0.8-preview",
-    "webcomponentsjs": "^0.6.0"
   }
 }

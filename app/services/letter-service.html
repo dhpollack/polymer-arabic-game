@@ -1,19 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
-<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <dom-module id="letter-service">
   <style>
-  core-ajax {
+  iron-ajax {
     display: none;
   }
   </style>
   <template>
-    <core-ajax id="ajax" 
+    <iron-ajax id="ajax" 
       url="{{jsonUrl}}" 
       handleas="json" 
       on-request="lettersRequest"
       on-response="lettersLoaded">
-    </core-ajax>
+    </iron-ajax>
   </template>
 </dom-module>
 <script>

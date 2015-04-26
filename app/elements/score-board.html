@@ -1,13 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/core-icons/core-icons.html">
-<link rel="import" href="../../bower_components/layout/layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="score-board">
   <style>
   </style>
   <template>
     <div class="score-box">
-      <div id="score-sign" class="horizontal layout center"><core-icon id="star-points" icon="stars"></core-icon>&nbsp;<span id="score-box-score">{{score}}</span></div>
+      <div id="score-sign" class="horizontal layout center"><iron-icon id="star-points" icon="stars"></iron-icon>&nbsp;<span id="score-box-score">{{score}}</span></div>
     </div>
   </template>
 </dom-module>
@@ -36,6 +36,10 @@
         type: Number,
         value: 100
       },
+      audioPts: {
+        type: Number,
+        value: 5
+      },
       incorrectPts: {
         type: Number,
         value: 30
@@ -47,6 +51,10 @@
       learnmodus: {
         type: Boolean,
         value: false
+      },
+      recordmodus: {
+        type: Boolean,
+        value: false
       }
     },
     listeners: {
@@ -55,7 +63,7 @@
     created: function() {
     },
     init: function() {
-      this.starIcon = Polymer.dom(this.root).querySelector("core-icon");
+      this.starIcon = Polymer.dom(this.root).querySelector("iron-icon");
       this.clueShow = document.getElementById('clueshow');
       this.wordBoardBox = document.querySelector('word-board');
     },
@@ -80,16 +88,13 @@
       if(["","_____"].indexOf(this.lastBucket) === -1) {
         console.log("Does " + this.lastBucket.toLowerCase() + " = " + this.wordBoardBox.getCheckWord().toLowerCase());
         if(this.learnmodus && this.lastBucket === "(^_^)") {
+          if(this.recordmodus) this.givePts();
           this.resetStar();
           this.wordBoardBox.wordFilter();
           if(document.getElementById('clueshow').classList.contains("glow-yellow")) document.getElementById('clueshow').classList.remove("glow-yellow");
         } else {
           if(this.lastBucket.toLowerCase() === this.wordBoardBox.getCheckWord().toLowerCase()) {
-            if(this.starIcon.style.color === "green") {
-              this.score += this.correctPts * this.selfRecMult;
-            } else {
-              this.score += this.correctPts;
-            }
+            this.givePts();
             this.updateStreak(true);
             this.resetStar();
             this.wordBoardBox.wordFilter();
@@ -101,6 +106,14 @@
         }
       }
     },
+    givePts: function() {
+      console.log(this.starIcon);
+      if(this.starIcon.style.color === "green") {
+        this.score += this.correctPts * this.selfRecMult;
+      } else {
+        this.score += this.correctPts;
+      }
+    },
     resetStar: function() {
       if(this.starIcon.style.color !== "white") {
         this.starIcon.style.color = "white";
@@ -108,6 +121,9 @@
     },
     helpPlayer: function() {
       this.clueShow.classList.add("glow-yellow");
+    },
+    audioPlayPts: function() {
+      this.score = this.score + this.audioPts;
     }
   });
 })();
