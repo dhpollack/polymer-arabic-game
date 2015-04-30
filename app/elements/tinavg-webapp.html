@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="country-flags.html">
 <!-- Custom Elements Vulcanized -->
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
@@ -16,33 +17,54 @@
   </style>
   <template>
     <paper-header-panel id="header-panel">
-      <div class="core-header horizontal justified layout center">
-        <score-board id="score-board-player-1" player="1" class="horizontal start-justified layout flex" learnmodus="{{learnmodus}}" recordmodus="{{recordmodus}}"></score-board>
-        <word-board id="wboard" class="horizontal center-justified layout flex-2" lang-code="{{currLang}}"></word-board>
-        <div class="top-right-item horizontal end-justified layout flex">
-          <score-board id="score-board-player-2" player="2" hidden></score-board>
+      <div class="two-headers">
+        <div class="footer horizontal justified layout center">
+          <div class="footer-button horizontal start-justified layout flex">
+            <score-board id="score-board-player-1" player="1" learnmodus="{{learnmodus}}" recordmodus="{{recordmodus}}"></score-board>
+          </div>
+          <word-board id="wboard" class="horizontal center-justified layout flex-2" lang-code="{{currLang}}"></word-board>
+          <div class="horizontal end-justified layout flex">
+            <iron-icon id="menutoggle" class="spin-flip-transition" icon="trending-neutral" on-tap="toggleCoreCollapse"></iron-icon>
+          </div>
+        </div>
+        <div class="core-header horizontal justified layout center">
+          <div class="top-right-item horizontal start-justified layout flex">
+            <iron-icon id="help-show" icon="help" on-tap="showHelp"></iron-icon>
+            <iron-icon id="switchModusIcon" class="spin-flip-transition flag-svg" icon="{{flagIcon}}" on-tap="switchModus"></iron-icon>
+          </div>
+          <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
+          <div id="nerdmodus-div" class="horizontal end-justified layout flex">
+            <score-board id="score-board-player-2" player="2" hidden></score-board>
+            <div id="clue-show-div"><iron-icon id="clueshow" class="spin-flip-transition" icon="text-format" on-tap="showClue"></iron-icon></div>
+          </div>
         </div>
       </div>
       <div class="content">
         <section id="overlaycontainer">
-          <div id="helpoverlay" class="help-box" hidden>
+          <div id="helpoverlay" class="help-box">
             <div id="close-help-overlay"><iron-icon id="close-help-overlay-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
             <center><h1>This Is Not A Vocabulary Game</h1></center>
             <h3>The Goal</h3>
             <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
-            <h3>The Rules</h3>
+            <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
             <ol>
               <li>Look at the word at the top of the page.</li>
               <li>Spell the word by tapping the letters in the grid.</li>
-              <li>Check your answer by tapping the word at the bottom of the page.</li>
+              <li>Check your answer by tapping the word just below the target word.</li>
+              <li>100 points for a correct answer and -30 for an incorrect answer.</li>
+              <li>Earmodus: The word is hidden and only spoken.  The underline gives hints about the word's grammar.</li>
+              <li>Learnmodus: Skip words and do not lose 30 pts for incorrect answers.</li>
+              <li>Talkmodus: Record your voice and play it.  Then click the emoticon for the next word and 250 pts.</li>
             </ol>
-            <h3>Scoring and Tips</h3>
+            <h3>The Buttons</h3>
             <ol>
-              <li>100 points for each correct answer and -30 points for each wrong answer.</li>
-              <li>If you need help, click the <iron-icon id="help-overlay-a" icon="text-format"></iron-icon> button in the bottom right corner.</li>
-              <li>When you spell the word correctly, you will automatically hear the word.</li>
-              <li>However, you still must click the word at the bottom to check it.</li>
-              <li>There is no delete button, so be careful!</li>
+              <li><iron-icon id="help-overlay-menutoggle" icon="trending-neutral"></iron-icon>: Reveals the options menu</li>
+              <li><iron-icon id="help-overlay-a" icon="text-format"></iron-icon>: Goes through the letter sequence, then says the word aloud</li>
+              <li><iron-icon id="help-overlay-help-show" icon="help"></iron-icon>: Shows this help menu.</li>
+              <li><iron-icon id="help-overlay-switchModusIcon" icon="country-flags:de"></iron-icon>: Switches the language.  Does NOT check word.</li>
+              <li><iron-icon icon="av:mic"></iron-icon>: Record voice in Talkmodus.  Also stops recording.</li>
+              <li><iron-icon icon="av:play-circle-fill"></iron-icon>: Play voice recording.  Also stops recording.</li>
+              <li>Target Word: You can click this to have the word spoken outloud.</li>
             </ol>
             <div id="help-lang-specific"></div>
           </div>
@@ -64,22 +86,12 @@
               </div>
               <div><br />Earmodus: <button id="select-earmodus" on-tap="toggleEarModus">toggle</button></div>
               <div><br />Learnmodus: <button id="select-learnmodus" on-tap="toggleLearnModus">toggle</button></div>
-              <div><br />Recordmodus: <button id="select-recordmodus" on-tap="toggleRecordModus">toggle</button></div>
+              <div><br />Talkmodus: <button id="select-recordmodus" on-tap="toggleRecordModus">toggle</button></div>
               <div><br />BuggyFill: <button id="select-buggyfill" on-tap="refreshBuggyFill">toggle</button></div>
               <div hidden><br />Nerdmodus: <button id="select-nerdmodus" on-tap="toggleNerdModus">toggle</button></div>
             </div>
           </iron-collapse>
           <div id="maincontentarea"><word-recorder id="wrecorder" hidden></word-recorder><letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list></div>
-        </div>
-        <div class="footer horizontal justified layout center">
-          <div class="footer-button horizontal start-justified layout flex">
-            <iron-icon id="menutoggle" class="spin-flip-transition" icon="trending-neutral" on-tap="toggleCoreCollapse"></iron-icon>
-          </div>
-          <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
-          <div id="nerdmodus-div" class="horizontal end-justified layout flex">
-            <div id="clue-show-div"><iron-icon id="clueshow" class="spin-flip-transition" icon="text-format" on-tap="showClue"></iron-icon></div>
-            <iron-icon id="help-show" icon="help" on-tap="showHelp"></iron-icon>
-          </div>
         </div>
       </div>
     </paper-header-panel>
@@ -113,6 +125,10 @@
       langHelp: {
         type: String,
         value: ""
+      },
+      flagIcon: {
+        type: String,
+        computed: 'flagIconString(currLang)'
       }
     },
     listeners: {
@@ -128,29 +144,36 @@
         document.activeElement.click();
         if(typeof document.activeElement.firePaperRipple === 'function') document.activeElement.firePaperRipple(false);
       });
-      Mousetrap.bind('a', function() {
-        console.log(window.innerHeight > window.innerWidth);
-      });
-      Mousetrap.bind('p', function() {
+      Mousetrap.bind('shift+p', function() {
         this.$.wboard.tapWord(false);
-        console.log(window.innerHeight > window.innerWidth);
+      }.bind(this));
+      Mousetrap.bind('shift+l', function() {
+        this.$.switchModusIcon.click();
       }.bind(this));
       Mousetrap.bind('left', function() {
+        var lastTab = this.lastTabIndex;
+        this.lastTabIndex = document.activeElement.tabIndex;
         var prevIndex = (document.activeElement.tabIndex === -1) ? this.letterLimit : (document.activeElement.tabIndex - 1 > 0) ? document.activeElement.tabIndex - 1 : this.letterLimit;
         document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
       }.bind(this));
       Mousetrap.bind('right', function() {
+        var lastTab = this.lastTabIndex;
+        this.lastTabIndex = document.activeElement.tabIndex;
         var nextIndex = (document.activeElement.tabIndex === -1 || document.activeElement.tabIndex + 1 > this.letterLimit) ? 1 : document.activeElement.tabIndex + 1;
         document.querySelector('[tabindex="'+ (nextIndex) + '"]').focus();
       }.bind(this));
       Mousetrap.bind('up', function() {
+        var lastTab = this.lastTabIndex;
+        this.lastTabIndex = document.activeElement.tabIndex;
         var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
-        var prevIndex = (document.activeElement.tabIndex === -1) ? this.jumbotronIndex : (document.activeElement.tabIndex - moveFocus > 0) ? document.activeElement.tabIndex - moveFocus : (moveFocus === 4) ? document.activeElement.tabIndex + moveFocus * 2 : document.activeElement.tabIndex + moveFocus * 3;
+        var prevIndex = (document.activeElement.tabIndex === -1) ? 1 : (document.activeElement.tabIndex - moveFocus > 0) ? document.activeElement.tabIndex - moveFocus : this.jumbotronIndex;
         document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
       }.bind(this));
       Mousetrap.bind('down', function() {
+        var lastTab = this.lastTabIndex;
+        this.lastTabIndex = document.activeElement.tabIndex;
         var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
-        var newFocus = (document.activeElement.tabIndex + moveFocus < this.jumbotronIndex) ? document.activeElement.tabIndex + moveFocus : this.jumbotronIndex;
+        var newFocus = (document.activeElement.tabIndex + moveFocus < this.jumbotronIndex) ? document.activeElement.tabIndex + moveFocus : (document.activeElement.tabIndex === this.jumbotronIndex) ? lastTab : document.activeElement.tabIndex;
         var downIndex = (document.activeElement.tabIndex === -1) ? 1 : newFocus;
         document.querySelector('[tabindex="'+ (downIndex) + '"]').focus();
       }.bind(this));
@@ -208,7 +231,7 @@
       this.recordmodus = !this.recordmodus;
       this.$.wrecorder.hidden = !this.$.wrecorder.hidden;
       this.$.lettergrid.hidden = !this.$.lettergrid.hidden;
-      this.learnmodus = true;
+      this.learnmodus = this.recordmodus;
       this.$.jt.resetBox();
     },
     refreshBuggyFill: function() {
@@ -225,6 +248,22 @@
     setWBoardDisplay: function(ev) {
       console.log("changing diacritics");
       this.$.wboard.setDisplayWord();
+    },
+    switchModus: function(ev) {
+      var deg = 0;
+      var languageList = ['de', 'en', 'en-US-south', 'ar'];
+      var nextLang = (languageList.indexOf(this.currLang) === -1 || languageList.indexOf(this.currLang) + 1 >= languageList.length) ? 0 : languageList.indexOf(this.currLang) + 1;
+      this.currLang = languageList[nextLang];
+      this.$.jt.resetBox();
+      if(nextLang === 0 || !this.$.switchModusIcon.style.transform) {
+        deg = 360; 
+      } else {
+        deg = parseInt(this.$.switchModusIcon.style.transform.match(/\d+/)[0]) + 360;
+      }
+      this.$.switchModusIcon.style.transform = "rotateY("+ deg + "deg)";
+    },
+    flagIconString: function(lang) {
+      return "country-flags:" + lang;
     }
   });
 

@@ -50,7 +50,7 @@
 ["bubbles",  {"grammar": {"partofs": "noun", "number": "plural"}}],
 ["hula hoop",  {"grammar": {"type": "phrase", "segments": [{"partofs": "adjective"},{"partofs": "noun", "number": "singular"} ]}}],
 ["coffee",  {"grammar": {"partofs": "noun", "number": "singular"}}],
-["tee",  {"grammar": {"partofs": "noun", "number": "singular"}}],
+["tea",  {"grammar": {"partofs": "noun", "number": "singular"}}],
 ["whammy",  {"grammar": {"partofs": "noun", "number": "singular"}}],
 ["paparazzi",  {"grammar": {"partofs": "noun", "number": "plural"}}],
 ["just do it",  {"grammar": {"type": "phrase", "segments": [{"partofs": "adverb"}, {"partofs": "verb", "tense": "present"}, {"partofs": "noun", "number": "singular"} ]}}],

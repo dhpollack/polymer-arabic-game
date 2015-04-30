@@ -98,6 +98,10 @@
           } else {
             this.setGrammarStyles(this.wordArray[this.ranWordIndex][2].grammar.segments[this.phraseIndex]);
           }
+        } else {
+          this.wordBoardWord.className = "";
+          this.myWordSpan.className = "";
+          this.wordBoardWord.classList.add("word-board");
         }
         this.setDisplayWord();
 

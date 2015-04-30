@@ -1,4 +1,6 @@
-## Polymer Arabic Game
+## [tinavg - this is not a vocabulary game](https://www.tinavg.com)
+
+30/4/2015: The game is mostly functional.  Languages include German, English (US) and English (US South).  There is also partial support for Arabic (no sound files for the words).
 
 I'm playing around with [Polymer](https://www.polymer-project.org/) to create a simple language learning game.
 
@@ -21,3 +23,7 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [glowing text](http://codepen.io/NobodyRocks/pen/qzfoc) - this is an example of glowing text.  neon4 is what I am looking for.
 [cloud icon](http://www.iconarchive.com/show/100-flat-2-icons-by-graphicloads/clouds-1-icon.html) - freeware
 [pt engine](https://ptengine.com) - heatmaps
+[pocketsphinx](https://github.com/syl22-00/pocketsphinx.js) - possible speech recognition library
+[electron](http://electron.atom.io/#built-on-electron) - possible desktop app distribution platform.
+[Apache Cordova](https://cordova.apache.org/) - Way to bundle webapps as phone apps.
+[crosswalk](https://crosswalk-project.org/) - Way to bundle webapps into Android

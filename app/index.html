@@ -21,8 +21,6 @@
   <!-- Fix for Viewport Units -->
   <script src="../bower_components/viewport-units-buggyfill/viewport-units-buggyfill.js"></script>
   <script src="../bower_components/viewport-units-buggyfill/viewport-units-buggyfill.hacks.js"></script>
-  <!-- tinavg-webapp -->
-  <link rel="import" href="elements/tinavg-webapp.html">
   <script type="text/javascript">
     window.viewportUnitsBuggyfill.init({
       // milliseconds to delay between updates of viewport-units
@@ -33,6 +31,8 @@
       hacks: window.viewportUnitsBuggyfillHacks
     });
   </script>
+  <!-- tinavg-webapp -->
+  <link rel="import" href="elements/tinavg-webapp.html">
   
 </head>
 
@@ -40,7 +40,18 @@
   <!-- arabic alphabet
   غ	ظ	ض	ذ	خ	ث	ت	ش	ر	ق	ص	ف	ع	س	ن	م	ل	ك	ي	ط	ح	ز	و	ه	د	ج	ب	ا
   -->
+  <div id="friendly-message" hidden>If you see this message something is taking too long, please try reloading your browser. <a href="javascript:void(0)" onclick="hideFriendlyMessage();">Click here to hide this message</a></div>
   <tinavg-webapp></tinavg-webapp>
-
+  <script type="text/javascript">
+    function hideFriendlyMessage() {
+      document.getElementById('friendly-message').setAttribute('hidden', true);
+    }
+    setTimeout(function() {
+      if(document.querySelector('[unresolved]')) {
+        document.getElementById('friendly-message').removeAttribute('hidden');
+        document.querySelector('[unresolved]').removeAttribute("unresolved");
+      }
+    }, 25000);
+  </script>
 </body>
 </html>

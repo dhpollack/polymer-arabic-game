@@ -144,8 +144,9 @@
     },
     shuffleLetters: function(word, tileLimit) {
       if(!this.pageRevealed) {
-        if(document.body.hasAttribute("unresolved")) this.pageRevealed = true;
-        document.body.removeAttribute("unresolved");
+        if(document.querySelector('[unresolved]')) this.pageRevealed = true;
+        document.getElementById('friendly-message').setAttribute('hidden', true);
+        document.querySelector('[unresolved]').removeAttribute("unresolved");
         this.init();
         /*
         window.viewportUnitsBuggyfill.init({
