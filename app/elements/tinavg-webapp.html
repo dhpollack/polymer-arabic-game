@@ -32,7 +32,10 @@
             <iron-icon id="help-show" icon="help" on-tap="showHelp"></iron-icon>
             <iron-icon id="switchModusIcon" class="spin-flip-transition flag-svg" icon="{{flagIcon}}" on-tap="switchModus"></iron-icon>
           </div>
-          <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" class="horizontal center-justified layout flex-2" learnmodus="{{learnmodus}}"></jumbotron-text>
+          <div class="horizontal center-justified layout flex-2">
+            <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" learnmodus="{{learnmodus}}"></jumbotron-text>
+            <div id="click_jtext" hidden>Click</div>
+          </div>
           <div id="nerdmodus-div" class="horizontal end-justified layout flex">
             <score-board id="score-board-player-2" player="2" hidden></score-board>
             <div id="clue-show-div"><iron-icon id="clueshow" class="spin-flip-transition" icon="text-format" on-tap="showClue"></iron-icon></div>
@@ -43,7 +46,7 @@
         <section id="overlaycontainer">
           <div id="helpoverlay" class="help-box">
             <div id="close-help-overlay"><iron-icon id="close-help-overlay-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
-            <center><h1>This Is Not A Vocabulary Game</h1></center>
+            <center><h2>This Is Not A Vocabulary Game</h2></center>
             <h3>The Goal</h3>
             <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
             <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
@@ -186,7 +189,10 @@
           e.returnValue = false;
         }
         console.log("backspace...");
-      });      
+      });
+      document.getElementById('friendly_message').setAttribute('hidden', true);
+      document.querySelector('[unresolved]').removeAttribute("unresolved");
+
     },
     setLangHelp: function(e) {
       var langHtml  = e.detail.langHtml;

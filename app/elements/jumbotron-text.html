@@ -57,6 +57,7 @@
       this.lastBucket = "!!!";
     },
     updateJumbotron: function() {
+      if(document.getElementById('click_jtext') && !document.getElementById('click_jtext').hasAttribute('hidden')) document.getElementById('click_jtext').remove();
       if(!this.wordBoard) this.init();
       if(this.wordBoard.myWord.charAt(0) === this.wordBoard.myWord.charAt(0).toUpperCase()) {
         this.$.jtext.classList.add('capitalize');
@@ -81,6 +82,8 @@
               checkTimeout = setTimeout(function() {
                 if(this.first) {
                   this.wordBoard.tapWord(false);
+                  document.getElementById('click_jtext').classList.add('arrow_box');
+                  document.getElementById('click_jtext').removeAttribute('hidden');
                 } else {
                   this.wordBoard.playAudio();
                 }

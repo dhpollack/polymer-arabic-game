@@ -212,6 +212,67 @@
   .capitalize {
     text-transform: capitalize;
   }
+  .arrow_box {
+    z-index: 99;
+  	position: absolute;
+  	background: #88b7d5;
+  	border: 0.5vh solid #c2e1f5;
+  	left: 0;
+  	top: 22vh;
+  	margin-left: 47vw;
+    /*
+    -webkit-animation: movetext 1.5s 10 alternate ease-out;
+    -moz-animation: movetext 1.5s 10 alternate ease-out;
+    animation: movetext 1.5s 10 alternate ease-out;
+    */
+  }
+  .arrow_box:after, .arrow_box:before {
+  	bottom: 100%;
+	  left: 50%;
+  	border: solid transparent;
+  	content: " ";
+  	height: 0;
+  	width: 0;
+  	position: absolute;
+  	pointer-events: none;
+  }
+  
+  .arrow_box:after {
+  	border-color: rgba(136, 183, 213, 0);
+  	border-bottom-color: #88b7d5;
+  	border-width: 2vw;
+  	margin-left: -2vw;
+  }
+  .arrow_box:before {
+  	border-color: rgba(194, 225, 245, 0);
+  	border-bottom-color: #c2e1f5;
+  	border-width: 2.5vw;
+  	margin-left: -2.5vw;
+  }
+  @-webkit-keyframes movetext {
+    from {
+      transform: translate(0vw, 0vh);
+    }
+    to {
+      transform: translate(0vw, 3vh);
+    }
+  }
+  @-moz-keyframes movetext {
+    from {
+      transform: translate(0vw, 0vh);
+    }
+    to {
+      transform: translate(0vw, 3vh);
+    }
+  }
+  @keyframes movetext {
+    from {
+      transform: translate(0vw, 0vh);
+    }
+    to {
+      transform: translate(0vw, 3vh);
+    }
+  }
   .glow-text {
     -webkit-animation: glowtext 1.5s 10 alternate;
     -moz-animation: glowtext 1.5s 10 alternate;

@@ -145,15 +145,9 @@
     shuffleLetters: function(word, tileLimit) {
       if(!this.pageRevealed) {
         if(document.querySelector('[unresolved]')) this.pageRevealed = true;
-        document.getElementById('friendly-message').setAttribute('hidden', true);
-        document.querySelector('[unresolved]').removeAttribute("unresolved");
+        //document.getElementById('friendly-message').setAttribute('hidden', true);
+        //document.querySelector('[unresolved]').removeAttribute("unresolved");
         this.init();
-        /*
-        window.viewportUnitsBuggyfill.init({
-          refreshDebounceWait: 50,
-          hacks: window.viewportUnitsBuggyfillHacks
-        });
-        */
       }
       // this is a hack because polymer doesn't update if an array's properties have changed only if the array itself
       // has been manipulated.
