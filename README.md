@@ -27,3 +27,4 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [electron](http://electron.atom.io/#built-on-electron) - possible desktop app distribution platform.
 [Apache Cordova](https://cordova.apache.org/) - Way to bundle webapps as phone apps.
 [crosswalk](https://crosswalk-project.org/) - Way to bundle webapps into Android
+[hangul.js](https://www.npmjs.com/package/hangul-js) - This assembles/disassembles the Korean letters in the block groups.

@@ -15,8 +15,8 @@
     <template>
       <div id="record-elem" class="horizontal center-justified layout center">
         <audio id="recAudio" src="" hidden></audio>
-        <iron-icon id="recorderInit" icon="av:mic" on-tap="makeRecording"></iron-icon>
-        <iron-icon id="recorderPlay" class="spin-flip-transition" icon="av:play-circle-fill" on-tap="playRecording"></iron-icon>
+        <iron-icon id="recorderInit" class="recorder-icon" icon="av:mic" on-tap="makeRecording"></iron-icon>
+        <iron-icon id="recorderPlay" class="spin-flip-transition recorder-icon" icon="av:play-circle-fill" on-tap="playRecording"></iron-icon>
       </div>
     </template>
 </dom-module>

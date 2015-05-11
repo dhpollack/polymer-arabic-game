@@ -1,11 +1,15 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<script src="../assets/js/hangul.js"></script>
+
+
 
 <dom-module id="jumbotron-text">
   <style>
   </style>
   <template>
     <div id="jumbotron-div" class="jumbotron">
-      <span id="jtext">{{usertext}}</span>
+      <paper-button id="jtext">{{usertext}}</paper-button>
     </div>
   </template>
 </dom-module>
@@ -47,17 +51,14 @@
     created: function() {
     },
     init: function() {
-      //console.log("scoreArray: " + scoreCount + "\nscore: " + score + "\nlastBucket: " + lastBucket);
       this.scoreBox = document.getElementById('score-board-player-1');
       this.wordBoard = document.querySelector('word-board');
-      //this.jtext = document.querySelector('jumbotron-text');
       this.first = true;
     },
     handleClick: function() {
       this.lastBucket = "!!!";
     },
     updateJumbotron: function() {
-      if(document.getElementById('click_jtext') && !document.getElementById('click_jtext').hasAttribute('hidden')) document.getElementById('click_jtext').remove();
       if(!this.wordBoard) this.init();
       if(this.wordBoard.myWord.charAt(0) === this.wordBoard.myWord.charAt(0).toUpperCase()) {
         this.$.jtext.classList.add('capitalize');
@@ -70,28 +71,34 @@
       } else {
         if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
           console.log("checking word...");
-          this.$.jtext.classList.remove("glow-yellow");
           this.scoreBox.lastBucket = this.usertext;
           this.resetBox();
         } else if(this.lastBucket !== "") {
-          if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
+          if(!this.$.jtext.hasAttribute("raised")) this.$.jtext.setAttribute("raised", true);
+          if(this.wordBoard.langCode === "ko") {
+            if(this.scoreArray.length >= window.Hangul.disassemble(this.zielWort).join('').length + 2) this.scoreArray.shift();
+          } else {
+            if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
+          }
           window.clearTimeout(checkTimeout);
           this.scoreArray.push(this.lastBucket);
-          this.usertext = this.scoreArray.join("");
+          if(this.wordBoard.langCode === "ko") {
+            this.usertext = window.Hangul.assemble(this.scoreArray.join(""));
+          } else {
+            this.usertext = this.scoreArray.join("");
+          }
           if(this.usertext.toLowerCase() === this.wordBoard.getCheckWord().toLowerCase()) {
               checkTimeout = setTimeout(function() {
                 if(this.first) {
                   this.wordBoard.tapWord(false);
-                  document.getElementById('click_jtext').classList.add('arrow_box');
-                  document.getElementById('click_jtext').removeAttribute('hidden');
                 } else {
-                  this.wordBoard.playAudio();
+                  this.wordBoard.playAudio(false);
                 }
                 this.first=false;
-                this.$.jtext.classList.add("glow-yellow");
+                this.$.jtext.querySelector("paper-material").setAttribute("elevation", 5);
               }.bind(this), 700);
           } else {
-            this.$.jtext.classList.remove("glow-yellow");
+            this.$.jtext.querySelector("paper-material").setAttribute("elevation", 1);
           }
           this.lastBucket = "";
         }
@@ -102,7 +109,8 @@
         this.usertext = (this.learnmodus) ? "(^_^)" : "_____";
         this.lastBucket = "";
         this.scoreBox.lastBucket = "";
-        this.$.jtext.classList.remove("glow-yellow");
+        this.$.jtext.removeAttribute("raised");
+        this.$.jtext.classList.remove("to-foreground");
     }
   });
 })();

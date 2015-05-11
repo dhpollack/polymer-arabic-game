@@ -14,7 +14,7 @@
         <span class="content-span"><content></content></span>
         <paper-ripple id="letterpr" recenters></paper-ripple>
       </div>
-      <audio id="letteraudio" style="display: none;" src="{{aacAudio}}"></audio>
+      <audio id="letteraudio" src="{{aacAudio}}" on-error="enableSynth" hidden></audio>
     </template>
 </dom-module>
 <script>
@@ -53,6 +53,10 @@
         type: Number,
         reflectToAttribute: true,
         value: 0
+      },
+      useSynth: {
+        type: Boolean,
+        value: false
       }
     },
     listeners: {
@@ -65,6 +69,9 @@
     },
     ready: function() {
     },
+    enableSynth: function(e) {
+      if('speechSynthesis' in window) this.useSynth = true;      
+    },
     handleClick: function(e) {
       this.fire("letter-card-tapped", {letter: this.letter});
       var card = Polymer.dom(this.root).querySelector(".card-body");
@@ -76,11 +83,21 @@
         card.style.transform = "rotateX(360deg)";
       }
       */
-      if(!this.$.letteraudio.paused) {
-        this.$.letteraudio.pause();
-        this.$.letteraudio.currentTime = this.$.letteraudio.currentTime / 3;
+      if(!this.useSynth) {
+        if(!this.$.letteraudio.paused) {
+          this.$.letteraudio.pause();
+          this.$.letteraudio.currentTime = this.$.letteraudio.currentTime / 3;
+        }
+        this.$.letteraudio.play();
+      } else {
+        //disabling this for now.
+        if(false) {
+          var msg = new SpeechSynthesisUtterance();
+          msg.lang = this.currlang;
+          msg.text = this.letter;
+          window.speechSynthesis.speak(msg);
+        }
       }
-      this.$.letteraudio.play();
     },
     handlePulse: function(e) {
       console.log("Hold Pulse");
@@ -92,12 +109,13 @@
     },
     
     firePaperRipple: function(playAudio) {
-      this.$.letterpr.mousedownAction();
-      this.$.letterpr.mouseupAction();
+      this.$.letterpr.downAction();
+      this.$.letterpr.upAction();
       if(playAudio) this.$.letteraudio.play();
     },
     
     computeAacAudio: function(letter, mylang) {
+      this.useSynth = false;
       if(letter === " " || mylang === undefined) return "";
       return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
     }

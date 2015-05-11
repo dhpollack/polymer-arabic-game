@@ -177,7 +177,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('offlineapp', function(){
-  return gulp.src(appDir + '/index.uv.html')
+  return gulp.src(appDir + '/index.html')
     .pipe($.replace('<html>', '<html manifest="app.manifest">'))
     .pipe($.rename('offline.html'))
     .pipe(gulp.dest(appDir));
@@ -185,12 +185,13 @@ gulp.task('offlineapp', function(){
 
 // Vulcanize imports
 gulp.task('vulcanize', function () {
-  return gulp.src(distDir + '/index.uv.html')
+  return gulp.src(distDir + '/index.html')
     .pipe($.vulcanize({
       dest: distDir
     }))
-    .pipe($.rename('index.html'))
+    .pipe($.rename('index.vul.html'))
     .pipe(gulp.dest(distDir))
+    .pipe(gulp.dest(tmpDir))
     .pipe($.size({title: 'vulcanize'}));
 });
 

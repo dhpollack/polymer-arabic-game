@@ -1,12 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../services/word-service.html">
+<script src="../assets/js/hangul.js"></script>
+
 
 <dom-module id="word-board">
   <style>
   </style>
   <template>
     <div id="word-board-word"><span id="my-word">{{myWord}}</span></div>
-    <audio src="{{wordAudio}}" hidden></audio>
+    <audio id="word_aud_elem" src="{{wordAudio}}" on-error="enableSynth" hidden></audio>
     <word-service id="wservice" currlang="{{langCode}}" warray="{{warray}}"></word-service>
   </template>
 </dom-module>
@@ -43,6 +45,10 @@
       phraseIndex: {
         type: Number,
         value: 0
+      },
+      useSynth: {
+        type: Boolean,
+        value: false
       }
     },
     listeners: {
@@ -52,6 +58,7 @@
       'tap': 'tapWord'
     },
     created: function() {
+      if('speechSynthesis' in window) window.speechSynthesis.getVoices();
     },
     init: function() {
       this.jumbotronBox = document.querySelector("jumbotron-text");
@@ -61,10 +68,15 @@
       this.wordBoardWord = document.getElementById("word-board-word");
       this.myWordSpan = document.getElementById("my-word");
       var wordSpan = this.wordBoardWord;
-      this.audioBox = Polymer.dom(this.root).querySelector("audio");
-      this.audioBox.onended = function() { 
+      this.$.word_aud_elem.onended = function() { 
           wordSpan.classList.remove("flip-text");
         };
+    },
+    enableSynth: function(e) {
+      if('speechSynthesis' in window) {
+        this.useSynth = true;
+        this.voices = window.speechSynthesis.getVoices();
+      }
     },
     changeLanguage: function(event) {
       this.$.wservice.currlang = this.langCode;
@@ -109,7 +121,7 @@
         this.letterListBox.runLetters();
 
         
-        if(this.myWordSpan.classList.contains('invisible-text') || this.jumbotronBox.usertext === "(^_^)") this.audioBox.play();
+        if(this.myWordSpan.classList.contains('invisible-text') || this.jumbotronBox.usertext === "(^_^)") this.$.word_aud_elem.play();
       }
     },
     getCheckWord: function() {
@@ -139,8 +151,14 @@
     revealWord: function() {
       var pauseLength = 1500;
       var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+      var word;
+      
+      if(this.langCode === "ko") {
+        word = window.Hangul.disassemble(this.wordArray[this.ranWordIndex][findex].toLowerCase()).join('');
+      } else {
+        word = this.wordArray[this.ranWordIndex][findex].toLowerCase();
+      }
 
-      var word = this.wordArray[this.ranWordIndex][findex].toLowerCase();
       word.split("").forEach(function(value, index) {
         setTimeout(function() {
           var lCard = document.querySelector('letter-card[letter="'+value+'"]');
@@ -159,19 +177,47 @@
       }
     },
     produceWordAudioUrl: function(word, lang) {
+      this.useSynth = false;
       return "/assets/audio/"+ lang +"/words/" + word + ".m4a";
     },
     tapWord: function(tapped) {
       this.wordBoardWord.classList.add("flip-text");
-      if(this.audioBox.paused && tapped) this.scoreBox.audioPlayPts();
-      this.playAudio();
+      if(this.$.word_aud_elem.paused && tapped) this.scoreBox.audioPlayPts();
+      this.playAudio(true);
     },
-    playAudio: function() {
-      if(!this.audioBox.paused) {
-        this.audioBox.pause();
-        this.audioBox.currentTime = this.audioBox.currentTime / 3;
+    playAudio: function(tapped) {
+      var msg;
+      if(!this.useSynth) {
+        if(!this.$.word_aud_elem.paused) {
+          this.$.word_aud_elem.pause();
+          this.$.word_aud_elem.currentTime = this.$.word_aud_elem.currentTime / 3;
+        }
+        this.$.word_aud_elem.play();
+      } else if(this.checkSynthVoices(this.langCode)) {
+        msg = new SpeechSynthesisUtterance();
+        msg.onend = function(e) {
+          document.getElementById("word-board-word").classList.remove("flip-text");
+        };
+        msg.lang = this.langCode;
+        msg.text = this.myWord;
+        window.speechSynthesis.speak(msg);
+      } else if(tapped) {
+        msg = new SpeechSynthesisUtterance();
+        msg.onend = function(e) {
+          document.getElementById("word-board-word").classList.remove("flip-text");
+        };
+        msg.lang = "en";
+        msg.text = "Sorry, no audio";
+        window.speechSynthesis.speak(msg);
       }
-      this.audioBox.play();
+    },
+    checkSynthVoices: function(testlang) {
+      for(var i = 0; i < this.voices.length; i++) {
+        if(this.voices[i].lang.match("^" + testlang)) {
+          return true;
+        }
+      }
+      return false;
     },
     setGrammarStyles: function(grammar) {
       var classesToAdd = [];

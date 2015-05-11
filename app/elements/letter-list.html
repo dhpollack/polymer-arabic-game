@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../services/letter-service.html">
 <link rel="import" href="letter-card.html">
+<script src="../assets/js/hangul.js"></script>
+
 
 <dom-module id="letter-list">
   <style>
@@ -12,7 +14,7 @@
   <template>
     <letter-service id="lservice" currlang="{{langCode}}" lobj="{{lobj}}"></letter-service>
     <div id="lmc" class="horizontal layout flex wrap" style="width: 100vw">
-      <template id="repeater" is="x-repeat" filter="addIndex" items="{{letterList}}">
+      <template id="repeater" is="dom-repeat" filter="addIndex" items="{{letterList}}">
         <letter-card
           class="letter-matrix"
           uid="[[item.uid]]"
@@ -131,18 +133,22 @@
       }
     },
     onNewWord: function() {
-      var word = this.wordBoardBox.getCheckWord();
+      var word = this.wordBoardBox.getCheckWord().toLowerCase();
       if(word !== undefined && word.length !== 0) {
         console.log("fired filter-word-changed: " + word + " | ohneAccent: " + this.stripDiacritics);
         this.setWord = true;
         if(this.allLettersList.length > 0 && this.setLetters) {
-          this.shuffleLetters(word.toLowerCase(), this.limit);
+          this.shuffleLetters(word, this.limit);
         } else {
           console.log("this.letterList is not yet set :-/");
         }
       }
     },
     shuffleLetters: function(word, tileLimit) {
+      if(this.langCode === "ko") {
+        word = window.Hangul.disassemble(word).join('');
+        console.log(word);
+      }
       if(!this.pageRevealed) {
         if(document.querySelector('[unresolved]')) this.pageRevealed = true;
         //document.getElementById('friendly-message').setAttribute('hidden', true);
