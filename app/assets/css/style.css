@@ -50,6 +50,7 @@
     border-bottom-color: #FF80CE;
   }
   .word-board-neuter {
+    border-bottom-style: solid;
     border-bottom-color: #8A8A8A;
   }
   .word-board-singular {

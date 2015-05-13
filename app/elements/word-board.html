@@ -193,22 +193,29 @@
           this.$.word_aud_elem.currentTime = this.$.word_aud_elem.currentTime / 3;
         }
         this.$.word_aud_elem.play();
-      } else if(this.checkSynthVoices(this.langCode)) {
-        msg = new SpeechSynthesisUtterance();
-        msg.onend = function(e) {
-          document.getElementById("word-board-word").classList.remove("flip-text");
-        };
-        msg.lang = this.langCode;
-        msg.text = this.myWord;
-        window.speechSynthesis.speak(msg);
-      } else if(tapped) {
-        msg = new SpeechSynthesisUtterance();
-        msg.onend = function(e) {
-          document.getElementById("word-board-word").classList.remove("flip-text");
-        };
-        msg.lang = "en";
-        msg.text = "Sorry, no audio";
-        window.speechSynthesis.speak(msg);
+      } else {
+        this.playSynVoice(this.langCode, this.myWord, 0.75, tapped);
+      }
+    },
+    playSynVoice: function(lang, text, rate, tapped) {
+      if('speechSynthesis' in window) {
+        var msg = new SpeechSynthesisUtterance();
+        if(this.checkSynthVoices(lang)) {
+          msg.onend = function(e) {
+            document.getElementById("word-board-word").classList.remove("flip-text");
+          };
+          msg.lang = lang;
+          msg.text = text;
+          msg.rate = rate;
+          window.speechSynthesis.speak(msg);
+        } else if(tapped) {
+          msg.onend = function(e) {
+            document.getElementById("word-board-word").classList.remove("flip-text");
+          };
+          msg.lang = "en";
+          msg.text = "Oops, no audio for this language.";
+          window.speechSynthesis.speak(msg);
+        }
       }
     },
     checkSynthVoices: function(testlang) {
@@ -222,8 +229,8 @@
     setGrammarStyles: function(grammar) {
       var classesToAdd = [];
       var wordDiv = this.wordBoardWord;
-      // this should probably be a map of some sort
       classesToAdd.push("word-board");
+      // this should probably be a map of some sort
       if(grammar.partofs !== undefined) {
         switch(grammar.partofs) {
           case "adjective":

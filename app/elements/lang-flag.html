@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<!-- Additional Component Load -->
+
+<dom-module id="lang-flag">
+    <style>
+    </style>
+    <template>
+      <div id="flag_icon" class="spin-flip-transition flag-svg tinavg-med-icon flag-div"></div>
+    </template>
+</dom-module>
+<script>
+(function() {
+  Polymer({
+    is: 'lang-flag',
+    properties: {
+      mylang: {
+        type: String,
+        notify: true,
+        observer: "switchLanguage"
+      },
+      langs: {
+        type: Array,
+        value: function() { return []; }
+      }
+    },
+    listeners: {
+    },
+    handleClick: function(e) {
+    },
+    ready: function() {
+      this.isReady = true;
+    },
+    switchLanguage: function() {
+      console.log("switchLang Fired!");
+      if(!this.isReady) return;
+      var deg = 0;
+      this.$.flag_icon.style.background = "url(/assets/images/" + this.mylang + ".png) center center no-repeat";
+      this.$.flag_icon.style.backgroundSize = "contain";
+      this.fire("reset-jumbotron", true);
+      //this.$.jt.resetBox();
+      deg = (this.langs.indexOf(this.mylang) + 1) * 360;
+      this.async(function() {
+        this.$.flag_icon.style.transform = "rotateY("+ deg + "deg)";
+      });
+    }
+  });
+})();
+</script>

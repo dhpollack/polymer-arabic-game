@@ -34,8 +34,7 @@
         <div class="core-header horizontal justified layout center">
           <div class="top-right-item horizontal start-justified layout flex">
             <iron-icon id="help-show" class="tinavg-med-icon" icon="help" on-tap="showHelp"></iron-icon>
-            <div id="switchModusIcon" class="spin-flip-transition flag-svg tinavg-med-icon flag-div" on-tap="switchModus"></div>
-            <!--<iron-icon id="switchModusIcon" class="spin-flip-transition flag-svg tinavg-med-icon" icon="{{flagIcon}}" on-tap="switchModus"></iron-icon>-->
+            <lang-flag id="switchModusIcon" mylang="[[currLang]]" langs="[[languageList]]" on-tap="switchModus"></lang-flag>
           </div>
           <div class="horizontal center-justified layout flex-2">
             <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" learnmodus="{{learnmodus}}"></jumbotron-text>
@@ -295,22 +294,14 @@
       console.log("changing diacritics");
       this.$.wboard.setDisplayWord();
     },
-    switchModus: function(ev) {
-      var deg = 0;
-      var languageList = this.languageList;
-      var nextLang = (languageList.indexOf(this.currLang) === -1 || languageList.indexOf(this.currLang) + 1 >= languageList.length) ? 0 : languageList.indexOf(this.currLang) + 1;
-      this.currLang = languageList[nextLang];
-      this.$.switchModusIcon.style.background = "url(/assets/images/" + this.currLang + ".png) center center no-repeat";
-      this.$.switchModusIcon.style.backgroundSize = "contain";
-      this.$.jt.resetBox();
-      if(nextLang === 0 || !this.$.switchModusIcon.style.transform) {
-        deg = 360; 
+    switchModus: function(newLang) {
+      if(this.languageList.indexOf(newLang) !== -1) {
+        this.currLang = newLang;
       } else {
-        deg = parseInt(this.$.switchModusIcon.style.transform.match(/\d+/)[0]) + 360;
+        var nextLangInd = (this.languageList.indexOf(this.currLang) === -1 || this.languageList.indexOf(this.currLang) + 1 >= this.languageList.length) ? 0 : this.languageList.indexOf(this.currLang) + 1;
+        console.log(nextLangInd);
+        this.currLang = this.languageList[nextLangInd];
       }
-      this.async(function() {
-        this.$.switchModusIcon.style.transform = "rotateY("+ deg + "deg)";
-      });
     },
     flagIconString: function(lang) {
       return "country-flags:" + lang;
