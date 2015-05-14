@@ -126,7 +126,7 @@
     },
     getCheckWord: function() {
       if(this.wordArray.length !== 0) {
-        var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+        var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
         var word = this.wordArray[this.ranWordIndex][findex].split(" ");
         return word[this.phraseIndex];
       } else {
@@ -135,7 +135,7 @@
       }
     },
     setDisplayWord: function() {
-      var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+      var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
       this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
       this.myWord = this.phraseArray[this.phraseIndex];
       this.wordAudio = this.produceWordAudioUrl(this.phraseArray[this.phraseIndex].toLowerCase(), this.langCode);
@@ -150,7 +150,7 @@
     },
     revealWord: function() {
       var pauseLength = 1500;
-      var findex = (this.letterListBox.stripDiacritics) ? 1 : 0;
+      var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
       var word;
       
       if(this.langCode === "ko") {
