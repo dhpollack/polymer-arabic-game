@@ -5,6 +5,7 @@ _dist
 .tmp
 .ruby-version
 .c9
+utils
 
 # Numerous always-ignore extensions
 *.diff

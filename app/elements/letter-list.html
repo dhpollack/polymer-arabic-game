@@ -127,6 +127,7 @@
     runNewLetters: function(){
       if(this.wordBoardBox.getCheckWord() !== undefined) {
         console.log("switching up letters: " + this.wordBoardBox.getCheckWord());
+        this.fire('ready-set-go', true);
         this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase(), this.limit);
       } else {
         console.log("check word still not set");

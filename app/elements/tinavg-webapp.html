@@ -9,6 +9,7 @@
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <!-- Custom Elements Vulcanized -->
 <link rel="import" href="country-flags.html">
@@ -87,22 +88,36 @@
                   <option value="ar">Arabic</option>
                   <option value="ko">Korean</option>
                   <option value="ru">Russian</option>
+                  <option value="he">Hebrew</option>
                   <!--
                   <option value="tr">Turkish</option>
                   -->
                 </select>
               </div>
               <div><br />Earmodus: <paper-toggle-button id="select_earmodus" on-tap="toggleEarModus"></paper-toggle-button></div>
-              <div><br />Learnmodus: <paper-toggle-button id="select-learnmodus" on-tap="toggleLearnModus"></paper-toggle-button></div>
-              <div><br />Talkmodus: <paper-toggle-button id="select-recordmodus" on-tap="toggleRecordModus"></paper-toggle-button></div>
-              <div><br />BuggyFill: <paper-toggle-button id="select-buggyfill" on-tap="refreshBuggyFill"></paper-toggle-button></div>
-              <div hidden><br />Nerdmodus: <button id="select-nerdmodus" on-tap="toggleNerdModus">toggle</button></div>
+              <div><br />Learnmodus: <paper-toggle-button id="select_learnmodus" on-tap="toggleLearnModus" checked$="{{learnmodus}}"></paper-toggle-button></div>
+              <div><br />Meiseldmodus: <paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button></div>
+              <div>
+                Meiselsprache: 
+                <select id="meiselspracheliste" on-change="setNerdSprache" disabled>
+                  <option value="de">German</option>
+                  <option value="en">English</option>
+                  <option value="ar">Arabic</option>
+                  <option value="ko">Korean</option>
+                  <option value="ru">Russian</option>
+                  <option value="he">Hebrew</option>
+                  <option value="tr">Turkish</option>
+                </select>
+              </div>
+              <div><br />Talkmodus: <paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button></div>
+              <div hidden><br />BuggyFill: <paper-toggle-button id="select_buggyfill" on-tap="refreshBuggyFill"></paper-toggle-button></div>
             </div>
           </iron-collapse>
           <div id="maincontentarea"><word-recorder id="wrecorder" hidden></word-recorder><letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list></div>
         </div>
       </div>
     </paper-header-panel>
+    <paper-toast id="übersetzung" text="{{currLang}}"></paper-toast>
   </template>
 </dom-module>
 <script>
@@ -130,6 +145,14 @@
         type: Boolean,
         value: false
       },
+      nerdmodus: {
+        type: Boolean,
+        value: false
+      },
+      nerdSprache: {
+        type: String,
+        value: 'de'
+      },
       langHelp: {
         type: String,
         value: ""
@@ -140,13 +163,14 @@
       },
       languageList: {
         type: Array,
-        value: function() { return ['de', 'en', 'en-US-south', 'ar',"ko", "ru"]; }
+        value: function() { return ['de', 'en', 'en-US-south', 'ar','ko', 'ru', 'he']; }
       }
     },
     listeners: {
       'letter-card-tapped': 'letterTapped',
       'stripdia-set': 'setWBoardDisplay',
-      'lang-help': 'setLangHelp'
+      'lang-help': 'setLangHelp',
+      'ready-set-go': 'showÜbersetzung'
     },
     ready: function() {
       Mousetrap.bind('shift+enter', function() { 
@@ -305,6 +329,25 @@
     },
     flagIconString: function(lang) {
       return "country-flags:" + lang;
+    },
+    toggleNerdModus: function() {
+      this.nerdmodus = !this.nerdmodus;
+      this.$.meiselspracheliste.disabled = !this.nerdmodus;
+      this.showÜbersetzung();
+    },
+    showÜbersetzung: function() {
+      if(this.nerdmodus && this.$.wboard.getWordObj().übersetzung !== undefined && this.$.wboard.getWordObj().übersetzung[this.nerdSprache]) {
+        this.$.übersetzung.text = this.$.wboard.getWordObj().übersetzung[this.nerdSprache];
+      } else if(this.$.wboard.getWordObj().uebersetzungen[this.nerdSprache] !== undefined) {
+        this.$.übersetzung.text = this.$.wboard.getWordObj().uebersetzungen[this.nerdSprache];
+      } else {
+        this.$.übersetzung.text = "Es tut mir Leid.  Keine Übersetzung :-(";
+      }
+      if(this.nerdmodus) this.$.übersetzung.show();
+    },
+    setNerdSprache: function(ev) {
+      this.nerdSprache = ev.target.value;
+      this.showÜbersetzung();
     }
   });
 

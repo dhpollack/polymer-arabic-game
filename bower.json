@@ -30,6 +30,7 @@
     "paper-button": "PolymerElements/paper-button#master",
     "paper-menu": "PolymerElements/paper-menu#master",
     "paper-item": "PolymerElements/paper-item#master",
+    "paper-toast": "PolymerElements/paper-toast#master",
     "polymer": "Polymer/polymer#v0.9.0-rc.1",
     "web-component-tester": "Polymer/web-component-tester#master",
     "test-fixture": "Polymer/test-fixture#master",

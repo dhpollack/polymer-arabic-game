@@ -134,6 +134,9 @@
         return;
       }
     },
+    getWordObj: function() {
+      return this.wordArray[this.ranWordIndex];
+    },
     setDisplayWord: function() {
       var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
       this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");

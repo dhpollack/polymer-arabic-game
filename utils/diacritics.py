@@ -18,7 +18,7 @@ with codecs.open(filetoread[1],'r', 'utf-8') as data_file:
         entry = word
         entry['ohne'] = strip_accents(word['word'])
         newjson.append(entry)
-    with codecs.open(filetoread[1].replace(".json", "-stpacc.json"), 'w', 'utf-8') as writejson:
-        json.dump(newjson, writejson, ensure_ascii=False)
+with codecs.open(filetoread[1].replace(".json", "-stpacc.json"), 'w', 'utf-8') as writejson:
+    json.dump(newjson, writejson, ensure_ascii=False)
    
     

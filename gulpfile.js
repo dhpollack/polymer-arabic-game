@@ -100,11 +100,19 @@ gulp.task('audio', function () {
     }));
 });
 
-// Optimize Audio - create .mp4 and .opus
+// strip all diacritics and accents
 gulp.task('diacritics', function () {
   return gulp.src(appDir+'/api/**/words.json')
     .pipe($.shell([
       'utils/diacritics.py <%= file.path %>'
+    ]));
+});
+
+// strip all diacritics and create translations
+gulp.task('metadata', function () {
+  return gulp.src(appDir+'/api/**/words.json')
+    .pipe($.shell([
+      'utils/metadata.py <%= file.path %>'
     ]));
 });
 
