@@ -27,7 +27,7 @@
     "gulp-size": "^1.0.0",
     "gulp-uglify": "^0.3.1",
     "gulp-useref": "^0.6.0",
-    "gulp-vulcanize": "^5.0.0",
+    "gulp-vulcanize": "^6.0.0",
     "hangul-js": "^0.1.4",
     "jshint-stylish": "^0.4.0",
     "merge-stream": "^0.1.6",

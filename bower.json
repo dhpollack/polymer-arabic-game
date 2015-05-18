@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "font-roboto": "Polymer/font-roboto#^0.5.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#master",
     "iron-ajax": "PolymerElements/iron-ajax#master",
     "iron-icons": "PolymerElements/iron-icons#master",
@@ -31,7 +31,7 @@
     "paper-menu": "PolymerElements/paper-menu#master",
     "paper-item": "PolymerElements/paper-item#master",
     "paper-toast": "PolymerElements/paper-toast#master",
-    "polymer": "Polymer/polymer#v0.9.0-rc.1",
+    "polymer": "Polymer/polymer#master",
     "web-component-tester": "Polymer/web-component-tester#master",
     "test-fixture": "Polymer/test-fixture#master",
     "viewport-units-buggyfill": "~0.5.2"
