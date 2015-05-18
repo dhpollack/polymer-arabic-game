@@ -20,7 +20,7 @@
           uid="[[item.uid]]"
           aac-audio="[[item.audio]]"
           letter="[[item.letter]]"
-          currlang="[[item.currlang]]"
+          currlang="[[langCode]]"
           regular="[[item.regular]]"
           hidden="[[item.hidden]]"
           tabindex="[[item.index]]">
@@ -112,9 +112,7 @@
         this.stripDiacritics = items.lang.stripDiacritics;
         this.fire("stripdia-set",{stripdia: this.stripDiacritics });
         items.alphabet.forEach(function(entry, i, array) {
-          entry.currlang = lang;
-          array[i].currlang = lang;
-          array[i].audio = computeAacAudio(entry);
+          array[i].audio = computeAacAudio(entry, lang);
           array[i].hidden = false;
         });
       }
@@ -212,9 +210,9 @@
       return array;
     }
   }
-  function computeAacAudio(item) {
-    if(item.letter === "!!!" || item.currlang === undefined) return "";
-    return "/assets/audio/"+ item.currlang +"/" + item.letter + ".m4a";
+  function computeAacAudio(item, lang) {
+    if(item.letter === "!!!" || lang === undefined) return "";
+    return "/assets/audio/"+ lang +"/" + item.letter + ".m4a";
   }
   function hackIndex(item) {
       item.index = itemIndex;

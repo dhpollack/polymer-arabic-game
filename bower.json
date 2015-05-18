@@ -1,7 +1,7 @@
 {
   "name": "this-is-not-a-vocabulary-game",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.5.0",
   "authors": [
     "David Pollack <sent@da3.net>"
   ],
@@ -24,6 +24,7 @@
     "iron-collapse": "PolymerElements/iron-collapse#master",
     "iron-selector": "PolymerElements/iron-selector#master",
     "paper-header-panel": "PolymerElements/paper-header-panel#master",
+    "paper-drawer-panel": "PolymerElements/paper-drawer-panel#master",
     "paper-toolbar": "PolymerElements/paper-toolbar#master",
     "paper-ripple": "PolymerElements/paper-ripple#master",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#master",

@@ -139,11 +139,16 @@
   iron-collapse {
     background: rgba(200,170,160, 1.0);
   }
-  .mini-menu {
+  #drawer {
     width: 360px;
     padding: 1vh 1vw;
+    background: rgba(200,170,160, 1.0);
     content: 'viewport-units-buggyfill; padding: 1vh 1vw;';
   }
+  .mini-menu {
+    background: rgba(200,170,160, 1.0);
+  }
+  
   .tinavg-med-icon {
     font-size: 14px;
     height: 7vh;
