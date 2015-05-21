@@ -24,8 +24,7 @@
         value: function() { return []; }
       },
       usertext: {
-        type: String,
-        value: "_____"
+        type: String
       },
       lastBucket: {
         type: String,
@@ -41,14 +40,12 @@
       },
       learnmodus: {
         type: Boolean,
-        value: false
+        reflectToAttribute: true
       }
     },
     listeners: {
       'tap': 'handleClick',
       'last-bucket-changed': 'updateJumbotron'
-    },
-    created: function() {
     },
     init: function() {
       this.scoreBox = document.getElementById('score-board-player-1');
@@ -103,6 +100,10 @@
           this.lastBucket = "";
         }
       }
+    },
+    forceLearnmodus: function(lm) {
+      this.learnmodus = lm;
+      this.usertext = (this.learnmodus) ? "(^_^)" : "_____";
     },
     resetBox: function() {
         this.scoreArray = [];

@@ -23,6 +23,8 @@
     "iron-iconset": "PolymerElements/iron-iconset#master",
     "iron-collapse": "PolymerElements/iron-collapse#master",
     "iron-selector": "PolymerElements/iron-selector#master",
+    "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#master",
+    "iron-localstorage": "PolymerElements/iron-localstorage#master",
     "paper-header-panel": "PolymerElements/paper-header-panel#master",
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#master",
     "paper-toolbar": "PolymerElements/paper-toolbar#master",

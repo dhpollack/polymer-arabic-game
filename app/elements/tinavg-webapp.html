@@ -4,23 +4,35 @@
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-
-<!-- Custom Elements Vulcanized -->
-<link rel="import" href="country-flags.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<!-- Custom Elements -->
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
 <script src="../assets/js/mousetrap.min.js"></script>
-
 <dom-module id="tinavg-webapp">
-  <style>
+  <style is="custom-style">
+    /*
+    paper-toggle-button {
+      --paper-toggle-button-unchecked-bar-color: #FF4081;
+      --paper-toggle-button-unchecked-button-color: #9c27b0;
+      --paper-toggle-button-unchecked-ink-color: #009688;
+      --paper-toggle-button-checked-bar-color: #5677fc;
+      --paper-toggle-button-checked-button-color: #ff4081;
+      --paper-toggle-button-checked-ink-color: #ff4081;
+    }
+    */
   </style>
   <template>
+    <iron-localstorage name="tinavg-lastlang" value="{{currLang}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
       <div id="collapse" class="mini-menu" drawer>
         <div>
@@ -38,7 +50,7 @@
             -->
           </select>
         </div>
-        <br /><div>Earmodus: <paper-toggle-button id="select_earmodus" on-tap="toggleEarModus"></paper-toggle-button></div>
+        <br /><div>Earmodus: <paper-toggle-button id="select_earmodus" on-tap="toggleEarModus" checked$="{{earmodus}}"></paper-toggle-button></div>
         <br /><div>Learnmodus: <paper-toggle-button id="select_learnmodus" on-tap="toggleLearnModus" checked$="{{learnmodus}}"></paper-toggle-button></div>
         <br /><div>Meiseldmodus: <paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button></div>
         <br /><div>
@@ -62,7 +74,7 @@
             <div class="footer-button horizontal start-justified layout flex">
               <score-board id="score-board-player-1" player="1" learnmodus="{{learnmodus}}" recordmodus="{{recordmodus}}"></score-board>
             </div>
-            <word-board id="wboard" class="horizontal center-justified layout flex-2" lang-code="{{currLang}}"></word-board>
+            <word-board id="wboard" class="horizontal center-justified layout flex-2" lang-code="{{currLang}}" earmodus="{{earmodus}}"></word-board>
             <div class="horizontal end-justified layout flex">
               <iron-icon id="menutoggle" class="spin-flip-transition tinavg-med-icon" icon="menu" paper-drawer-toggle></iron-icon>
             </div>
@@ -77,42 +89,44 @@
             </div>
             <div id="nerdmodus-div" class="horizontal end-justified layout flex">
               <score-board id="score-board-player-2" player="2" hidden></score-board>
-              <div id="clue-show-div"><iron-icon id="clueshow" class="spin-flip-transition tinavg-med-icon" icon="text-format" on-tap="showClue"></iron-icon></div>
+              <div id="clue-show-div" class="tinavg-med-icon"><iron-icon id="clueshow" class="spin-flip-transition tinavg-med-icon" icon="text-format" on-tap="showClue"></iron-icon></div>
             </div>
           </div>
         </div>
         <div id="maincontentarea" class="content">
-          <word-recorder id="wrecorder" hidden></word-recorder>
-          <letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}"></letter-list>
-          <section id="overlaycontainer">
-            <div id="helpoverlay" class="help-box">
-              <div id="close-help-overlay"><iron-icon id="close-help-overlay-icon" class="tinavg-med-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
-              <center><h2>This Is Not A Vocabulary Game</h2></center>
-              <h3>The Goal</h3>
-              <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
-              <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
-              <ol>
-                <li>Look at the word at the top of the page.</li>
-                <li>Spell the word by tapping the letters in the grid.</li>
-                <li>Check your answer by tapping the word just below the target word.</li>
-                <li>100 points for a correct answer and -30 for an incorrect answer.</li>
-                <li>Earmodus: The word is hidden and only spoken.  The underline gives hints about the word's grammar.</li>
-                <li>Learnmodus: Skip words and do not lose 30 pts for incorrect answers.</li>
-                <li>Talkmodus: Record your voice and play it.  Then click the emoticon for the next word and 250 pts.</li>
-              </ol>
-              <h3>The Buttons</h3>
-              <ol>
-                <li><iron-icon id="help-overlay-menutoggle" icon="trending-neutral" class="tinavg-med-icon"></iron-icon>: Reveals the options menu</li>
-                <li><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon>: Goes through the letter sequence, then says the word aloud</li>
-                <li><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon>: Shows this help menu.</li>
-                <li><iron-icon id="help-overlay-switchModusIcon" icon="country-flags:de" class="tinavg-med-icon"></iron-icon>: Switches the language.  Does NOT check word.</li>
-                <li><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon>: Record voice in Talkmodus.  Also stops recording.</li>
-                <li><iron-icon icon="av:play-circle-fill" class="tinavg-med-icon"></iron-icon>: Play voice recording.  Also stops recording.</li>
-                <li>Target Word: You can click this to have the word spoken outloud.</li>
-              </ol>
-              <div id="help-lang-specific"></div>
+          <word-recorder id="wrecorder" hidden$="{{!recordmodus}}"></word-recorder>
+          <letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}" hidden$="{{recordmodus}}"></letter-list>
+          <simple-overlay id="so" opened="true">
+            <div id="overlaycontainer">
+              <div id="helpoverlay" class="help-box">
+                <div id="close-help-overlay" class="tinavg-med-icon"><iron-icon id="close-help-overlay-icon" class="tinavg-med-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
+                <center><h2>This Is Not A Vocabulary Game</h2></center>
+                <h3>The Goal</h3>
+                <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
+                <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
+                <ol>
+                  <li>Look at the word at the top of the page.</li>
+                  <li>Spell the word by tapping the letters in the grid.</li>
+                  <li>Check your answer by tapping the word just below the target word.</li>
+                  <li>100 points for a correct answer and -30 for an incorrect answer.</li>
+                  <li>Earmodus: The word is hidden and only spoken.  The underline gives hints about the word's grammar.</li>
+                  <li>Learnmodus: Skip words and do not lose 30 pts for incorrect answers.</li>
+                  <li>Talkmodus: Record your voice and play it.  Then click the emoticon for the next word and 250 pts.</li>
+                </ol>
+                <h3>The Buttons</h3>
+                <ol>
+                  <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-menutoggle" icon="menu" class="tinavg-med-icon"></iron-icon></div>: Reveals the options menu</li>
+                  <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon></div>: Goes through the letter sequence, then says the word aloud</li>
+                  <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon></div>: Shows this help menu.</li>
+                  <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[currLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
+                  <li><div class="tinavg-med-icon"><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon></div>: Record voice in Talkmodus.  Also stops recording.</li>
+                  <li><div class="tinavg-med-icon"><iron-icon icon="av:play-circle-fill" class="tinavg-med-icon"></iron-icon></div>: Play voice recording.  Also stops recording.</li>
+                  <li>Target Word: You can click this to have the word spoken outloud.</li>
+                </ol>
+                <div id="help-lang-specific"></div>
+              </div>
             </div>
-          </section>
+          </simple-overlay>
         </div>
         <paper-toast id="übersetzung" text="{{currLang}}"></paper-toast>
       </paper-header-panel>
@@ -131,7 +145,6 @@
     properties: {
       currLang: {
         type: String,
-        value: "de",
         notify: true
       },
       letterLimit: {
@@ -143,16 +156,16 @@
         value: 13
       },
       learnmodus: {
-        type: Boolean,
-        value: false
+        type: Boolean
       },
       recordmodus: {
-        type: Boolean,
-        value: false
+        type: Boolean
       },
       nerdmodus: {
-        type: Boolean,
-        value: false
+        type: Boolean
+      },
+      earmodus: {
+        type: Boolean
       },
       nerdSprache: {
         type: String,
@@ -177,7 +190,41 @@
       'lang-help': 'setLangHelp',
       'ready-set-go': 'showÜbersetzung'
     },
+    created: function() {
+
+      if(localStorage.getItem("tinavg-earmodus") === undefined) {
+        this.earmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
+      }
+
+      if(localStorage.getItem("tinavg-learnmodus") === undefined) {
+        this.learnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
+      }
+
+      if(localStorage.getItem("tinavg-recordmodus") === undefined) {
+        this.recordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
+      }
+
+      if(JSON.parse(localStorage.getItem("tinavg-nerdmodus")) === undefined) {
+        this.nerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
+      }
+
+    },
     ready: function() {
+
+      // localStorage functions and setting defaults
+      window.localStorage["tinavg-lastvisit"] = new Date();
+      if(this.languageList.indexOf(JSON.parse(localStorage.getItem("tinavg-lastlang"))) === -1) {
+        this.currLang = "de";
+      } else {
+        this.currLang = JSON.parse(localStorage.getItem("tinavg-lastlang"));
+      }
+      if(this.earmodus === undefined) this.earmodus = false;
+      if(this.learnmodus === undefined) this.learnmodus = false;
+      if(this.recordmodus === undefined) this.recordmodus = false;
+      if(this.nerdmodus === undefined) this.nerdmodus = false;
+      this.$.jt.forceLearnmodus(this.learnmodus);
+
+      // Keyboard Shortcut Bindings
       Mousetrap.bind('shift+enter', function() { 
         this.$.jt.click(); 
       }.bind(this));
@@ -228,28 +275,16 @@
         }
         console.log("backspace...");
       });
+      
+      // remove unresolve and reveal app
       document.getElementById('friendly_message').setAttribute('hidden', true);
       document.querySelector('[unresolved]').removeAttribute("unresolved");
+      
       //preload flags
       for(var i = 0; i < this.languageList.length; i++) {
         new Image().src = "/assets/images/" + this.languageList[i] + ".png";
       }
-      /*
-      var fixIcons = document.querySelectorAll(".iron-icon-0");
-      for(var i = 0; i < fixIcons.length; i++) {
-        fixIcons[i].classList.remove("iron-icon-0");
-        if(fixIcons[i].classList.contains("tinavg-med-icon")) {
-          fixIcons[i].style.height = "7vh";
-          fixIcons[i].style.width = "7vh";
-        }
-        if(fixIcons[i].classList.contains("recorder-icon")) {
-          fixIcons[i].style.height = "25vw";
-          fixIcons[i].style.width = "25vw";
-        }
-        //fixIcons[i].classList.add("iron-icon-0");
-      }
-      */
-
+      
     },
     setLangHelp: function(e) {
       var langHtml  = e.detail.langHtml;
@@ -264,7 +299,7 @@
       this.$.jt.lastBucket = e.detail.letter;
     },
     showHelp: function(e) {
-      this.$.helpoverlay.hidden = !this.$.helpoverlay.hidden;
+      this.$.so.opened = !this.$.so.opened;
     },
     showClue: function(e) {
       this.$.wboard.revealWord();
@@ -276,7 +311,7 @@
       }
     },
     toggleEarModus: function() {
-      this.$.wboard.hideWord();
+      this.earmodus = !this.earmodus;
     },
     toggleLearnModus: function() {
       this.learnmodus = !this.learnmodus;
@@ -284,8 +319,6 @@
     },
     toggleRecordModus: function() {
       this.recordmodus = !this.recordmodus;
-      this.$.wrecorder.hidden = !this.$.wrecorder.hidden;
-      this.$.lettergrid.hidden = !this.$.lettergrid.hidden;
       this.learnmodus = this.recordmodus;
       this.$.select_learnmodus.toggleAttribute('disabled');
       this.$.jt.resetBox();
@@ -324,6 +357,7 @@
         console.log(nextLangInd);
         this.currLang = this.languageList[nextLangInd];
       }
+      this.$.jt.resetBox();
     },
     flagIconString: function(lang) {
       return "country-flags:" + lang;

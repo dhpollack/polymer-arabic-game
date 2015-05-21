@@ -4,20 +4,6 @@
     background-color: #E5E5E5;
     font-family: 'RobotoDraft', sans-serif;
   }
-  #splash-screen {
-    position: fixed;
-    z-index: 999;
-    height: 20em;
-    width: 20em;
-    border-style: solid;
-    border-width: 4px;
-    overflow: show;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-  }
   paper-header-panel {
     height: 100vh;
     content: 'viewport-units-buggyfill; height: 100vh;';
@@ -139,10 +125,12 @@
   iron-collapse {
     background: rgba(200,170,160, 1.0);
   }
-  #drawer {
-    width: 360px;
-    padding: 1vh 1vw;
+  iron-selector.paper-drawer-panel > #drawer.paper-drawer-panel {
     background: rgba(200,170,160, 1.0);
+  }
+  #drawer.paper-drawer-panel {
+    width: 360px;
+    padding: 1vh 1vh;
     content: 'viewport-units-buggyfill; padding: 1vh 1vw;';
   }
   .mini-menu {
@@ -154,6 +142,7 @@
     height: 7vh;
     width: 7vh;
     color: white;
+    display: inline-block;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
@@ -185,8 +174,6 @@
     bottom:0;
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
-		-webkit-user-select: none;
-		-moz-user-select: none;
 		overflow: hidden;
 		background: white;
 		padding: 10px;
@@ -197,9 +184,18 @@
 		z-index: 100;
   }
   #overlaycontainer {
-    background-color: rgba(255,255,255,0.7);
-    width: 100%;
-    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transition: opacity 0.2s;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: initial;
+    transition-delay: initial;
+    z-index: 99;
   }
   .right-to-left {
     transform: rotateY(180deg);
@@ -226,11 +222,11 @@
   .to-foreground {
     z-index: 101;
   }
-  .invisible-text {
-    color: rgba(0,0,0,0.0);
-  }
   .capitalize {
     text-transform: capitalize;
+  }
+  .same-line {
+    display: inline-block;
   }
   /* Not used, but keeping this code just in case
   .arrow_box {

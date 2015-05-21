@@ -68,14 +68,17 @@
       'tap': 'handleClick'
     },
     ready: function() {
+      this.$.letteraudio.addEventListener("error", function(e) {
+        this.src = "/assets/audio/sfx/druck1.ogg";
+      });
     },
     enableSynth: function(e) {
       if('speechSynthesis' in window) this.useSynth = true;      
     },
     handleClick: function(e) {
       this.fire("letter-card-tapped", {letter: this.letter});
-      var card = Polymer.dom(this.root).querySelector(".card-body");
       /*
+      var card = Polymer.dom(this.root).querySelector(".card-body");
       If I want a less expensive animation.  Also add the spin-flip-class
       if(card.style.transform === "rotateX(360deg)") {
         card.style.transform = "rotateX(0deg)";
@@ -83,12 +86,14 @@
         card.style.transform = "rotateX(360deg)";
       }
       */
+      if(!this.$.letteraudio.paused) {
+        this.$.letteraudio.pause();
+        this.$.letteraudio.currentTime = this.$.letteraudio.currentTime / 3;
+      }
+      this.$.letteraudio.play();
       if(!this.useSynth) {
-        if(!this.$.letteraudio.paused) {
-          this.$.letteraudio.pause();
-          this.$.letteraudio.currentTime = this.$.letteraudio.currentTime / 3;
-        }
-        this.$.letteraudio.play();
+        // perhaps put play into here
+        
       } else {
         //disabling this for now.
         if(false) {
@@ -113,7 +118,6 @@
       this.$.letterpr.upAction();
       if(playAudio) this.$.letteraudio.play();
     },
-    
     computeAacAudio: function(letter, mylang) {
       this.useSynth = false;
       if(letter === " " || mylang === undefined) return "";

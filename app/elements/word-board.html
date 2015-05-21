@@ -7,7 +7,7 @@
   <style>
   </style>
   <template>
-    <div id="word-board-word"><span id="my-word">{{myWord}}</span></div>
+    <div id="word-board-word"><span id="my_word">{{myWord}}</span></div>
     <audio id="word_aud_elem" src="{{wordAudio}}" on-error="enableSynth" hidden></audio>
     <word-service id="wservice" currlang="{{langCode}}" warray="{{warray}}"></word-service>
   </template>
@@ -49,16 +49,24 @@
       useSynth: {
         type: Boolean,
         value: false
+      },
+      earmodus: {
+        type: Boolean,
+        notify: true
       }
     },
     listeners: {
       'new-words': 'setWords',
       'lang-code-changed': 'changeLanguage',
       'word-array-changed': 'wordFilter',
+      'earmodus-changed': 'hideWord',
       'tap': 'tapWord'
     },
     created: function() {
       if('speechSynthesis' in window) window.speechSynthesis.getVoices();
+    },
+    attached: function() {
+      this.hideWord();
     },
     init: function() {
       this.jumbotronBox = document.querySelector("jumbotron-text");
@@ -66,7 +74,7 @@
       this.letterListBox = document.querySelector('letter-list');
       
       this.wordBoardWord = document.getElementById("word-board-word");
-      this.myWordSpan = document.getElementById("my-word");
+      this.myWordSpan = document.getElementById("my_word");
       var wordSpan = this.wordBoardWord;
       this.$.word_aud_elem.onended = function() { 
           wordSpan.classList.remove("flip-text");
@@ -101,13 +109,13 @@
           //this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
           this.phraseIndex = 0;
         }
-        if(this.wordArray[this.ranWordIndex][2] !== (undefined || null) && typeof this.wordArray[this.ranWordIndex][2] === 'object') {
+        if(this.wordArray[this.ranWordIndex].grammar !== (undefined || null) && typeof this.wordArray[this.ranWordIndex].grammar === 'object') {
           this.wordBoardWord.className = "";
           this.myWordSpan.className = "";
-          if(this.wordArray[this.ranWordIndex][2].grammar.segments === undefined) {
-            this.setGrammarStyles(this.wordArray[this.ranWordIndex][2].grammar);
+          if(this.wordArray[this.ranWordIndex].grammar.segments === undefined) {
+            this.setGrammarStyles(this.wordArray[this.ranWordIndex].grammar);
           } else {
-            this.setGrammarStyles(this.wordArray[this.ranWordIndex][2].grammar.segments[this.phraseIndex]);
+            this.setGrammarStyles(this.wordArray[this.ranWordIndex].grammar.segments[this.phraseIndex]);
           }
         } else {
           this.wordBoardWord.className = "";
@@ -124,7 +132,7 @@
       }
     },
     getCheckWord: function() {
-      if(this.wordArray.length !== 0) {
+      if(this.wordArray.length !== 0 && this.wordArray[this.ranWordIndex] !== undefined) {
         var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
         var word = this.wordArray[this.ranWordIndex][findex].split(" ");
         return word[this.phraseIndex];
@@ -172,10 +180,12 @@
       }.bind(this), pauseLength * (word.length + 0.5));
     },
     hideWord: function() {
-      if(!this.myWordSpan.classList.contains('invisible-text')) {
-        this.myWordSpan.classList.add('invisible-text');
-      } else {
-        this.myWordSpan.classList.remove('invisible-text');
+      if(this.$.my_word !== undefined) {
+        if(this.earmodus) {
+          this.$.my_word.style.color = "rgba(0,0,0,0.0)";
+        } else {
+          this.$.my_word.style.color = "";
+        }
       }
     },
     produceWordAudioUrl: function(word, lang) {
@@ -215,7 +225,7 @@
             document.getElementById("word-board-word").classList.remove("flip-text");
           };
           msg.lang = "en";
-          msg.text = "Oops, no audio for this language.";
+          msg.text = "Oops, no audio for this word.";
           window.speechSynthesis.speak(msg);
         }
       }

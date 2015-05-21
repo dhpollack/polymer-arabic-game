@@ -132,8 +132,9 @@
       }
     },
     onNewWord: function() {
-      var word = this.wordBoardBox.getCheckWord().toLowerCase();
+      var word = this.wordBoardBox.getCheckWord();
       if(word !== undefined && word.length !== 0) {
+        word = word.toLowerCase();
         console.log("fired filter-word-changed: " + word + " | ohneAccent: " + this.stripDiacritics);
         this.setWord = true;
         if(this.allLettersList.length > 0 && this.setLetters) {
