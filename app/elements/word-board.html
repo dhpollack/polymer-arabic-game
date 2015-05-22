@@ -31,9 +31,9 @@
         notify: true
       },
       wordArray: {
-        type: Array,
+        type: Object,
         notify: true,
-        value: function() { return []; }
+        value: function() { return {}; }
       },
       ranWordIndex: {
         type: Number
@@ -58,7 +58,6 @@
     listeners: {
       'new-words': 'setWords',
       'lang-code-changed': 'changeLanguage',
-      'word-array-changed': 'wordFilter',
       'earmodus-changed': 'hideWord',
       'tap': 'tapWord'
     },
@@ -93,29 +92,29 @@
     },
     wordFilter: function() {
       if(!this.letterListBox) this.init();
-      var randomIndex = Math.floor(Math.random() * this.wordArray.length);
+      var randomIndex = (this.wordArray[this.langCode]) ? Math.floor(Math.random() * this.wordArray[this.langCode].length) : 0;
       this.phraseIndex++;
-      if(this.wordArray.length !== 0) {
+      if(Object.keys(this.wordArray).length > 0 && this.wordArray[this.langCode]) {
         if(this.phraseArray[this.phraseIndex] === undefined) {
           if(this.ranWordIndex !== undefined) {
             for(var i=0;this.ranWordIndex === randomIndex;i++) {
-              randomIndex = Math.floor(Math.random() * this.wordArray.length);
+              randomIndex = Math.floor(Math.random() * this.wordArray[this.langCode].length);
               if(i > 20) break;
             }
           }
           this.ranWordIndex = randomIndex;
-          console.log("wordArray.length: " + this.wordArray.length + "\nthis.ranWordIndex: " + this.ranWordIndex);
+          console.log("wordArray.length: " + this.wordArray[this.langCode].length + "\nthis.ranWordIndex: " + this.ranWordIndex);
           //word = this.wordArray[this.ranWordIndex];
           //this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
           this.phraseIndex = 0;
         }
-        if(this.wordArray[this.ranWordIndex].grammar !== (undefined || null) && typeof this.wordArray[this.ranWordIndex].grammar === 'object') {
+        if(this.wordArray[this.langCode][this.ranWordIndex].grammar !== (undefined || null) && typeof this.wordArray[this.langCode][this.ranWordIndex].grammar === 'object') {
           this.wordBoardWord.className = "";
           this.myWordSpan.className = "";
-          if(this.wordArray[this.ranWordIndex].grammar.segments === undefined) {
-            this.setGrammarStyles(this.wordArray[this.ranWordIndex].grammar);
+          if(this.wordArray[this.langCode][this.ranWordIndex].grammar.segments === undefined) {
+            this.setGrammarStyles(this.wordArray[this.langCode][this.ranWordIndex].grammar);
           } else {
-            this.setGrammarStyles(this.wordArray[this.ranWordIndex].grammar.segments[this.phraseIndex]);
+            this.setGrammarStyles(this.wordArray[this.langCode][this.ranWordIndex].grammar.segments[this.phraseIndex]);
           }
         } else {
           this.wordBoardWord.className = "";
@@ -132,9 +131,9 @@
       }
     },
     getCheckWord: function() {
-      if(this.wordArray.length !== 0 && this.wordArray[this.ranWordIndex] !== undefined) {
+      if(this.wordArray[this.langCode] && this.wordArray[this.langCode].length !== 0 && this.wordArray[this.langCode][this.ranWordIndex] !== undefined) {
         var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
-        var word = this.wordArray[this.ranWordIndex][findex].split(" ");
+        var word = this.wordArray[this.langCode][this.ranWordIndex][findex].split(" ");
         return word[this.phraseIndex];
       } else {
         console.log("words not set yet");
@@ -142,21 +141,26 @@
       }
     },
     getWordObj: function() {
-      return this.wordArray[this.ranWordIndex];
+      return this.wordArray[this.langCode][this.ranWordIndex];
     },
     setDisplayWord: function() {
       var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
-      this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
+      this.phraseArray = this.wordArray[this.langCode][this.ranWordIndex][findex].split(" ");
       this.myWord = this.phraseArray[this.phraseIndex];
       this.wordAudio = this.produceWordAudioUrl(this.phraseArray[this.phraseIndex].toLowerCase(), this.langCode);
       this.jumbotronBox.zielWort = this.phraseArray[this.phraseIndex];
     },
     setWords: function() {
       if(!this.wordBoardWord) this.init();
-      var items = this.$.wservice.warray;
-      if(items.length !== 0) {
-        this.wordArray = items;
+      if(!this.wordArray[this.langCode]) {
+        var items = this.$.wservice.warray;
+        if(items.length !== 0) {
+          this.wordArray[this.langCode] = items;
+        }
+      } else {
+        console.log(this.wordArray);
       }
+      this.wordFilter();
     },
     revealWord: function() {
       var pauseLength = 1500;
@@ -164,9 +168,9 @@
       var word;
       
       if(this.langCode === "ko") {
-        word = window.Hangul.disassemble(this.wordArray[this.ranWordIndex][findex].toLowerCase()).join('');
+        word = window.Hangul.disassemble(this.wordArray[this.langCode][this.ranWordIndex][findex].toLowerCase()).join('');
       } else {
-        word = this.wordArray[this.ranWordIndex][findex].toLowerCase();
+        word = this.wordArray[this.langCode][this.ranWordIndex][findex].toLowerCase();
       }
 
       word.split("").forEach(function(value, index) {

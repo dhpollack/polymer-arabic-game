@@ -49,9 +49,9 @@
         value: function() { return []; }
       },
       allLettersList: {
-        type: Array,
+        type: Object,
         notify: true,
-        value: function() { return []; }
+        value: function() { return {}; }
       },
       setWord: {
         type: Boolean,
@@ -109,17 +109,19 @@
       } else {
         var lang = items.lang.code;
         this.langCode = lang;
-        this.stripDiacritics = items.lang.stripDiacritics;
-        this.fire("stripdia-set",{stripdia: this.stripDiacritics });
         items.alphabet.forEach(function(entry, i, array) {
           array[i].audio = computeAacAudio(entry, lang);
           array[i].hidden = false;
         });
       }
-      return items.alphabet;
+      return items;
     },
     onNewLetters: function() {
-      this.allLettersList = this.filterResults(this.$.lservice.lobj);
+      if(!this.allLettersList[this.langCode]) {
+        this.allLettersList[this.langCode] = this.filterResults(this.$.lservice.lobj);
+      }
+      this.stripDiacritics = this.allLettersList[this.langCode].lang.stripDiacritics;
+      this.fire("stripdia-set",{stripdia: this.stripDiacritics });
       this.setLetters = true;
     },
     runNewLetters: function(){
@@ -137,7 +139,7 @@
         word = word.toLowerCase();
         console.log("fired filter-word-changed: " + word + " | ohneAccent: " + this.stripDiacritics);
         this.setWord = true;
-        if(this.allLettersList.length > 0 && this.setLetters) {
+        if(Object.keys(this.allLettersList).length > 0 && this.allLettersList[this.langCode] && this.setLetters) {
           this.shuffleLetters(word, this.limit);
         } else {
           console.log("this.letterList is not yet set :-/");
@@ -162,8 +164,8 @@
       var dummyArray = [];
       var numTiles = tileLimit;
       numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
-      shuffle(this.allLettersList);
-      this.allLettersList.forEach(function(value, index) {
+      shuffle(this.allLettersList[this.langCode].alphabet);
+      this.allLettersList[this.langCode].alphabet.forEach(function(value, index) {
         if(value.letter === "!!!" || value.letter === undefined) {
           //do nothing
         } else if(word.indexOf(value.letter) > -1) {

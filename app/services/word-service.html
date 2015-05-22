@@ -40,25 +40,32 @@
     },
     attached: function() {
       this.jsonUrl = this.createJsonUrl(this.currlang);
-      this.$.wajax.auto = true;
+      //this.$.wajax.auto = true;
     },
     ready: function() {
-      this.letterList = document.querySelector("letter-list");
+      this.wordBoard = document.getElementById("wboard");
+      this.letterList = document.getElementById("lettergrid");
     },
     changeJsonUrl: function(ev) {
       this.jsonUrl = this.createJsonUrl(this.currlang);
+      if(this.wordBoard && this.wordBoard.wordArray[this.currlang]) {
+        this.letterList.setWord = false;
+        this.async(function() { this.spoofLoad(); }, 100);
+      } else {
+        if(this.jsonUrl.length > 0) this.$.wajax.generateRequest();
+      }
+
     },
     createJsonUrl: function(langCode) {
       if(langCode == undefined) {
-        return "/api/ar/words-stpacc.json";
+        return "";
       } else {
         return "/api/"+langCode+"/words-stpacc.json";
       }
     },
     requestSent: function(e) {
-      if(!this.letterList) {
-        this.letterList = document.querySelector("letter-list");
-      }
+      if(!this.letterList) this.letterList = document.getElementById("lettergrid");
+      if(!this.wordBoard) this.wordBoard = document.getElementById("wboard");
       this.letterList.setWord = false;
     },
     wordsLoaded: function() {
@@ -71,6 +78,10 @@
         this.warray = ajaxData;
         this.fire('new-words');
       }
+    },
+    spoofLoad: function() {
+      this.letterList.setWord = true;
+      this.fire('new-words');
     }
   });
 })();

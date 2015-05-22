@@ -41,14 +41,19 @@
     },
     attached: function() {
       this.jsonUrl = this.createJsonUrl(this.currlang);
-      this.$.ajax.auto = true;
     },
     changeJsonUrl: function(ev) {
       this.jsonUrl = this.createJsonUrl(this.currlang);
+      if(this.letterListBox && this.letterListBox.allLettersList[this.currlang]) {
+        this.letterListBox.setLetters = false;
+        this.async(function() { this.spoofLoad(); }, 150);
+      } else {
+        if(this.jsonUrl.length > 0) this.$.ajax.generateRequest();
+      }
     },
     createJsonUrl: function(langCode) {
       if(langCode == undefined) {
-        return "/api/ar/letters.json";
+        return "";
       } else {
         return "/api/"+langCode+"/letters.json";
       }
@@ -66,10 +71,13 @@
       if(jsonSuccess) {
         var ajaxData = this.$.ajax.lastResponse.slice()[0];
         this.lobj = ajaxData;
-        this.fire('new-letters', { jsonLang:  ajaxData.lang.code });
-        this.fire('lang-help', {langHtml: ajaxData.lang.langHelpInfo})
+        this.fire('new-letters');
         this.letterListBox.setLetters = true;
       }
+    },
+    spoofLoad: function() {
+      this.fire('new-letters');
+      this.letterListBox.setLetters = true;
     }
   });
 })();
