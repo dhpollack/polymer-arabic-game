@@ -12,6 +12,7 @@ var merge = require('merge-stream');
 var path = require('path');
 var mkpath = require('mkpath');
 var fs = require("fs");
+var polybuild = require('polybuild');
 
 
 var appDir = 'app';
@@ -193,14 +194,12 @@ gulp.task('offlineapp', function(){
 
 // Vulcanize imports
 gulp.task('vulcanize', function () {
-  return gulp.src(distDir + '/index.html')
-    .pipe($.vulcanize({
-      dest: distDir
+  return gulp.src('app/index.html')
+    .pipe(polybuild({
+      maximumCrush: true
     }))
-    .pipe($.rename('index.vul.html'))
     .pipe(gulp.dest(distDir))
-    .pipe(gulp.dest(tmpDir))
-    .pipe($.size({title: 'vulcanize'}));
+    .pipe(gulp.dest(tmpDir));
 });
 
 // Clean Output Directory

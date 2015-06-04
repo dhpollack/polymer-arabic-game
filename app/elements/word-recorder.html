@@ -11,12 +11,22 @@
       background-color: rgba(255, 50, 50, 0.6);
       border-radius: 50%;
     }
+    /*
+    :root {
+      --iron-icon-width: 25vmax;
+      --iron-icon-height: 25vmax;
+    }
+    @media screen and (orientation: portrait) {
+      --iron-icon-width: 33.33vmax;
+      --iron-icon-height: 33.33vmax;
+    }
+    */
     </style>
     <template>
       <div id="record-elem" class="horizontal center-justified layout center">
         <audio id="recAudio" src="" hidden></audio>
         <iron-icon id="recorderInit" class="recorder-icon" icon="av:mic" on-tap="makeRecording"></iron-icon>
-        <iron-icon id="recorderPlay" class="spin-flip-transition recorder-icon" icon="av:play-circle-fill" on-tap="playRecording"></iron-icon>
+        <iron-icon id="recorderPlay" class="spin-flip-transition recorder-icon" icon="av:play-circle-filled" on-tap="playRecording"></iron-icon>
       </div>
     </template>
 </dom-module>
