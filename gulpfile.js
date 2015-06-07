@@ -37,7 +37,7 @@ var styleTask = function (stylesPath, srcs) {
     }))
     .pipe($.changed(stylesPath, {extension: '.css'}))
     .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
-    .pipe(gulp.dest(tmpDir + stylesPath))
+    .pipe(gulp.dest(tmpDir + '/' + stylesPath))
     .pipe($.if('*.css', $.cssmin()))
     .pipe(gulp.dest(distDir + '/' + stylesPath))
     .pipe($.size({title: stylesPath}));
@@ -128,28 +128,36 @@ gulp.task('copy', function () {
 
   var html = gulp.src(['app/**/*.html'])
     .pipe(gulp.dest(tmpDir))
+    .pipe(gulp.dest(distDir))
     .pipe(reload({stream: true}));
 
-  var bower = gulp.src(['bower_components/**/*.{css,js,html,swf}', '!**/test/**/*', '!**/demo/**/*'])
-    .pipe(gulp.dest(distDir + '/bower_components'));
+  var bower = gulp.src(['bower_components/**/*.{css,js,html,swf}', '!**/test/**/*', '!**/demo/**/*', '!**/Gruntfile.js'])
+    .pipe(gulp.dest(distDir + '/bower_components'))
+    .pipe(gulp.dest(tmpDir + '/bower_components'));
 
   var json = gulp.src([appDir + '/**/*.json'])
-    .pipe(gulp.dest(distDir));
+    .pipe(gulp.dest(distDir))
+    .pipe(gulp.dest(tmpDir));
 
   var assets = gulp.src([appDir + '/assets/**/*.*', '!'+appDir+'/assets/**/*.flac'])
-    .pipe(gulp.dest(distDir+ '/assets'));
+    .pipe(gulp.dest(distDir+ '/assets'))
+    .pipe(gulp.dest(tmpDir+ '/assets'));
 
   var elements = gulp.src([appDir+'/elements/**/*.html'])
-    .pipe(gulp.dest(distDir + '/elements'));
+    .pipe(gulp.dest(distDir + '/elements'))
+    .pipe(gulp.dest(tmpDir + '/elements'));
 
   var services = gulp.src([appDir+'/services/**/*.html'])
-    .pipe(gulp.dest(distDir+'/services'));
+    .pipe(gulp.dest(distDir + '/services'))
+    .pipe(gulp.dest(tmpDir+'/services'));
 
-  var vulcanized = gulp.src([appDir+'/elements/elements.html'])
-    .pipe($.rename('elements.vulcanized.html'))
-    .pipe(gulp.dest(distDir+'/elements'));
+  var nodemodules = gulp.src(['node_modules/mousetrap/mousetrap.min.js', 'node_modules/hangul-js/hangul.min.js'])
+    .pipe(gulp.dest(distDir + '/assets/js'))
+    .pipe(gulp.dest(appDir + '/assets/js'))
+    .pipe(gulp.dest(tmpDir+'/assets/js'));
 
-  return merge(app, html, bower, elements, vulcanized, json).pipe($.size({title: 'copy'}));
+
+  return merge(app, html, bower, elements, json, assets, nodemodules, services).pipe($.size({title: 'copy'}));
 });
 
 // Copy Web Fonts To Dist
@@ -163,9 +171,10 @@ gulp.task('fonts', function () {
 gulp.task('html', function () {
   var assets = $.useref.assets({searchPath: [tmpDir, appDir, distDir]});
 
-  return gulp.src([appDir+'/**/*.html', '!'+appDir+'/{elements,test}/**/*.html'])
+  return gulp.src([appDir+'/**/*.html'])
     // Replace path for vulcanized assets
     //.pipe($.if('*.html', $.replace('elements/elements.html', 'elements/elements.vulcanized.html')))
+    .pipe($.replace('../bower_components', 'bower_components'))
     .pipe(assets)
     // Concatenate And Minify JavaScript
     .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
@@ -175,13 +184,13 @@ gulp.task('html', function () {
     .pipe(assets.restore())
     .pipe($.useref())
     // Minify Any HTML
-    //.pipe($.if('*.html', $.minifyHtml({
-    //  quotes: true,
-    //  empty: true,
-    //  spare: true
-    //})))
+    .pipe($.if('*.html', $.minifyHtml({
+      quotes: true,
+      empty: true,
+      spare: true
+    })))
     // Output Files
-    .pipe(gulp.dest(distDir))
+    .pipe(gulp.dest(tmpDir))
     .pipe($.size({title: 'html'}));
 });
 
@@ -194,7 +203,7 @@ gulp.task('offlineapp', function(){
 
 // Vulcanize imports
 gulp.task('vulcanize', function () {
-  return gulp.src('app/index.html')
+  return gulp.src(tmpDir + '/index.html')
     .pipe(polybuild({
       maximumCrush: true
     }))
@@ -216,16 +225,16 @@ gulp.task('serve', ['styles', 'elements'], function () {
     //       will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: [appDir, tmpDir],
+      baseDir: [tmpDir, appDir],
       routes: {
         '/bower_components': 'bower_components'
       }
     }
   });
 
-  gulp.watch([appDir+'/**/*.html'], reload);
+  gulp.watch([appDir+'/**/*.html'], ['vulcanize', reload]);
   gulp.watch([appDir+'/**/*.json'], reload);
-  gulp.watch([appDir+'/styles/**/*.css'], ['styles', reload]);
+  gulp.watch([appDir+'/assets/css/**/*.css'], ['styles', reload]);
   gulp.watch([appDir+'/elements/**/*.css'], ['elements', reload]);
   gulp.watch([appDir+'/{scripts,elements}/**/*.js'], ['jshint']);
   gulp.watch([appDir+'/assets/**/*'], reload);
