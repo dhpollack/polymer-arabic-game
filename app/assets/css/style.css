@@ -4,6 +4,9 @@
     background-color: #E5E5E5;
     font-family: 'RobotoDraft', sans-serif;
   }
+  form {
+    max-width: 450px;
+  }
   paper-header-panel {
     height: 100vh;
     content: 'viewport-units-buggyfill; height: 100vh;';
@@ -177,7 +180,7 @@
 		overflow: hidden;
 		background: white;
 		padding: 10px;
-		margin: 30px;
+		margin: 10px 30px 30px 30px;
 		outline: 1px solid rgba(0,0,0,0.2);
 		box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 		overflow: auto;

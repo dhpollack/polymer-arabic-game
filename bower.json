@@ -25,6 +25,7 @@
     "iron-selector": "PolymerElements/iron-selector#^1.0.0",
     "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#^1.0.0",
     "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.0",
     "paper-header-panel": "PolymerElements/paper-header-panel#^1.0.0",
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.0",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.0.0",
@@ -34,6 +35,7 @@
     "paper-menu": "PolymerElements/paper-menu#^1.0.0",
     "paper-item": "PolymerElements/paper-item#^1.0.0",
     "paper-toast": "PolymerElements/paper-toast#^1.0.0",
+    "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
     "polymer": "Polymer/polymer#^1.0.0",
     "viewport-units-buggyfill": "^0.5.2"
   }

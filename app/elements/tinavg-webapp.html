@@ -5,9 +5,8 @@
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <!-- Custom Elements -->
@@ -34,6 +33,7 @@
     <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-lastvisit" value="{{lastvisit}}"></iron-localstorage>
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
       <div id="collapse" class="mini-menu" drawer>
         <div>
@@ -100,31 +100,82 @@
           <simple-overlay id="so" opened="true">
             <div id="overlaycontainer">
               <div id="helpoverlay" class="help-box">
-                <div id="close-help-overlay" class="tinavg-med-icon"><iron-icon id="close-help-overlay-icon" class="tinavg-med-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
                 <center><h2>This Is Not A Vocabulary Game</h2></center>
-                <h3>The Goal</h3>
-                <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
-                <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
-                <ol>
-                  <li>Look at the word at the top of the page.</li>
-                  <li>Spell the word by tapping the letters in the grid.</li>
-                  <li>Check your answer by tapping the word just below the target word.</li>
-                  <li>100 points for a correct answer and -30 for an incorrect answer.</li>
-                  <li>Earmodus: The word is hidden and only spoken.  The underline gives hints about the word's grammar.</li>
-                  <li>Learnmodus: Skip words and do not lose 30 pts for incorrect answers.</li>
-                  <li>Talkmodus: Record your voice and play it.  Then click the emoticon for the next word and 250 pts.</li>
-                </ol>
-                <h3>The Buttons</h3>
-                <ol>
-                  <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-menutoggle" icon="menu" class="tinavg-med-icon"></iron-icon></div>: Reveals the options menu</li>
-                  <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon></div>: Goes through the letter sequence, then says the word aloud</li>
-                  <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon></div>: Shows this help menu.</li>
-                  <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[currLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
-                  <li><div class="tinavg-med-icon"><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon></div>: Record voice in Talkmodus.  Also stops recording.</li>
-                  <li><div class="tinavg-med-icon"><iron-icon icon="av:play-circle-filled" class="tinavg-med-icon"></iron-icon></div>: Play voice recording.  Also stops recording.</li>
-                  <li>Target Word: You can click this to have the word spoken outloud.</li>
-                </ol>
-                <div id="help-lang-specific"></div>
+                <div id="close-help-overlay" class="tinavg-med-icon"><iron-icon id="close-help-overlay-icon" class="tinavg-med-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
+                <paper-tabs selected="{{selected}}">
+                  <paper-tab>Rules</paper-tab>
+                  <paper-tab>Credits</paper-tab>
+                  <paper-tab>Contact</paper-tab>
+                </paper-tabs>
+                
+                <iron-pages selected="{{selected}}">
+                  <div id="rules">
+                    <h3>The Goal</h3>
+                    <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
+                    <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
+                    <ol>
+                      <li>Look at the word at the top of the page.</li>
+                      <li>Spell the word by tapping the letters in the grid.</li>
+                      <li>Check your answer by tapping the word just below the target word.</li>
+                      <li>100 points for a correct answer and -30 for an incorrect answer.</li>
+                      <li>Earmodus: The word is hidden and only spoken.  The underline gives hints about the word's grammar.</li>
+                      <li>Learnmodus: Skip words and do not lose 30 pts for incorrect answers.</li>
+                      <li>Talkmodus: Record your voice and play it.  Then click the emoticon for the next word and 250 pts.</li>
+                    </ol>
+                    <h3>The Buttons</h3>
+                    <ol>
+                      <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-menutoggle" icon="menu" class="tinavg-med-icon"></iron-icon></div>: Reveals the options menu</li>
+                      <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon></div>: Goes through the letter sequence, then says the word aloud</li>
+                      <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon></div>: Shows this help menu.</li>
+                      <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[currLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
+                      <li><div class="tinavg-med-icon"><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon></div>: Record voice in Talkmodus.  Also stops recording.</li>
+                      <li><div class="tinavg-med-icon"><iron-icon icon="av:play-circle-filled" class="tinavg-med-icon"></iron-icon></div>: Play voice recording.  Also stops recording.</li>
+                      <li>Target Word: You can click this to have the word spoken outloud.</li>
+                    </ol>
+                    <div id="llin" hidden><small>You last logged in on: <span>{{lastvisit}}</span></small></div>
+                    <div id="help-lang-specific"></div>
+                  </div>
+                  <div id="credits">
+                    <p>First, I know that I won't be able to thank everyone that made this game possible, but I wanted to give credit to a few people that have inspired me to develop this game and to those that have lent their voice to the game.</p>
+                    <h3>German</h3>
+                      <strong>Voice: Ina Schoof</strong>
+                        <ul>
+                          <li>Ina has not only has she provided a voice that shatters all the preconceived notions that German is an "ugly" sounding language, but she has also been super supportive as a flatmate, a friend, and even as a fake girlfriend with the Ausländerbehörde.</li>
+                        </ul>
+                    <h3>English (US and Southern US)</h3>
+                      <strong>Voice: David Pollack</strong><br>
+                      <strong>Inspiration (Southern US): Pete Delaune</strong>
+                        <ul>
+                          <li>In a previous life, Pete was my partner in crime in the Atlanta bar scene.  We would practice our southern accents with each other to the point where we could hold entire conversations in the dialect only pausing from time to time to laugh at how ridiculous we sounded.  But like Icarus one cannot fly so close to the sun forever. Thus we can blame Pete for driving me away from the States and onto my language learning sojourn in Deutschland.  Danke Pete, ich haße dich wirklich mit allem Kraft auf der Welt... hehe, just kidding.</li>
+                        </ul>
+                    <h3>Arabic</h3>
+                      <strong>Voice (alphabet): Tamam El-Mohamed</strong>
+                        <ul>
+                          <li>Tamam is one of my students at the Rütli Schule and the voice of the Arabic alphabet.  I really appreciated her and all my other students enthusiasm at the Rütli Schule.  They've given me a much deeper perspective on what it is like growing up in Berlin.</li>
+                        </ul>
+                    <h3>Korean and Russian</h3>
+                      <strong>Voice (words): <a href="http://updates.html5rocks.com/2014/01/Web-apps-that-talk---Introduction-to-the-Speech-Synthesis-API" target="_blank">Speech Synthesis API</a></strong><br>
+                      <strong>Voice (letters): <a href="https://goo.gl/photos/g1djbMV34RKZX78FA" target="_blank">die Schreibmaschine</strong></a>
+                        <ul>
+                          <li>Of course, I'd like to thank die Schreibmaschine for providing her voice for the letters that have yet to be vocalized.  :-)</li>
+                        </ul>
+                    <h3>Hebrew</h3>
+                      <strong>Voice: Suzan Badran</strong>
+                        <ul>
+                          <li>Suzan hails from Israel and contributed her voice after a chance meeting while she was on vacation in Berlin.  I was super excited about that because I was going to Israel the very next week, so I could actually put this project to use.  She also showed me a around a bit in Jerusalem and will hopefully remain a dear friend in the future.</li>
+                        </ul>
+                    <p>Lastly, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded because it wasn't too difficult to add the feature.  Many of my friends, including her, have endured the trials and tribulations of beta testing tinavg.com from the time when it was just colored boxes without points, sounds, words, or even letters to the mostly functional version of the game you see today.</p>
+                  </div>
+                  <div id="contact">
+                    <h3>Email Me!</h3>
+                    <form action="//formspree.io/david@tinavg.com" method="POST" target="_blank" class="vertical layout">
+                        <input type="email" name="_replyto" placeholder="your email">
+                        <textarea name="message" rows="5" placeholder="your message"></textarea>
+                        <input type="text" name="_gotcha" style="display:none" />
+                        <input type="submit" value="Send">
+                    </form>
+                  </div>
+                </iron-pages>
               </div>
             </div>
           </simple-overlay>
@@ -221,6 +272,10 @@
       if(this.nerdmodus === undefined) this.nerdmodus = false;
       if(this.nerdSprache === undefined) this.nerdSprache = "de";
       this.$.jt.forceLearnmodus(this.learnmodus);
+      
+      // selected tab
+      
+      if(!this.selected) this.selected = 0;
 
       // Keyboard Shortcut Bindings
       Mousetrap.bind('shift+enter', function() { 
@@ -297,7 +352,7 @@
       this.$.jt.lastBucket = e.detail.letter;
     },
     showHelp: function(e) {
-      this.$.so.opened = !this.$.so.opened;
+      this.$.so.toggle();
     },
     showClue: function(e) {
       this.$.wboard.revealWord();

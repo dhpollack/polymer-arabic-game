@@ -225,7 +225,7 @@ gulp.task('serve', ['styles', 'elements'], function () {
     //       will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: [tmpDir, appDir],
+      baseDir: [appDir, tmpDir],
       routes: {
         '/bower_components': 'bower_components'
       }
