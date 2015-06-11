@@ -113,7 +113,7 @@
     content: 'viewport-units-buggyfill; width: 33.33vw; height: 26.66vh;';
   }
   letter-card:focus {
-    z-index: 10;
+    z-index: 4;
   }
   .space-bar {
     width: inherit;
@@ -184,8 +184,9 @@
 		outline: 1px solid rgba(0,0,0,0.2);
 		box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 		overflow: auto;
-		z-index: 100;
+		z-index: 11;
   }
+  /*
   #overlaycontainer {
     background-color: rgba(0,0,0,0.7);
     position: fixed;
@@ -198,8 +199,9 @@
     transition-duration: 0.2s;
     transition-timing-function: initial;
     transition-delay: initial;
-    z-index: 99;
+    z-index: 7;
   }
+  */
   .right-to-left {
     transform: rotateY(180deg);
   }
@@ -223,7 +225,7 @@
     border:solid 0px;
   }
   .to-foreground {
-    z-index: 101;
+    z-index: 7;
   }
   .capitalize {
     text-transform: capitalize;
