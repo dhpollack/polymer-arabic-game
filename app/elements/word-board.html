@@ -108,7 +108,7 @@
           //this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
           this.phraseIndex = 0;
         }
-        if(this.wordArray[this.langCode][this.ranWordIndex].grammar !== (undefined || null) && typeof this.wordArray[this.langCode][this.ranWordIndex].grammar === 'object') {
+        if(this.wordArray !== undefined && this.langCode !== undefined && this.ranWordIndex !== undefined && this.wordArray[this.langCode][this.ranWordIndex].grammar !== (undefined || null) && typeof this.wordArray[this.langCode][this.ranWordIndex].grammar === 'object') {
           this.wordBoardWord.className = "";
           this.myWordSpan.className = "";
           if(this.wordArray[this.langCode][this.ranWordIndex].grammar.segments === undefined) {
@@ -131,7 +131,7 @@
       }
     },
     getCheckWord: function() {
-      if(this.wordArray[this.langCode] && this.wordArray[this.langCode].length !== 0 && this.wordArray[this.langCode][this.ranWordIndex] !== undefined) {
+      if(this.wordArray !== undefined && this.langCode !== undefined && this.ranWordIndex !== undefined && this.wordArray[this.langCode].length !== 0) {
         var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
         var word = this.wordArray[this.langCode][this.ranWordIndex][findex].split(" ");
         return word[this.phraseIndex];

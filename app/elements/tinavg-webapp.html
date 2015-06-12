@@ -2,6 +2,7 @@
 <!-- Additional Component Load -->
 <!-- Layout/Polymer Elements -->
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
@@ -25,6 +26,14 @@
       --paper-toggle-button-checked-ink-color: #ff4081;
     }
     */
+    #overlay-toolbar {
+      background-color: #16B38B;
+      margin: 0px;
+      padding: 0px;
+      width: 100%;
+      display: inline-block;
+      color: #fff;
+    }
   </style>
   <template>
     <iron-localstorage name="tinavg-lastlang" value="{{currLang}}"></iron-localstorage>
@@ -93,20 +102,18 @@
               <div id="clue-show-div" class="tinavg-med-icon"><iron-icon id="clueshow" class="spin-flip-transition tinavg-med-icon" icon="text-format" on-tap="showClue"></iron-icon></div>
             </div>
           </div>
-        </div>
-        <div id="maincontentarea" class="content">
-          <word-recorder id="wrecorder" hidden$="{{!recordmodus}}"></word-recorder>
-          <letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}" hidden$="{{recordmodus}}"></letter-list>
+
           <simple-overlay id="so" opened="true" with-backdrop>
             <div id="helpoverlay" class="help-box">
-              <center><h2>This Is Not A Vocabulary Game</h2></center>
+              <div id="overlay-toolbar" class="vertical flex">
+                <center><h2>This Is Not A Vocabulary Game</h2></center>
+                <paper-tabs selected="{{selected}}">
+                  <paper-tab>Rules</paper-tab>
+                  <paper-tab>Credits</paper-tab>
+                  <paper-tab>Contact</paper-tab>
+                </paper-tabs>
+              </div>
               <div id="close-help-overlay" class="tinavg-med-icon"><iron-icon id="close-help-overlay-icon" class="tinavg-med-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
-              <paper-tabs selected="{{selected}}">
-                <paper-tab>Rules</paper-tab>
-                <paper-tab>Credits</paper-tab>
-                <paper-tab>Contact</paper-tab>
-              </paper-tabs>
-              
               <iron-pages selected="{{selected}}">
                 <div id="rules">
                   <h3>The Goal</h3>
@@ -145,7 +152,7 @@
                     <strong>Voice: David Pollack</strong><br>
                     <strong>Inspiration (Southern US): Pete Delaune</strong>
                       <ul>
-                        <li>In a previous life, Pete was my partner in crime in the Atlanta bar scene.  We would practice our southern accents with each other to the point where we could hold entire conversations in the dialect only pausing from time to time to laugh at how ridiculous we sounded.  But like Icarus one cannot fly so close to the sun forever. Thus we can blame Pete for driving me away from the States and onto my language learning sojourn in Deutschland.  Danke Pete, ich haße dich wirklich mit allem Kraft auf der Welt... hehe, just kidding.</li>
+                        <li>In a previous life, Pete was my partner in crime in the Atlanta low-society social scene.  We would practice our southern accents with each other to the point where we could hold entire conversations in the dialect only pausing from time to time to laugh at how ridiculous we sounded.  But like Icarus one cannot fly too close to the sun forever. Thus we can blame Pete for driving me away from the States and onto my language learning sojourn in Deutschland.  Danke Pete, ich haße dich wirklich mit allem Kraft auf der Welt... hehe, just kidding.</li>
                       </ul>
                   <h3>Arabic</h3>
                     <strong>Voice (alphabet): Tamam El-Mohamed</strong>
@@ -163,7 +170,7 @@
                       <ul>
                         <li>Suzan hails from Israel and contributed her voice after a chance meeting while she was on vacation in Berlin.  I was super excited about that because I was going to Israel the very next week, so I could actually put this project to use.  She also showed me a around a bit in Jerusalem and will hopefully remain a dear friend in the future.</li>
                       </ul>
-                  <p>Lastly, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded because it wasn't too difficult to add the feature.  Many of my friends, including her, have endured the trials and tribulations of beta testing tinavg.com from the time when it was just colored boxes without points, sounds, words, or even letters to the mostly functional version of the game you see today.</p>
+                  <p>Lastly, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded.  Many of my friends, including her, have endured the trials and tribulations of beta testing tinavg.com so I thought it was only appropriate to throw them a bone and add the option of seeing definitions to the words in the game.</p>
                 </div>
                 <div id="contact">
                   <h3>Email Me!</h3>
@@ -177,6 +184,11 @@
               </iron-pages>
             </div>
           </simple-overlay>
+
+        </div>
+        <div id="maincontentarea" class="content">
+          <word-recorder id="wrecorder" hidden$="{{!recordmodus}}"></word-recorder>
+          <letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}" hidden$="{{recordmodus}}"></letter-list>
         </div>
         <paper-toast id="übersetzung" text="{{currLang}}"></paper-toast>
       </paper-header-panel>

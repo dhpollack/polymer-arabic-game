@@ -179,7 +179,6 @@
 		-moz-box-sizing: border-box;
 		overflow: hidden;
 		background: white;
-		padding: 10px;
 		margin: 10px 30px 30px 30px;
 		outline: 1px solid rgba(0,0,0,0.2);
 		box-shadow: 0 4px 16px rgba(0,0,0,0.2);
@@ -220,6 +219,9 @@
   }
   #helpoverlay iron-icon {
     color: black;
+  }
+  #helpoverlay iron-pages {
+    padding: 10px;
   }
   #jumbotron-text {
     border:solid 0px;

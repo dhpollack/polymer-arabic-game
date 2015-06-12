@@ -232,7 +232,8 @@ gulp.task('serve', ['styles', 'elements'], function () {
     }
   });
 
-  gulp.watch([appDir+'/**/*.html'], ['vulcanize', reload]);
+//  gulp.watch([appDir+'/**/*.html'], ['vulcanize', reload]);
+  gulp.watch([appDir+'/**/*.html'], reload);
   gulp.watch([appDir+'/**/*.json'], reload);
   gulp.watch([appDir+'/assets/css/**/*.css'], ['styles', reload]);
   gulp.watch([appDir+'/elements/**/*.css'], ['elements', reload]);
