@@ -10,6 +10,8 @@
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
 <!-- Custom Elements -->
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
@@ -75,7 +77,13 @@
             <option value="tr">Turkish</option>
           </select>
         </div>
-        <div><br />Talkmodus: <paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button></div>
+        <br /><div>Talkmodus: <paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button></div>
+        <br /><div>
+          <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://intense-heat-8981.firebaseio.com" provider="twitter" on-error="errorHandler" ></firebase-auth>
+          <img src="../assets/images/sign-in-with-twitter-gray.png" alt="sign in with Twitter" on-tap="login" hidden$="{{computeLoginHidden(statusKnown, user)}}">
+          <button on-tap="logout" hidden$="{{!computeLoginHidden(statusKnown, user)}}">Logout</button>
+        </div>
+
         <div hidden><br />BuggyFill: <paper-toggle-button id="select_buggyfill" on-tap="refreshBuggyFill"></paper-toggle-button></div>
       </div>
       <paper-header-panel id="header-panel" main>
@@ -237,6 +245,10 @@
       languageList: {
         type: Array,
         value: function() { return ['de', 'en', 'en-US-south', 'ar','ko', 'ru', 'he']; }
+      },
+      user: {
+        type: Object,
+        notify: true
       }
     },
     listeners: {
@@ -245,6 +257,9 @@
       'lang-help': 'setLangHelp',
       'ready-set-go': 'showÜbersetzung'
     },
+    observers: [
+      '_addUsersToFirebase(user.*)'
+    ],
     created: function() {
 
       if(localStorage.getItem("tinavg-earmodus") === undefined) {
@@ -264,7 +279,7 @@
       }
 
       if(JSON.parse(localStorage.getItem("tinavg-nerdsprache")) === undefined) {
-        this.nerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdsprache"));
+        this.nerdSprache = JSON.parse(localStorage.getItem("tinavg-nerdsprache"));
       }
     },
     ready: function() {
@@ -284,8 +299,31 @@
       this.$.jt.forceLearnmodus(this.learnmodus);
       
       // selected tab
-      
       if(!this.selected) this.selected = 0;
+      
+      // firebase
+      var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
+      var lastlogin = window.localStorage["tinavg-lastvisit"];
+      fbRef.onAuth(function(authData) {
+        if (authData) {
+          // save the user's profile into Firebase so we can list users,
+          // use them in Security and Firebase Rules, and show profiles
+          fbRef.child("users").child(authData.uid).update({
+            provider: authData.provider,
+            name: _getFirebaseName(authData),
+            lastlogin: lastlogin
+          });
+          fbRef.child("users").child(authData.uid).child("logins").push({
+            timestamp: lastlogin
+          });
+        } else {
+          fbRef.child("users").child("anonymous").child("logins").push({
+            timestamp: lastlogin
+          });
+        }
+      });
+      
+      this.firebaseRef = fbRef;
 
       // Keyboard Shortcut Bindings
       Mousetrap.bind('shift+enter', function() { 
@@ -444,7 +482,40 @@
     setNerdSprache: function(ev) {
       this.nerdSprache = ev.target.value;
       this.showÜbersetzung();
+    },
+    login: function() {
+      var params;
+      try {
+        params = JSON.parse(this.params);
+      } catch (e) {
+        params = null;
+      }
+      if (this.provider == 'password') {
+        params = params || {};
+        params.email = this.email;
+        params.password = this.password;
+      }
+      this.$.firebaseLogin.login(params);
+    },
+    logout: function() {
+      this.$.firebaseLogin.logout();
+    },
+    _addUsersToFirebase: function(e) {
+      console.log(this.user);
+    },
+    computeLoginHidden: function(statusKnown, user) {
+      return !statusKnown || !!user;
     }
   });
+function _getFirebaseName(authData) {
+  switch(authData.provider) {
+     case 'password':
+       return authData.password.email.replace(/@.*/, '');
+     case 'twitter':
+       return authData.twitter.displayName;
+     case 'facebook':
+       return authData.facebook.displayName;
+  }
+}
 
 </script>
