@@ -148,6 +148,7 @@
                   </ol>
                   <div id="llin" hidden><small>You last logged in on: <span>{{lastvisit}}</span></small></div>
                   <div id="help-lang-specific"></div>
+                  <div><a href="/privacy.html">privacy policy</a></div>
                 </div>
                 <div id="credits">
                   <p>First, I know that I won't be able to thank everyone that made this game possible, but I wanted to give credit to a few people that have inspired me to develop this game and to those that have lent their voice to the game.</p>
@@ -178,7 +179,8 @@
                       <ul>
                         <li>Suzan hails from Israel and contributed her voice after a chance meeting while she was on vacation in Berlin.  I was super excited about that because I was going to Israel the very next week, so I could actually put this project to use.  She also showed me a around a bit in Jerusalem and will hopefully remain a dear friend in the future.</li>
                       </ul>
-                  <p>Lastly, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded.  Many of my friends, including her, have endured the trials and tribulations of beta testing tinavg.com so I thought it was only appropriate to throw them a bone and add the option of seeing definitions to the words in the game.</p>
+                  <p>Additionally, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded.</p>
+                  <p>Finally, I would like to thank my father, Bob Pollack.  The list would be endless if I had to thank him for everything, but he has endured the trials and tribulations of beta testing tinavg.com on the iPad/iPhone.  He along with all of my friends comments and questions have made this site what it is today.</p>
                 </div>
                 <div id="contact">
                   <h3>Email Me!</h3>
@@ -255,7 +257,8 @@
       'letter-card-tapped': 'letterTapped',
       'stripdia-set': 'setWBoardDisplay',
       'lang-help': 'setLangHelp',
-      'ready-set-go': 'showÜbersetzung'
+      'ready-set-go': 'lettersSet',
+      'checking-word': 'fbLetterSeq'
     },
     observers: [
       '_addUsersToFirebase(user.*)'
@@ -304,6 +307,7 @@
       // firebase
       var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
       var lastlogin = window.localStorage["tinavg-lastvisit"];
+      this.letterSeq = [];
       fbRef.onAuth(function(authData) {
         if (authData) {
           // save the user's profile into Firebase so we can list users,
@@ -311,7 +315,8 @@
           fbRef.child("users").child(authData.uid).update({
             provider: authData.provider,
             name: _getFirebaseName(authData),
-            lastlogin: lastlogin
+            lastlogin: lastlogin,
+            options: this.getOptions()
           });
           fbRef.child("users").child(authData.uid).child("logins").push({
             timestamp: lastlogin
@@ -321,7 +326,7 @@
             timestamp: lastlogin
           });
         }
-      });
+      }.bind(this));
       
       this.firebaseRef = fbRef;
 
@@ -398,6 +403,20 @@
     },
     letterTapped: function(e) {
       this.$.jt.lastBucket = e.detail.letter;
+      this.fbLetterSeq(e);
+    },
+    fbLetterSeq: function(e) {
+      if(this.letterSeq.length === 0 && e.detail.letter === '!!!') {
+        // do nothing
+      } else {
+        this.letterSeq.push(e.detail.letter);
+      }
+      var authData = this.firebaseRef.getAuth();
+      if(authData) {
+        this.firebaseWordRef.child('letters').set(this.letterSeq);
+      } else {
+        // not logged in
+      }
     },
     showHelp: function(e) {
       this.$.so.toggle();
@@ -447,7 +466,6 @@
       this.$.jt.resetBox();
     },
     setWBoardDisplay: function(ev) {
-      console.log("changing diacritics");
       this.$.wboard.setDisplayWord();
     },
     switchModus: function(newLang) {
@@ -479,6 +497,19 @@
         this.$.übersetzung.show();
       }
     },
+    lettersSet: function() {
+      this.showÜbersetzung();
+      this.letterSeq = [];
+      var authData = this.firebaseRef.getAuth();
+      if(authData) {
+        var word = this.$.wboard.getWordObj();
+        delete word.uebersetzungen;
+        this.firebaseWordRef = this.firebaseRef.child("users").child(authData.uid).child('words').push(word);
+      } else {
+        // not logged in
+      }
+      
+    },
     setNerdSprache: function(ev) {
       this.nerdSprache = ev.target.value;
       this.showÜbersetzung();
@@ -501,10 +532,20 @@
       this.$.firebaseLogin.logout();
     },
     _addUsersToFirebase: function(e) {
-      console.log(this.user);
+      //console.log(this.user);
     },
     computeLoginHidden: function(statusKnown, user) {
       return !statusKnown || !!user;
+    },
+    getOptions: function() {
+      var options = {};
+      options.language = this.currLang;
+      options.learnmodus = this.learnmodus;
+      options.recordmodus = this.recordmodus;
+      options.nerdmodus = this.nerdmodus;
+      options.nerdsprache = this.nerdSprache;
+      options.earmodus = this.earmodus;
+      return options;
     }
   });
 function _getFirebaseName(authData) {

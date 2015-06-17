@@ -54,6 +54,7 @@
     },
     handleClick: function() {
       this.lastBucket = "!!!";
+      this.fire('checking-word', { letter: "!!!" });
     },
     updateJumbotron: function() {
       if(!this.wordBoard) this.init();
