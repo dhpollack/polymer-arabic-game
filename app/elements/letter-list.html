@@ -128,6 +128,7 @@
       if(this.wordBoardBox.getCheckWord() !== undefined) {
         console.log("switching up letters: " + this.wordBoardBox.getCheckWord());
         this.fire('ready-set-go', true);
+        this.fire('lang-help', this.allLettersList);
         this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase(), this.limit);
       } else {
         console.log("check word still not set");
@@ -187,6 +188,9 @@
       //this.webapp.letterLimit = tileLimit;
       //this.webapp.jumbotronIndex = tileLimit + 1;
       
+    },
+    getLangHelpInfo: function() {
+      return this.allLettersList[this.langCode].lang.langHelpInfo;
     }
   });
   var itemIndex;

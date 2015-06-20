@@ -70,7 +70,7 @@
     },
     wordsLoaded: function() {
       var jsonSuccess = (this.$.wajax.lastResponse != null) ? true : false;
-      console.log("loading words from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
+      //console.log("loading words from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
       // Make a copy of the loaded data
       if(jsonSuccess) {
         if(this.letterList) this.letterList.setWord = true;

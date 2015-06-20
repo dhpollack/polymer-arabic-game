@@ -103,9 +103,7 @@
             }
           }
           this.ranWordIndex = randomIndex;
-          console.log("wordArray.length: " + this.wordArray[this.langCode].length + "\nthis.ranWordIndex: " + this.ranWordIndex);
-          //word = this.wordArray[this.ranWordIndex];
-          //this.phraseArray = this.wordArray[this.ranWordIndex][findex].split(" ");
+          //console.log("wordArray.length: " + this.wordArray[this.langCode].length + "\nthis.ranWordIndex: " + this.ranWordIndex);
           this.phraseIndex = 0;
         }
         if(this.wordArray !== undefined && this.langCode !== undefined && this.ranWordIndex !== undefined && this.wordArray[this.langCode][this.ranWordIndex].grammar !== (undefined || null) && typeof this.wordArray[this.langCode][this.ranWordIndex].grammar === 'object') {

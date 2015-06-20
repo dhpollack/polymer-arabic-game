@@ -36,6 +36,8 @@
     "paper-item": "PolymerElements/paper-item#^1.0.0",
     "paper-toast": "PolymerElements/paper-toast#^1.0.0",
     "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.0.0",
+    "neon-animation": "PolymerElements/neon-animation#^1.0.0",
     "polymer": "Polymer/polymer#^1.0.0",
     "viewport-units-buggyfill": "^0.5.2",
     "firebase-element": "GoogleWebComponents/firebase-element#~1.0.1"

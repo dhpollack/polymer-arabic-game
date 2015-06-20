@@ -201,7 +201,7 @@ gulp.task('offlineapp', function(){
     .pipe(gulp.dest(appDir));
 });
 
-// Vulcanize imports
+// Polybuild imports
 gulp.task('vulcanize', function () {
   return gulp.src(tmpDir + '/index.html')
     .pipe(polybuild({
@@ -210,6 +210,7 @@ gulp.task('vulcanize', function () {
     .pipe(gulp.dest(distDir))
     .pipe(gulp.dest(tmpDir));
 });
+
 
 // Clean Output Directory
 gulp.task('clean', del.bind(null, [tmpDir, distDir]));

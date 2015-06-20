@@ -29,6 +29,10 @@
     },
     ready: function() {
       this.isReady = true;
+      this.abbrevs = [];
+      for(var i = 0; i < this.langs.length; i++) {
+        this.abbrevs.push(this.langs[i].abbrev);
+      }
     },
     switchLanguage: function() {
       if(!this.isReady) return;
@@ -37,7 +41,7 @@
       this.$.flag_icon.style.backgroundSize = "contain";
       this.fire("reset-jumbotron", true);
       //this.$.jt.resetBox();
-      deg = (this.langs.indexOf(this.mylang) + 1) * 360;
+      deg = (this.abbrevs.indexOf(this.mylang) + 1) * 360;
       this.async(function() {
         this.$.flag_icon.style.transform = "rotateY("+ deg + "deg)";
       });

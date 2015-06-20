@@ -1,14 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
 <!-- Layout/Polymer Elements -->
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
@@ -18,26 +21,11 @@
 <script src="../assets/js/mousetrap.min.js"></script>
 <dom-module id="tinavg-webapp">
   <style is="custom-style">
-    /*
-    paper-toggle-button {
-      --paper-toggle-button-unchecked-bar-color: #FF4081;
-      --paper-toggle-button-unchecked-button-color: #9c27b0;
-      --paper-toggle-button-unchecked-ink-color: #009688;
-      --paper-toggle-button-checked-bar-color: #5677fc;
-      --paper-toggle-button-checked-button-color: #ff4081;
-      --paper-toggle-button-checked-ink-color: #ff4081;
-    }
-    */
-    #overlay-toolbar {
-      background-color: #16B38B;
-      margin: 0px;
-      padding: 0px;
-      width: 100%;
-      display: inline-block;
-      color: #fff;
-    }
+    /* see tinavg-style.html */
   </style>
   <template>
+    
+    <!-- localstorage -->
     <iron-localstorage name="tinavg-lastlang" value="{{currLang}}"></iron-localstorage>
     <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
@@ -45,21 +33,16 @@
     <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
     <iron-localstorage name="tinavg-lastvisit" value="{{lastvisit}}"></iron-localstorage>
+    
+    <!-- in main viewport -->
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
+      
+      <!-- Drawer -->
       <div id="collapse" class="mini-menu" drawer>
         <div>
           Language: 
-          <select on-change="setLang">
-            <option value="de">German</option>
-            <option value="en">English</option>
-            <option value="en-US-south">English (US South)</option>
-            <option value="ar">Arabic</option>
-            <option value="ko">Korean</option>
-            <option value="ru">Russian</option>
-            <option value="he">Hebrew</option>
-            <!--
-            <option value="tr">Turkish</option>
-            -->
+          <select id="selectLang" on-change="setLang">
+            <template is="dom-repeat" items="{{languageList}}"><option value="{{item.abbrev}}">{{item.fullname}}</option></template>
           </select>
         </div>
         <br /><div>Earmodus: <paper-toggle-button id="select_earmodus" on-tap="toggleEarModus" checked$="{{earmodus}}"></paper-toggle-button></div>
@@ -68,13 +51,7 @@
         <br /><div>
           Meiselsprache: 
           <select id="meiselspracheliste" on-change="setNerdSprache" disabled$="{{!nerdmodus}}">
-            <option value="de">German</option>
-            <option value="en">English</option>
-            <option value="ar">Arabic</option>
-            <option value="ko">Korean</option>
-            <option value="ru">Russian</option>
-            <option value="he">Hebrew</option>
-            <option value="tr">Turkish</option>
+            <template is="dom-repeat" items="{{nerdSpracheList}}"><option value="{{item.abbrev}}">{{item.fullname}}</option></template>
           </select>
         </div>
         <br /><div>Talkmodus: <paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button></div>
@@ -83,9 +60,9 @@
           <img src="../assets/images/sign-in-with-twitter-gray.png" alt="sign in with Twitter" on-tap="login" hidden$="{{computeLoginHidden(statusKnown, user)}}">
           <button on-tap="logout" hidden$="{{!computeLoginHidden(statusKnown, user)}}">Logout</button>
         </div>
-
-        <div hidden><br />BuggyFill: <paper-toggle-button id="select_buggyfill" on-tap="refreshBuggyFill"></paper-toggle-button></div>
       </div>
+      
+      <!-- Main Content Area -->
       <paper-header-panel id="header-panel" main>
         <div class="two-headers paper-header">
           <div class="footer horizontal justified layout center">
@@ -110,91 +87,6 @@
               <div id="clue-show-div" class="tinavg-med-icon"><iron-icon id="clueshow" class="spin-flip-transition tinavg-med-icon" icon="text-format" on-tap="showClue"></iron-icon></div>
             </div>
           </div>
-
-          <simple-overlay id="so" opened="true" with-backdrop>
-            <div id="helpoverlay" class="help-box">
-              <div id="overlay-toolbar" class="vertical flex">
-                <center><h2>This Is Not A Vocabulary Game</h2></center>
-                <paper-tabs selected="{{selected}}">
-                  <paper-tab>Rules</paper-tab>
-                  <paper-tab>Credits</paper-tab>
-                  <paper-tab>Contact</paper-tab>
-                </paper-tabs>
-              </div>
-              <div id="close-help-overlay" class="tinavg-med-icon"><iron-icon id="close-help-overlay-icon" class="tinavg-med-icon" icon="cancel" on-tap="showHelp"></iron-icon></div>
-              <iron-pages selected="{{selected}}">
-                <div id="rules">
-                  <h3>The Goal</h3>
-                  <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
-                  <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
-                  <ol>
-                    <li>Look at the word at the top of the page.</li>
-                    <li>Spell the word by tapping the letters in the grid.</li>
-                    <li>Check your answer by tapping the word just below the target word.</li>
-                    <li>100 points for a correct answer and -30 for an incorrect answer.</li>
-                    <li>Earmodus: The word is hidden and only spoken.  The underline gives hints about the word's grammar.</li>
-                    <li>Learnmodus: Skip words and do not lose 30 pts for incorrect answers.</li>
-                    <li>Talkmodus: Record your voice and play it.  Then click the emoticon for the next word and 250 pts.</li>
-                  </ol>
-                  <h3>The Buttons</h3>
-                  <ol>
-                    <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-menutoggle" icon="menu" class="tinavg-med-icon"></iron-icon></div>: Reveals the options menu</li>
-                    <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon></div>: Goes through the letter sequence, then says the word aloud</li>
-                    <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon></div>: Shows this help menu.</li>
-                    <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[currLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
-                    <li><div class="tinavg-med-icon"><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon></div>: Record voice in Talkmodus.  Also stops recording.</li>
-                    <li><div class="tinavg-med-icon"><iron-icon icon="av:play-circle-filled" class="tinavg-med-icon"></iron-icon></div>: Play voice recording.  Also stops recording.</li>
-                    <li>Target Word: You can click this to have the word spoken outloud.</li>
-                  </ol>
-                  <div id="llin" hidden><small>You last logged in on: <span>{{lastvisit}}</span></small></div>
-                  <div id="help-lang-specific"></div>
-                  <div><a href="/privacy.html">privacy policy</a></div>
-                </div>
-                <div id="credits">
-                  <p>First, I know that I won't be able to thank everyone that made this game possible, but I wanted to give credit to a few people that have inspired me to develop this game and to those that have lent their voice to the game.</p>
-                  <h3>German</h3>
-                    <strong>Voice: Ina Schoof</strong>
-                      <ul>
-                        <li>Ina has not only has she provided a voice that shatters all the preconceived notions that German is an "ugly" sounding language, but she has also been super supportive as a flatmate, a friend, and even as a fake girlfriend with the Ausländerbehörde.</li>
-                      </ul>
-                  <h3>English (US and Southern US)</h3>
-                    <strong>Voice: David Pollack</strong><br>
-                    <strong>Inspiration (Southern US): Pete Delaune</strong>
-                      <ul>
-                        <li>In a previous life, Pete was my partner in crime in the Atlanta low-society social scene.  We would practice our southern accents with each other to the point where we could hold entire conversations in the dialect only pausing from time to time to laugh at how ridiculous we sounded.  But like Icarus one cannot fly too close to the sun forever. Thus we can blame Pete for driving me away from the States and onto my language learning sojourn in Deutschland.  Danke Pete, ich haße dich wirklich mit allem Kraft auf der Welt... hehe, just kidding.</li>
-                      </ul>
-                  <h3>Arabic</h3>
-                    <strong>Voice (alphabet): Tamam El-Mohamed</strong>
-                      <ul>
-                        <li>Tamam is one of my students at the Rütli Schule and the voice of the Arabic alphabet.  I really appreciated her and all my other students enthusiasm at the Rütli Schule.  They've given me a much deeper perspective on what it is like growing up in Berlin.</li>
-                      </ul>
-                  <h3>Korean and Russian</h3>
-                    <strong>Voice (words): <a href="http://updates.html5rocks.com/2014/01/Web-apps-that-talk---Introduction-to-the-Speech-Synthesis-API" target="_blank">Speech Synthesis API</a></strong><br>
-                    <strong>Voice (letters): <a href="https://goo.gl/photos/g1djbMV34RKZX78FA" target="_blank">die Schreibmaschine</strong></a>
-                      <ul>
-                        <li>Of course, I'd like to thank die Schreibmaschine for providing her voice for the letters that have yet to be vocalized.  :-)</li>
-                      </ul>
-                  <h3>Hebrew</h3>
-                    <strong>Voice: Suzan Badran</strong>
-                      <ul>
-                        <li>Suzan hails from Israel and contributed her voice after a chance meeting while she was on vacation in Berlin.  I was super excited about that because I was going to Israel the very next week, so I could actually put this project to use.  She also showed me a around a bit in Jerusalem and will hopefully remain a dear friend in the future.</li>
-                      </ul>
-                  <p>Additionally, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded.</p>
-                  <p>Finally, I would like to thank my father, Bob Pollack.  The list would be endless if I had to thank him for everything, but he has endured the trials and tribulations of beta testing tinavg.com on the iPad/iPhone.  He along with all of my friends comments and questions have made this site what it is today.</p>
-                </div>
-                <div id="contact">
-                  <h3>Email Me!</h3>
-                  <form action="//formspree.io/david@tinavg.com" method="POST" target="_blank" class="vertical layout">
-                      <input type="email" name="_replyto" placeholder="your email">
-                      <textarea name="message" rows="5" placeholder="your message"></textarea>
-                      <input type="text" name="_gotcha" style="display:none" />
-                      <input type="submit" value="Send">
-                  </form>
-                </div>
-              </iron-pages>
-            </div>
-          </simple-overlay>
-
         </div>
         <div id="maincontentarea" class="content">
           <word-recorder id="wrecorder" hidden$="{{!recordmodus}}"></word-recorder>
@@ -203,6 +95,90 @@
         <paper-toast id="übersetzung" text="{{currLang}}"></paper-toast>
       </paper-header-panel>
     </paper-drawer-panel>
+    <!-- Dialog Modal -->
+    <paper-dialog id="so" entry-animation="slide-from-left-animation" exit-animation="slide-right-animation" with-backdrop>
+      <div id="overlay-toolbar" class="vertical flex overlay-toolbar">
+        <center><h2>This Is Not A Vocabulary Game</h2></center>
+        <paper-tabs selected="{{selected}}">
+          <paper-tab>Rules</paper-tab>
+          <paper-tab>Credits</paper-tab>
+          <paper-tab>Contact</paper-tab>
+        </paper-tabs>
+      </div>
+      <iron-pages selected="{{selected}}" class="overlay-pages">
+        <div id="rules">
+          <h3>The Goal</h3>
+          <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
+          <h3>The Rules: Normal / Earmodus / Learnmodus / Talkmodus</h3>
+          <ol>
+            <li>Look at the word at the top of the page.</li>
+            <li>Spell the word by tapping the letters in the grid.</li>
+            <li>Check your answer by tapping the word just below the target word.</li>
+            <li>100 points for a correct answer and -30 for an incorrect answer.</li>
+            <li>Earmodus: The word is hidden and only spoken.  The underline gives hints about the word's grammar.</li>
+            <li>Learnmodus: Skip words and do not lose 30 pts for incorrect answers.</li>
+            <li>Talkmodus: Record your voice and play it.  Then click the emoticon for the next word and 250 pts.</li>
+          </ol>
+          <h3>The Buttons</h3>
+          <ol>
+            <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-menutoggle" icon="menu" class="tinavg-med-icon"></iron-icon></div>: Reveals the options menu</li>
+            <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon></div>: Goes through the letter sequence, then says the word aloud</li>
+            <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon></div>: Shows this help menu.</li>
+            <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[currLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
+            <li><div class="tinavg-med-icon"><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon></div>: Record voice in Talkmodus.  Also stops recording.</li>
+            <li><div class="tinavg-med-icon"><iron-icon icon="av:play-circle-filled" class="tinavg-med-icon"></iron-icon></div>: Play voice recording.  Also stops recording.</li>
+            <li>Target Word: You can click this to have the word spoken outloud.</li>
+          </ol>
+          <div id="llin" hidden><small>You last logged in on: <span>{{lastvisit}}</span></small></div>
+          <div id="help-lang-specific"></div>
+        </div>
+        <div id="credits">
+          <p>First, I know that I won't be able to thank everyone that made this game possible, but I wanted to give credit to a few people that have inspired me to develop this game and to those that have lent their voice to the game.</p>
+          <h3>German</h3>
+            <strong>Voice: Ina Schoof</strong>
+              <ul>
+                <li>Ina has not only has she provided a voice that shatters all the preconceived notions that German is an "ugly" sounding language, but she has also been super supportive as a flatmate, a friend, and even as a fake girlfriend with the Ausländerbehörde.</li>
+              </ul>
+          <h3>English (US and Southern US)</h3>
+            <strong>Voice: David Pollack</strong><br>
+            <strong>Inspiration (Southern US): Pete Delaune</strong>
+              <ul>
+                <li>In a previous life, Pete was my partner in crime in the Atlanta low-society social scene.  We would practice our southern accents with each other to the point where we could hold entire conversations in the dialect only pausing from time to time to laugh at how ridiculous we sounded.  But like Icarus one cannot fly too close to the sun forever. Thus we can blame Pete for driving me away from the States and onto my language learning sojourn in Deutschland.  Danke Pete, ich haße dich wirklich mit allem Kraft auf der Welt... hehe, just kidding.</li>
+              </ul>
+          <h3>Arabic</h3>
+            <strong>Voice (alphabet): Tamam El-Mohamed</strong>
+              <ul>
+                <li>Tamam is one of my students at the Rütli Schule and the voice of the Arabic alphabet.  I really appreciated her and all my other students enthusiasm at the Rütli Schule.  They've given me a much deeper perspective on what it is like growing up in Berlin.</li>
+              </ul>
+          <h3>Korean and Russian</h3>
+            <strong>Voice (words): <a href="http://updates.html5rocks.com/2014/01/Web-apps-that-talk---Introduction-to-the-Speech-Synthesis-API" target="_blank">Speech Synthesis API</a></strong><br>
+            <strong>Voice (letters): <a href="https://goo.gl/photos/g1djbMV34RKZX78FA" target="_blank">die Schreibmaschine</strong></a>
+              <ul>
+                <li>Of course, I'd like to thank die Schreibmaschine for providing her voice for the letters that have yet to be vocalized.  :-)</li>
+              </ul>
+          <h3>Hebrew</h3>
+            <strong>Voice: Suzan Badran</strong>
+              <ul>
+                <li>Suzan hails from Israel and contributed her voice after a chance meeting while she was on vacation in Berlin.  I was super excited about that because I was going to Israel the very next week, so I could actually put this project to use.  She also showed me a around a bit in Jerusalem and will hopefully remain a dear friend in the future.</li>
+              </ul>
+          <p>Additionally, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded.</p>
+          <p>Finally, I would like to thank my father, Bob Pollack.  The list would be endless if I had to thank him for everything, but he has endured the trials and tribulations of beta testing tinavg.com on the iPad/iPhone.  His along with all of my friends' comments, suggestions, criticisms, and wild looks of bewilderment have made this game what it is today.</p>
+        </div>
+        <div id="contact">
+          <h3>Email Me!</h3>
+          <form action="//formspree.io/david@tinavg.com" method="POST" target="_blank" class="vertical layout">
+              <input type="email" name="_replyto" placeholder="your email">
+              <textarea name="message" rows="5" placeholder="your message"></textarea>
+              <input type="text" name="_gotcha" style="display:none" />
+              <input type="submit" value="Send">
+          </form>
+        </div>
+      </iron-pages>
+      <div class="horizontal end-justified flex layout">
+        <paper-button raised><a href="/privacy.html" target="_blank">Privacy Policy</a></paper-button>
+        <paper-button raised dialog-dismiss autofocus>Close</paper-button>
+      </div>
+    </paper-dialog>
   </template>
 </dom-module>
 <script>
@@ -212,6 +188,10 @@
       currLang: {
         type: String,
         notify: true
+      },
+      languageList: {
+        type: Array,
+        value: function() { return [{"abbrev": "de","fullname": "German"}, {"abbrev": "en", "fullname":"English"}, {"abbrev": "en-US-south", "fullname": "English (US South)"}, {"abbrev": "ar","fullname": "Arabic"},{"abbrev":"ko","fullname": "Korean"}, {"abbrev":"ru","fullname":"Russian"}, {"abbrev":"he", "fullname": "Hebrew"}]; }
       },
       letterLimit: {
         type: Number,
@@ -236,17 +216,13 @@
       nerdSprache: {
         type: String
       },
-      langHelp: {
-        type: String,
-        value: ""
+      nerdSpracheList: {
+        type: Array,
+        value: function() { return [{"abbrev": "de","fullname": "German"}, {"abbrev": "en", "fullname":"English"}, {"abbrev": "ar","fullname": "Arabic"},{"abbrev":"ko","fullname": "Korean"}, {"abbrev":"ru","fullname":"Russian"}, {"abbrev":"he", "fullname": "Hebrew"}, {"abbrev": "tr", "fullname": "Turkish"}]; }
       },
       flagIcon: {
         type: String,
         computed: 'flagIconString(currLang)'
-      },
-      languageList: {
-        type: Array,
-        value: function() { return ['de', 'en', 'en-US-south', 'ar','ko', 'ru', 'he']; }
       },
       user: {
         type: Object,
@@ -289,7 +265,7 @@
 
       // localStorage functions and setting defaults
       window.localStorage["tinavg-lastvisit"] = new Date();
-      if(this.languageList.indexOf(JSON.parse(localStorage.getItem("tinavg-lastlang"))) === -1) {
+      if(_findWithAttr(this.languageList, "abbrev", JSON.parse(localStorage.getItem("tinavg-lastlang"))) === -1) {
         this.currLang = "de";
       } else {
         this.currLang = JSON.parse(localStorage.getItem("tinavg-lastlang"));
@@ -316,14 +292,17 @@
             provider: authData.provider,
             name: _getFirebaseName(authData),
             lastlogin: lastlogin,
+            stimestamp: Firebase.ServerValue.TIMESTAMP,
             options: this.getOptions()
           });
           fbRef.child("users").child(authData.uid).child("logins").push({
-            timestamp: lastlogin
+            lastlogin: lastlogin,
+            stimestamp: Firebase.ServerValue.TIMESTAMP
           });
         } else {
           fbRef.child("users").child("anonymous").child("logins").push({
-            timestamp: lastlogin
+            lastlogin: lastlogin,
+            stimestamp: Firebase.ServerValue.TIMESTAMP
           });
         }
       }.bind(this));
@@ -382,24 +361,29 @@
         console.log("backspace...");
       });
       
-      // remove unresolve and reveal app
+      // remove unresolve, reveal app, show help
       document.getElementById('friendly_message').setAttribute('hidden', true);
       document.querySelector('[unresolved]').removeAttribute("unresolved");
+      this.showHelp();
       
       //preload flags
       for(var i = 0; i < this.languageList.length; i++) {
-        new Image().src = "/assets/images/" + this.languageList[i] + ".png";
+        new Image().src = "/assets/images/" + this.languageList[i].abbrev + ".png";
       }
-      
+
+      this.async(function() { 
+        this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
+        this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
+      }, 100);
+
     },
     setLangHelp: function(e) {
-      var langHtml  = e.detail.langHtml;
+      var langHtml = this.$.lettergrid.getLangHelpInfo();
       if(langHtml) {
         document.getElementById("help-lang-specific").innerHTML = langHtml;
       } else {
         document.getElementById("help-lang-specific").innerHTML = "";
       }
-      //this.langHelp = e.detail.langHtml;
     },
     letterTapped: function(e) {
       this.$.jt.lastBucket = e.detail.letter;
@@ -419,7 +403,7 @@
       }
     },
     showHelp: function(e) {
-      this.$.so.toggle();
+      this.async(function(){ this.$.so.open();}, 200);
     },
     showClue: function(e) {
       this.$.wboard.revealWord();
@@ -443,12 +427,6 @@
       this.$.select_learnmodus.toggleAttribute('disabled');
       this.$.jt.resetBox();
     },
-    refreshBuggyFill: function() {
-      window.viewportUnitsBuggyfill.init({force: true});
-      window.viewportUnitsBuggyfill.refresh();
-      window.viewportUnitsBuggyfill.findProperties();
-      console.log(window.viewportUnitsBuggyfill.getCss());
-    },
     setLang: function(ev) {
       console.log("toggling language: " + ev.target.value + " | chars: " + this.letterLimit);
       this.currLang = ev.target.value;
@@ -469,12 +447,13 @@
       this.$.wboard.setDisplayWord();
     },
     switchModus: function(newLang) {
-      if(this.languageList.indexOf(newLang) !== -1) {
-        this.currLang = newLang;
+      var currentLangIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
+      if(currentLangIndex + 1 < this.languageList.length) {
+        this.currLang = this.languageList[currentLangIndex + 1].abbrev;
       } else {
-        var nextLangInd = (this.languageList.indexOf(this.currLang) === -1 || this.languageList.indexOf(this.currLang) + 1 >= this.languageList.length) ? 0 : this.languageList.indexOf(this.currLang) + 1;
-        this.currLang = this.languageList[nextLangInd];
+        this.currLang = this.languageList[0].abbrev;
       }
+      this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
       this.$.jt.resetBox();
     },
     flagIconString: function(lang) {
@@ -502,9 +481,10 @@
       this.letterSeq = [];
       var authData = this.firebaseRef.getAuth();
       if(authData) {
-        var word = this.$.wboard.getWordObj();
-        delete word.uebersetzungen;
+        var wordObj = this.$.wboard.getWordObj();
+        var word = { "word": wordObj.word, "ohne": wordObj.ohne } ;
         this.firebaseWordRef = this.firebaseRef.child("users").child(authData.uid).child('words').push(word);
+        this.firebaseWordRef.child('timestamp').set(Firebase.ServerValue.TIMESTAMP);
       } else {
         // not logged in
       }
@@ -557,6 +537,14 @@ function _getFirebaseName(authData) {
      case 'facebook':
        return authData.facebook.displayName;
   }
+}
+function _findWithAttr(array, attr, value) {
+    for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attr] === value) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 </script>
