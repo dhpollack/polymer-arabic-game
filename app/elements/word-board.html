@@ -129,7 +129,7 @@
       }
     },
     getCheckWord: function() {
-      if(this.wordArray !== undefined && this.langCode !== undefined && this.ranWordIndex !== undefined && this.wordArray[this.langCode].length !== 0) {
+      if(this.wordArray !== undefined && this.wordArray[this.langCode] !== undefined && this.ranWordIndex !== undefined && this.wordArray[this.langCode].length !== 0) {
         var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
         var word = this.wordArray[this.langCode][this.ranWordIndex][findex].split(" ");
         return word[this.phraseIndex];

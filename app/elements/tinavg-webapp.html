@@ -11,6 +11,8 @@
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase.html">
@@ -167,10 +169,10 @@
         <div id="contact">
           <h3>Email Me!</h3>
           <form action="//formspree.io/david@tinavg.com" method="POST" target="_blank" class="vertical layout">
-              <input type="email" name="_replyto" placeholder="your email">
-              <textarea name="message" rows="5" placeholder="your message"></textarea>
+              <paper-input name="_replyto" type="email" label="your email"></paper-input>
+              <paper-textarea name="message" label="your message"></paper-textarea>
               <input type="text" name="_gotcha" style="display:none" />
-              <input type="submit" value="Send">
+              <input type="submit" value="Send" />
           </form>
         </div>
       </iron-pages>
@@ -220,10 +222,6 @@
         type: Array,
         value: function() { return [{"abbrev": "de","fullname": "German"}, {"abbrev": "en", "fullname":"English"}, {"abbrev": "ar","fullname": "Arabic"},{"abbrev":"ko","fullname": "Korean"}, {"abbrev":"ru","fullname":"Russian"}, {"abbrev":"he", "fullname": "Hebrew"}, {"abbrev": "tr", "fullname": "Turkish"}]; }
       },
-      flagIcon: {
-        type: String,
-        computed: 'flagIconString(currLang)'
-      },
       user: {
         type: Object,
         notify: true
@@ -232,12 +230,11 @@
     listeners: {
       'letter-card-tapped': 'letterTapped',
       'stripdia-set': 'setWBoardDisplay',
-      'lang-help': 'setLangHelp',
       'ready-set-go': 'lettersSet',
       'checking-word': 'fbLetterSeq'
     },
     observers: [
-      '_addUsersToFirebase(user.*)'
+
     ],
     created: function() {
 
@@ -377,7 +374,7 @@
       }, 100);
 
     },
-    setLangHelp: function(e) {
+    setLangHelp: function() {
       var langHtml = this.$.lettergrid.getLangHelpInfo();
       if(langHtml) {
         document.getElementById("help-lang-specific").innerHTML = langHtml;
@@ -437,16 +434,10 @@
       this.currLang = lang;
       this.$.jt.resetBox();
     },
-    setLang2: function(ev) {
-      console.log(ev);
-      console.log("toggling language: " + ev.target.value + " | chars: " + this.letterLimit);
-      this.currLang = ev.detail.item.lang;
-      this.$.jt.resetBox();
-    },
-    setWBoardDisplay: function(ev) {
+    setWBoardDisplay: function() {
       this.$.wboard.setDisplayWord();
     },
-    switchModus: function(newLang) {
+    switchModus: function() {
       var currentLangIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
       if(currentLangIndex + 1 < this.languageList.length) {
         this.currLang = this.languageList[currentLangIndex + 1].abbrev;
@@ -455,9 +446,6 @@
       }
       this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
       this.$.jt.resetBox();
-    },
-    flagIconString: function(lang) {
-      return "country-flags:" + lang;
     },
     toggleNerdModus: function() {
       this.nerdmodus = !this.nerdmodus;
@@ -488,7 +476,7 @@
       } else {
         // not logged in
       }
-      
+      this.setLangHelp();
     },
     setNerdSprache: function(ev) {
       this.nerdSprache = ev.target.value;
@@ -510,9 +498,6 @@
     },
     logout: function() {
       this.$.firebaseLogin.logout();
-    },
-    _addUsersToFirebase: function(e) {
-      //console.log(this.user);
     },
     computeLoginHidden: function(statusKnown, user) {
       return !statusKnown || !!user;

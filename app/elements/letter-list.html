@@ -91,7 +91,7 @@
     init: function() {
       this.wordBoardBox = document.querySelector('word-board');
     },
-    changeLanguage: function(event) {
+    changeLanguage: function() {
       this.$.lservice.currlang = this.langCode;
     },
     runLetters: function() {
@@ -128,7 +128,6 @@
       if(this.wordBoardBox.getCheckWord() !== undefined) {
         console.log("switching up letters: " + this.wordBoardBox.getCheckWord());
         this.fire('ready-set-go', true);
-        this.fire('lang-help', this.allLettersList);
         this.shuffleLetters(this.wordBoardBox.getCheckWord().toLowerCase(), this.limit);
       } else {
         console.log("check word still not set");
@@ -150,12 +149,10 @@
     shuffleLetters: function(word, tileLimit) {
       if(this.langCode === "ko") {
         word = window.Hangul.disassemble(word).join('');
-        console.log(word);
+        //console.log(word);
       }
       if(!this.pageRevealed) {
         if(document.querySelector('[unresolved]')) this.pageRevealed = true;
-        //document.getElementById('friendly-message').setAttribute('hidden', true);
-        //document.querySelector('[unresolved]').removeAttribute("unresolved");
         this.init();
       }
       // this is a hack because polymer doesn't update if an array's properties have changed only if the array itself
@@ -164,7 +161,11 @@
       this.itemIndex = 1;
       var dummyArray = [];
       var numTiles = tileLimit;
-      numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
+      if(this.langCode === "emoji") {
+        numTiles = numTiles - countEmoji(word);
+      } else {
+        numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
+      }
       shuffle(this.allLettersList[this.langCode].alphabet);
       this.allLettersList[this.langCode].alphabet.forEach(function(value, index) {
         if(value.letter === "!!!" || value.letter === undefined) {
@@ -182,12 +183,11 @@
       });
       if(dummyArray.length < tileLimit) {
         console.log("Not enough tiles");
-        console.log(this.dummyArray);
+        console.log(word.length);
+        console.log(countEmoji(word));
+        console.log(dummyArray);
       }
       this.letterList = shuffle(dummyArray);
-      //this.webapp.letterLimit = tileLimit;
-      //this.webapp.jumbotronIndex = tileLimit + 1;
-      
     },
     getLangHelpInfo: function() {
       return this.allLettersList[this.langCode].lang.langHelpInfo;
@@ -225,6 +225,18 @@
       item.index = itemIndex;
       itemIndex++;
       return item;
+  }
+  function countEmoji(s) {
+    // http://stackoverflow.com/questions/24531751/how-can-i-split-a-string-containing-emoji-into-an-array
+    var split = s.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
+    var arr = [];
+    for (var i=0; i<split.length; i++) {
+      var char = split[i];
+      if (char !== "") {
+        arr.push(char);
+      }
+    }
+    return arr.length;
   }
 
 })();
