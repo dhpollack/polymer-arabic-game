@@ -18,6 +18,7 @@
 <link rel="import" href="../../bower_components/firebase-element/firebase.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
 <!-- Custom Elements -->
+<link rel="import" href="tinavg-behavior.html">
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
 <script src="../assets/js/mousetrap.min.js"></script>
@@ -28,7 +29,7 @@
   <template>
     
     <!-- localstorage -->
-    <iron-localstorage name="tinavg-lastlang" value="{{currLang}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
     <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
@@ -71,7 +72,7 @@
             <div class="footer-button horizontal start-justified layout flex">
               <score-board id="score-board-player-1" player="1" learnmodus="{{learnmodus}}" recordmodus="{{recordmodus}}"></score-board>
             </div>
-            <word-board id="wboard" class="horizontal center-justified layout flex-2" lang-code="{{currLang}}" earmodus="{{earmodus}}"></word-board>
+            <word-board id="wboard" class="horizontal center-justified layout flex-2" game-lang="{{gameLang}}" earmodus="{{earmodus}}"></word-board>
             <div class="horizontal end-justified layout flex">
               <iron-icon id="menutoggle" class="spin-flip-transition tinavg-med-icon big" icon="menu" paper-drawer-toggle></iron-icon>
             </div>
@@ -79,7 +80,7 @@
           <div class="core-header horizontal justified layout center">
             <div class="top-right-item horizontal start-justified layout flex">
               <iron-icon id="help-show" class="tinavg-med-icon" icon="help" on-tap="showHelp"></iron-icon>
-              <lang-flag id="switchModusIcon" mylang="[[currLang]]" langs="[[languageList]]" on-tap="switchModus"></lang-flag>
+              <lang-flag id="switchModusIcon" game-lang="[[gameLang]]" langs="[[languageList]]" on-tap="switchModus"></lang-flag>
             </div>
             <div class="horizontal center-justified layout flex-2">
               <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" learnmodus="{{learnmodus}}"></jumbotron-text>
@@ -92,9 +93,9 @@
         </div>
         <div id="maincontentarea" class="content">
           <word-recorder id="wrecorder" hidden$="{{!recordmodus}}"></word-recorder>
-          <letter-list id="lettergrid" limit="{{letterLimit}}" lang-code="{{currLang}}" hidden$="{{recordmodus}}"></letter-list>
+          <letter-list id="lettergrid" limit="{{letterLimit}}" game-lang="{{gameLang}}" hidden$="{{recordmodus}}"></letter-list>
         </div>
-        <paper-toast id="übersetzung" text="{{currLang}}"></paper-toast>
+        <paper-toast id="übersetzung" text="{{gameLang}}"></paper-toast>
       </paper-header-panel>
     </paper-drawer-panel>
     <!-- Dialog Modal -->
@@ -126,7 +127,7 @@
             <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-menutoggle" icon="menu" class="tinavg-med-icon"></iron-icon></div>: Reveals the options menu</li>
             <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon></div>: Goes through the letter sequence, then says the word aloud</li>
             <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon></div>: Shows this help menu.</li>
-            <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[currLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
+            <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[gameLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
             <li><div class="tinavg-med-icon"><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon></div>: Record voice in Talkmodus.  Also stops recording.</li>
             <li><div class="tinavg-med-icon"><iron-icon icon="av:play-circle-filled" class="tinavg-med-icon"></iron-icon></div>: Play voice recording.  Also stops recording.</li>
             <li>Target Word: You can click this to have the word spoken outloud.</li>
@@ -186,14 +187,21 @@
 <script>
   Polymer({
     is: 'tinavg-webapp',
+    behaviors: [TinavgBehavior],
     properties: {
-      currLang: {
-        type: String,
-        notify: true
-      },
       languageList: {
         type: Array,
-        value: function() { return [{"abbrev": "de","fullname": "German"}, {"abbrev": "en", "fullname":"English"}, {"abbrev": "en-US-south", "fullname": "English (US South)"}, {"abbrev": "ar","fullname": "Arabic"},{"abbrev":"ko","fullname": "Korean"}, {"abbrev":"ru","fullname":"Russian"}, {"abbrev":"he", "fullname": "Hebrew"}]; }
+        value: function() {
+          return [
+            {"abbrev": "de","fullname": "German"}, 
+            {"abbrev": "en", "fullname":"English"}, 
+            {"abbrev": "en-US-south", "fullname": "English (US South)"}, 
+            {"abbrev": "ar","fullname": "Arabic"},
+            {"abbrev":"ko","fullname": "Korean"}, 
+            {"abbrev":"ru","fullname":"Russian"}, 
+            {"abbrev":"he", "fullname": "Hebrew"}
+            ];
+        }
       },
       letterLimit: {
         type: Number,
@@ -220,7 +228,17 @@
       },
       nerdSpracheList: {
         type: Array,
-        value: function() { return [{"abbrev": "de","fullname": "German"}, {"abbrev": "en", "fullname":"English"}, {"abbrev": "ar","fullname": "Arabic"},{"abbrev":"ko","fullname": "Korean"}, {"abbrev":"ru","fullname":"Russian"}, {"abbrev":"he", "fullname": "Hebrew"}, {"abbrev": "tr", "fullname": "Turkish"}]; }
+        value: function() { 
+          return [
+            {"abbrev": "de","fullname": "German"}, 
+            {"abbrev": "en", "fullname":"English"}, 
+            {"abbrev": "ar","fullname": "Arabic"},
+            {"abbrev":"ko","fullname": "Korean"}, 
+            {"abbrev":"ru","fullname":"Russian"}, 
+            {"abbrev":"he", "fullname": "Hebrew"}, 
+            {"abbrev": "tr", "fullname": "Turkish"}
+            ]; 
+        }
       },
       user: {
         type: Object,
@@ -263,9 +281,9 @@
       // localStorage functions and setting defaults
       window.localStorage["tinavg-lastvisit"] = new Date();
       if(_findWithAttr(this.languageList, "abbrev", JSON.parse(localStorage.getItem("tinavg-lastlang"))) === -1) {
-        this.currLang = "de";
+        this.gameLang = "de";
       } else {
-        this.currLang = JSON.parse(localStorage.getItem("tinavg-lastlang"));
+        this.gameLang = JSON.parse(localStorage.getItem("tinavg-lastlang"));
       }
       if(this.earmodus === undefined) this.earmodus = false;
       if(this.learnmodus === undefined) this.learnmodus = false;
@@ -370,7 +388,7 @@
 
       this.async(function() { 
         this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
-        this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
+        this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
       }, 100);
 
     },
@@ -426,25 +444,25 @@
     },
     setLang: function(ev) {
       console.log("toggling language: " + ev.target.value + " | chars: " + this.letterLimit);
-      this.currLang = ev.target.value;
+      this.gameLang = ev.target.value;
       this.$.jt.resetBox();
     },
     setLangManual: function(lang) {
       console.log("toggling language: " + lang + " | chars: " + this.letterLimit);
-      this.currLang = lang;
+      this.gameLang = lang;
       this.$.jt.resetBox();
     },
     setWBoardDisplay: function() {
       this.$.wboard.setDisplayWord();
     },
     switchModus: function() {
-      var currentLangIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
+      var currentLangIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
       if(currentLangIndex + 1 < this.languageList.length) {
-        this.currLang = this.languageList[currentLangIndex + 1].abbrev;
+        this.gameLang = this.languageList[currentLangIndex + 1].abbrev;
       } else {
-        this.currLang = this.languageList[0].abbrev;
+        this.gameLang = this.languageList[0].abbrev;
       }
-      this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.currLang);
+      this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
       this.$.jt.resetBox();
     },
     toggleNerdModus: function() {
@@ -504,7 +522,7 @@
     },
     getOptions: function() {
       var options = {};
-      options.language = this.currLang;
+      options.language = this.gameLang;
       options.learnmodus = this.learnmodus;
       options.recordmodus = this.recordmodus;
       options.nerdmodus = this.nerdmodus;

@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
+<link rel="import" href="tinavg-behavior.html">
 <link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
 
 <dom-module id="letter-card">
@@ -21,12 +22,9 @@
 (function() {
   Polymer({
     is: 'letter-card',
+    behaviors: [TinavgBehavior],
     properties: {
       letter: {
-        type: String,
-        reflectToAttribute: true
-      },
-      currlang: {
         type: String,
         reflectToAttribute: true
       },
@@ -98,7 +96,7 @@
         //disabling this for now.
         if(false) {
           var msg = new SpeechSynthesisUtterance();
-          msg.lang = this.currlang;
+          msg.lang = this.gameLang;
           msg.text = this.letter;
           window.speechSynthesis.speak(msg);
         }
@@ -118,10 +116,10 @@
       this.$.letterpr.upAction();
       if(playAudio) this.$.letteraudio.play();
     },
-    computeAacAudio: function(letter, mylang) {
+    computeAacAudio: function(letter, gameLang) {
       this.useSynth = false;
-      if(letter === " " || mylang === undefined) return "";
-      return "/assets/audio/"+ mylang +"/" + letter + ".m4a";
+      if(letter === " " || gameLang === undefined) return "";
+      return "/assets/audio/"+ gameLang +"/" + letter + ".m4a";
     }
   });
 })();

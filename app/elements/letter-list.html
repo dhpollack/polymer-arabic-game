@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../services/letter-service.html">
 <link rel="import" href="letter-card.html">
+<link rel="import" href="tinavg-behavior.html">
 <script src="../assets/js/hangul.min.js"></script>
 
 
@@ -12,7 +13,7 @@
     }
   </style>
   <template>
-    <letter-service id="lservice" currlang="{{langCode}}" lobj="{{lobj}}"></letter-service>
+    <letter-service id="lservice" game-lang="{{gameLang}}" lobj="{{lobj}}"></letter-service>
     <div id="lmc" class="horizontal layout flex wrap" style="width: 100vw">
       <template id="repeater" is="dom-repeat" filter="addIndex" items="{{letterList}}">
         <letter-card
@@ -20,7 +21,7 @@
           uid="[[item.uid]]"
           aac-audio="[[item.audio]]"
           letter="[[item.letter]]"
-          currlang="[[langCode]]"
+          game-lang="[[gameLang]]"
           regular="[[item.regular]]"
           hidden="[[item.hidden]]"
           tabindex="[[item.index]]">
@@ -34,14 +35,11 @@
 (function() {
   Polymer({
     is: "letter-list",
+    behaviors: [TinavgBehavior],
     properties: {
       limit: {
         type: Number,
         value: 12
-      },
-      langCode: {
-        type: String,
-        notify: true
       },
       letterList: {
         type: Array,
@@ -77,7 +75,7 @@
     },
     listeners: {
       'new-letters': 'onNewLetters',
-      'lang-code-changed': 'changeLanguage',
+      'game-lang-changed': 'changeLanguage',
       'set-letters-changed': 'runLetters',
       'set-word-changed': 'runLetters'
     },
@@ -92,7 +90,7 @@
       this.wordBoardBox = document.querySelector('word-board');
     },
     changeLanguage: function() {
-      this.$.lservice.currlang = this.langCode;
+      this.$.lservice.gameLang = this.gameLang;
     },
     runLetters: function() {
       if(!this.wordBoardWord) this.init();
@@ -108,7 +106,7 @@
         console.log("hmm, you've got an empty dataset");
       } else {
         var lang = items.lang.code;
-        this.langCode = lang;
+        this.gameLang = lang;
         items.alphabet.forEach(function(entry, i, array) {
           array[i].audio = computeAacAudio(entry, lang);
           array[i].hidden = false;
@@ -117,10 +115,10 @@
       return items;
     },
     onNewLetters: function() {
-      if(!this.allLettersList[this.langCode]) {
-        this.allLettersList[this.langCode] = this.filterResults(this.$.lservice.lobj);
+      if(!this.allLettersList[this.gameLang]) {
+        this.allLettersList[this.gameLang] = this.filterResults(this.$.lservice.lobj);
       }
-      this.stripDiacritics = this.allLettersList[this.langCode].lang.stripDiacritics;
+      this.stripDiacritics = this.allLettersList[this.gameLang].lang.stripDiacritics;
       this.fire("stripdia-set",{stripdia: this.stripDiacritics });
       this.setLetters = true;
     },
@@ -139,7 +137,7 @@
         word = word.toLowerCase();
         console.log("fired filter-word-changed: " + word + " | ohneAccent: " + this.stripDiacritics);
         this.setWord = true;
-        if(Object.keys(this.allLettersList).length > 0 && this.allLettersList[this.langCode] && this.setLetters) {
+        if(Object.keys(this.allLettersList).length > 0 && this.allLettersList[this.gameLang] && this.setLetters) {
           this.shuffleLetters(word, this.limit);
         } else {
           console.log("this.letterList is not yet set :-/");
@@ -147,7 +145,7 @@
       }
     },
     shuffleLetters: function(word, tileLimit) {
-      if(this.langCode === "ko") {
+      if(this.gameLang === "ko") {
         word = window.Hangul.disassemble(word).join('');
         //console.log(word);
       }
@@ -161,13 +159,13 @@
       this.itemIndex = 1;
       var dummyArray = [];
       var numTiles = tileLimit;
-      if(this.langCode === "emoji") {
+      if(this.gameLang === "emoji") {
         numTiles = numTiles - countEmoji(word);
       } else {
         numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
       }
-      shuffle(this.allLettersList[this.langCode].alphabet);
-      this.allLettersList[this.langCode].alphabet.forEach(function(value, index) {
+      shuffle(this.allLettersList[this.gameLang].alphabet);
+      this.allLettersList[this.gameLang].alphabet.forEach(function(value, index) {
         if(value.letter === "!!!" || value.letter === undefined) {
           //do nothing
         } else if(word.indexOf(value.letter) > -1) {
@@ -190,7 +188,7 @@
       this.letterList = shuffle(dummyArray);
     },
     getLangHelpInfo: function() {
-      return this.allLettersList[this.langCode].lang.langHelpInfo;
+      return this.allLettersList[this.gameLang].lang.langHelpInfo;
     }
   });
   var itemIndex;

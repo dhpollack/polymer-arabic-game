@@ -72,14 +72,14 @@
           this.resetBox();
         } else if(this.lastBucket !== "") {
           if(!this.$.jtext.hasAttribute("raised")) this.$.jtext.setAttribute("raised", true);
-          if(this.wordBoard.langCode === "ko") {
+          if(this.wordBoard.gameLang === "ko") {
             if(this.scoreArray.length >= window.Hangul.disassemble(this.zielWort).join('').length + 2) this.scoreArray.shift();
           } else {
             if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
           }
           window.clearTimeout(checkTimeout);
           this.scoreArray.push(this.lastBucket);
-          if(this.wordBoard.langCode === "ko") {
+          if(this.wordBoard.gameLang === "ko") {
             this.usertext = window.Hangul.assemble(this.scoreArray.join(""));
           } else {
             this.usertext = this.scoreArray.join("");

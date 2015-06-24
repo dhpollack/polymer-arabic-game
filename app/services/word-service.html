@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="tinavg-behavior.html">
 <dom-module id="word-service">
   <style>
   iron-ajax {
@@ -20,12 +21,9 @@
 (function() {
   Polymer({
     is: 'word-service',
+    behaviors: [TinavgBehavior],
 
     properties: {
-      currlang: {
-        type: String,
-        notify: true
-      },
       warray: {
         type: Array,
         value: function () { return []; }
@@ -36,10 +34,10 @@
       }
     },
     listeners: {
-      'currlang-changed': 'changeJsonUrl'
+      'game-lang-changed': 'changeJsonUrl'
     },
     attached: function() {
-      this.jsonUrl = this.createJsonUrl(this.currlang);
+      this.jsonUrl = this.createJsonUrl(this.gameLang);
       //this.$.wajax.auto = true;
     },
     ready: function() {
@@ -47,8 +45,8 @@
       this.letterList = document.getElementById("lettergrid");
     },
     changeJsonUrl: function(ev) {
-      this.jsonUrl = this.createJsonUrl(this.currlang);
-      if(this.wordBoard && this.wordBoard.wordArray[this.currlang]) {
+      this.jsonUrl = this.createJsonUrl(this.gameLang);
+      if(this.wordBoard && this.wordBoard.wordArray[this.gameLang]) {
         this.letterList.setWord = false;
         this.async(function() { this.spoofLoad(); }, 100);
       } else {

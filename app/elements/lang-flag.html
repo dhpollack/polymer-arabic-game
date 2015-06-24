@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
+<link rel="import" href="tinavg-behavior.html">
 
 <dom-module id="lang-flag">
     <style>
@@ -12,18 +13,15 @@
 (function() {
   Polymer({
     is: 'lang-flag',
+    behaviors: [TinavgBehavior],
     properties: {
-      mylang: {
-        type: String,
-        notify: true,
-        observer: "switchLanguage"
-      },
       langs: {
         type: Array,
         value: function() { return []; }
       }
     },
     listeners: {
+      "game-lang-changed": "switchLanguage"
     },
     handleClick: function(e) {
     },
@@ -37,11 +35,11 @@
     switchLanguage: function() {
       if(!this.isReady) return;
       var deg = 0;
-      this.$.flag_icon.style.background = "url(/assets/images/" + this.mylang + ".png) center center no-repeat";
+      this.$.flag_icon.style.background = "url(/assets/images/" + this.gameLang + ".png) center center no-repeat";
       this.$.flag_icon.style.backgroundSize = "contain";
       this.fire("reset-jumbotron", true);
       //this.$.jt.resetBox();
-      deg = (this.abbrevs.indexOf(this.mylang) + 1) * 360;
+      deg = (this.abbrevs.indexOf(this.gameLang) + 1) * 360;
       this.async(function() {
         this.$.flag_icon.style.transform = "rotateY("+ deg + "deg)";
       });
