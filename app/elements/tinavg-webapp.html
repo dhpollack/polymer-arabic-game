@@ -35,8 +35,7 @@
     <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-lastvisit" value="{{lastvisit}}"></iron-localstorage>
-    
+
     <!-- in main viewport -->
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
       
@@ -53,7 +52,7 @@
         <br /><div>Meiselmodus: <paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button></div>
         <br /><div>
           Meiselsprache: 
-          <select id="meiselspracheliste" on-change="setNerdSprache" disabled$="{{!nerdmodus}}">
+          <select id="meiselspracheliste" on-change="setNerdSprache">
             <template is="dom-repeat" items="{{nerdSpracheList}}"><option value="{{item.abbrev}}">{{item.fullname}}</option></template>
           </select>
         </div>
@@ -83,7 +82,7 @@
               <lang-flag id="switchModusIcon" game-lang="[[gameLang]]" langs="[[languageList]]" on-tap="switchModus"></lang-flag>
             </div>
             <div class="horizontal center-justified layout flex-2">
-              <jumbotron-text id="jt" tabindex="{{jumbotronIndex}}" learnmodus="{{learnmodus}}"></jumbotron-text>
+              <jumbotron-text id="jt" tabindex="{{jumbotronIndexCompute()}}" learnmodus="{{learnmodus}}"></jumbotron-text>
             </div>
             <div id="nerdmodus-div" class="horizontal end-justified layout flex">
               <score-board id="score-board-player-2" player="2" hidden></score-board>
@@ -206,10 +205,6 @@
       letterLimit: {
         type: Number,
         value: 12
-      },
-      jumbotronIndex: {
-        type: Number,
-        value: 13
       },
       learnmodus: {
         type: Boolean
@@ -354,14 +349,14 @@
         var lastTab = this.lastTabIndex;
         this.lastTabIndex = document.activeElement.tabIndex;
         var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
-        var prevIndex = (document.activeElement.tabIndex === -1) ? 1 : (document.activeElement.tabIndex - moveFocus > 0) ? document.activeElement.tabIndex - moveFocus : this.jumbotronIndex;
+        var prevIndex = (document.activeElement.tabIndex === -1) ? 1 : (document.activeElement.tabIndex - moveFocus > 0) ? document.activeElement.tabIndex - moveFocus : this.jumbotronIndexCompute();
         document.querySelector('[tabindex="'+ (prevIndex) + '"]').focus();
       }.bind(this));
       Mousetrap.bind('down', function() {
         var lastTab = this.lastTabIndex;
         this.lastTabIndex = document.activeElement.tabIndex;
         var moveFocus = (window.innerHeight > window.innerWidth) ? 3 : 4;
-        var newFocus = (document.activeElement.tabIndex + moveFocus < this.jumbotronIndex) ? document.activeElement.tabIndex + moveFocus : (document.activeElement.tabIndex === this.jumbotronIndex) ? lastTab : document.activeElement.tabIndex;
+        var newFocus = (document.activeElement.tabIndex + moveFocus < this.jumbotronIndexCompute()) ? document.activeElement.tabIndex + moveFocus : (document.activeElement.tabIndex === this.jumbotronIndexCompute()) ? lastTab : document.activeElement.tabIndex;
         var downIndex = (document.activeElement.tabIndex === -1) ? 1 : newFocus;
         document.querySelector('[tabindex="'+ (downIndex) + '"]').focus();
       }.bind(this));
@@ -529,6 +524,13 @@
       options.nerdsprache = this.nerdSprache;
       options.earmodus = this.earmodus;
       return options;
+    },
+    jumbotronIndexCompute: function() {
+      if(this.letterLimit) {
+        return this.letterLimit + 1;
+      } else {
+        return 12 + 1;        
+      }
     }
   });
 function _getFirebaseName(authData) {

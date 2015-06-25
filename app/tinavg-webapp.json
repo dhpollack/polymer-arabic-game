@@ -1,9 +1,9 @@
 {
-  "name": "TINAVG - This is Not A Vocabulary Game",
+  "name": "tinavg: Alphabets for Everyone",
   "short_name": "tinavg",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "lang": "en",
-  "description": "A language game to learn the alphabet and improve pronounciation.",
+  "description": "This Is Not A Vocabulary Game, TINAVG, utilizes different languages to create a fun, fast-paced pattern matching game that is suitable for all ages.  English, German, and Hebrew are currently fully implemented with Arabic, Korean, and Russian also available in some form or another.",
   "author": "David Pollack",
   "url": "https://www.tinavg.com",
   "icons": [
