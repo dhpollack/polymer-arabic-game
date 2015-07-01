@@ -13,18 +13,25 @@
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
 <!-- Custom Elements -->
 <link rel="import" href="tinavg-behavior.html">
+<link rel="import" href="tinavg-style.html">
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
 <script src="../assets/js/mousetrap.min.js"></script>
 <dom-module id="tinavg-webapp">
   <style is="custom-style">
-    /* see tinavg-style.html */
+    /* see tinavg-style.html... it didn't work */
+    :host {
+      --paper-progress-container-color: #f3d6b0;
+      --paper-progress-secondary-color: var(--paper-red-a700);
+    }
+
   </style>
   <template>
     
@@ -94,6 +101,7 @@
           <word-recorder id="wrecorder" hidden$="{{!recordmodus}}"></word-recorder>
           <letter-list id="lettergrid" limit="{{letterLimit}}" game-lang="{{gameLang}}" hidden$="{{recordmodus}}"></letter-list>
         </div>
+        <paper-progress value="{{progress1}}" secondary-progress="{{progress2}}"></paper-progress>
         <paper-toast id="übersetzung" text="{{gameLang}}"></paper-toast>
       </paper-header-panel>
     </paper-drawer-panel>
@@ -168,11 +176,11 @@
         </div>
         <div id="contact">
           <h3>Email Me!</h3>
-          <form action="//formspree.io/david@tinavg.com" method="POST" target="_blank" class="vertical layout">
-              <paper-input name="_replyto" type="email" label="your email"></paper-input>
+          <form id="contactme" action="//formspree.io/david@tinavg.com" method="POST" target="_blank" class="vertical layout">
+              <paper-input name="_replyto" type="email" label="your email" autofocus></paper-input>
               <paper-textarea name="message" label="your message"></paper-textarea>
               <input type="text" name="_gotcha" style="display:none" />
-              <input type="submit" value="Send" />
+              <button type="submit" value="Send">Send</button>
           </form>
         </div>
       </iron-pages>
@@ -245,7 +253,8 @@
       'letter-card-tapped': 'letterTapped',
       'stripdia-set': 'setWBoardDisplay',
       'ready-set-go': 'lettersSet',
-      'checking-word': 'fbLetterSeq'
+      'checking-word': 'fbLetterSeq',
+      'word-percent-correct': 'wordPercentCorrect'
     },
     observers: [
 
@@ -294,6 +303,8 @@
       // firebase
       var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
       var lastlogin = window.localStorage["tinavg-lastvisit"];
+      var ulanglist = window.navigator.languages;
+      var preflang = window.navigator.language || window.navigator.userLanguage;
       this.letterSeq = [];
       fbRef.onAuth(function(authData) {
         if (authData) {
@@ -304,6 +315,8 @@
             name: _getFirebaseName(authData),
             lastlogin: lastlogin,
             stimestamp: Firebase.ServerValue.TIMESTAMP,
+            userlang: ulanglist,
+            preflang: preflang,
             options: this.getOptions()
           });
           fbRef.child("users").child(authData.uid).child("logins").push({
@@ -313,6 +326,8 @@
         } else {
           fbRef.child("users").child("anonymous").child("logins").push({
             lastlogin: lastlogin,
+            userlang: ulanglist,
+            preflang: preflang,
             stimestamp: Firebase.ServerValue.TIMESTAMP
           });
         }
@@ -532,6 +547,11 @@
       } else {
         return 12 + 1;        
       }
+    },
+    wordPercentCorrect: function(ev) {
+      console.log(ev);
+      this.progress1 = ev.detail.progress;
+      this.progress2 = ev.detail.secondary;
     }
   });
 function _getFirebaseName(authData) {

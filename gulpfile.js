@@ -135,7 +135,7 @@ gulp.task('copy', function () {
     .pipe(gulp.dest(distDir + '/bower_components'))
     .pipe(gulp.dest(tmpDir + '/bower_components'));
 
-  var json = gulp.src([appDir + '/**/*.json'])
+  var json = gulp.src([appDir + '/*.json', appDir + '/**/*.json', '!' + appDir + '/**/words.json'])
     .pipe(gulp.dest(distDir))
     .pipe(gulp.dest(tmpDir));
 
@@ -151,10 +151,10 @@ gulp.task('copy', function () {
     .pipe(gulp.dest(distDir + '/services'))
     .pipe(gulp.dest(tmpDir+'/services'));
 
-  var nodemodules = gulp.src(['node_modules/mousetrap/mousetrap.min.js', 'node_modules/hangul-js/hangul.min.js'])
+  var nodemodules = gulp.src(['node_modules/mousetrap/mousetrap.*', 'node_modules/hangul-js/hangul.*'])
     .pipe(gulp.dest(distDir + '/assets/js'))
-    .pipe(gulp.dest(appDir + '/assets/js'))
-    .pipe(gulp.dest(tmpDir+'/assets/js'));
+    .pipe(gulp.dest(tmpDir+'/assets/js'))
+    .pipe(gulp.dest(appDir + '/assets/js'));
 
 
   return merge(app, html, bower, elements, json, assets, nodemodules, services).pipe($.size({title: 'copy'}));
@@ -256,7 +256,7 @@ gulp.task('serve:dist', ['default'], function () {
 
 gulp.task('manifest', function(){
   
-  gulp.src([appDir + '/index.html', appDir + '/**/*.m4a', appDir + '/**/*.json'])
+  gulp.src([appDir + '/index.html', appDir + '/**/*.m4a', appDir + '/**/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png'])
     .pipe($.manifest({
       hash: true,
       preferOnline: true,

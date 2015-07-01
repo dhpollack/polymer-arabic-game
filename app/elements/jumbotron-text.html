@@ -67,6 +67,7 @@
         this.scoreBox.lastBucket = this.usertext;
         this.resetBox();
       } else {
+        var cw = this.wordBoard.getCheckWord().toLowerCase();
         if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
           this.scoreBox.lastBucket = this.usertext;
           this.resetBox();
@@ -81,9 +82,19 @@
           this.scoreArray.push(this.lastBucket);
           if(this.wordBoard.gameLang === "ko") {
             this.usertext = window.Hangul.assemble(this.scoreArray.join(""));
+            cw = window.Hangul.disassemble(cw);
           } else {
             this.usertext = this.scoreArray.join("");
+            cw = cw.split("");
           }
+          console.log(cw.slice(0, this.scoreArray.length));
+          console.log(this.scoreArray);
+          if(JSON.stringify(cw.slice(0, this.scoreArray.length)) === JSON.stringify(this.scoreArray)) {
+            this.fire("word-percent-correct", { progress: (this.scoreArray.length / cw.length) * 100, secondary: 0 });
+          } else {
+            this.fire("word-percent-correct", { progress: 0,  secondary: 100});
+          }
+          
           if(this.usertext.toLowerCase() === this.wordBoard.getCheckWord().toLowerCase()) {
               checkTimeout = setTimeout(function() {
                 if(this.first) {
@@ -112,6 +123,7 @@
         this.scoreBox.lastBucket = "";
         this.$.jtext.removeAttribute("raised");
         this.$.jtext.classList.remove("to-foreground");
+        this.fire("word-percent-correct", { progress: 0,  secondary: 0});
     }
   });
 })();

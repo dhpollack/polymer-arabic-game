@@ -64,7 +64,7 @@
     width: 100vw;
     height: 79.98vh;
     content: 'viewport-units-buggyfill; width: 100vw; height: 79.98vh;';
-    background: rgba(238,197,145,0.7);
+    background: #f3d6b0;
   }
   .recorder-icon {
     color: #222;
@@ -113,7 +113,7 @@
     height: 26.66vh;
     font-weight: 300;
     text-align: center;
-    background: rgba(238,197,145,0.7);
+    background: #f3d6b0;
     content: 'viewport-units-buggyfill; width: 33.33vw; height: 26.66vh;';
   }
   letter-card:focus {
@@ -224,6 +224,13 @@
     -moz-animation: fliptext 2s ease-in-out 2;
     animation: fliptext 2s ease-in-out 2;
     */
+  }
+  paper-progress {
+    width: 100vw;
+    position:absolute;
+    bottom:0;
+    z-index: 5;
+
   }
   @-webkit-keyframes glowtext {
     from {
