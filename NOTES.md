@@ -46,4 +46,5 @@ paper-dialog-common.css: line 11
       margin-top: 0;
     }
 
-    
+firebase-auth.html: line 10
+  remove: <link rel="import" href="firebase.html">
