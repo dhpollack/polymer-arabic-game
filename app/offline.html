@@ -24,6 +24,7 @@
   <!-- Fix for Viewport Units -->
   <script src="../bower_components/viewport-units-buggyfill/viewport-units-buggyfill.js"></script>
   <script src="../bower_components/viewport-units-buggyfill/viewport-units-buggyfill.hacks.js"></script>
+  <script src="assets/js/buggyfill.js"></script>
   <!-- Cookie Consent -->
   <script src="../bower_components/cookieconsent2/cookieconsent.js"></script>
   <!-- Firebase -->
@@ -45,8 +46,10 @@
   <div id="friendly_message" hidden>If you see this message something is taking too long, please try reloading your browser. <a href="javascript:void(0)" onclick="hideFriendlyMessage();">Click here to hide this message</a></div>
   <tinavg-webapp id="tinavg_app"></tinavg-webapp>
   <script type="text/javascript">
-    function hideFriendlyMessage() {
-      document.getElementById('friendly_message').setAttribute('hidden', true);
+    window.cookieconsent_options = {
+        learnMore: 'more info',
+        link: 'https://www.tinavg.com/terms.html',
+        theme: 'dark-top'
     }
     setTimeout(function() {
       if(document.querySelector('[unresolved]')) {
@@ -54,18 +57,8 @@
         document.querySelector('[unresolved]').removeAttribute("unresolved");
       }
     }, 25000);
-    window.viewportUnitsBuggyfill.init({
-      // milliseconds to delay between updates of viewport-units
-      // caused by orientationchange, pageshow, resize events
-      refreshDebounceWait: 250,
-    
-      // provide hacks plugin to make the contentHack property work correctly.
-      hacks: window.viewportUnitsBuggyfillHacks
-    });
-    window.cookieconsent_options = {
-        learnMore: 'more info',
-        link: 'https://www.tinavg.com/terms.html',
-        theme: 'dark-top'
+    function hideFriendlyMessage() {
+      document.getElementById('friendly_message').setAttribute('hidden', true);
     }
   </script>
 </body>

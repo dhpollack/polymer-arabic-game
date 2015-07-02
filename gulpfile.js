@@ -208,7 +208,24 @@ gulp.task('vulcanize', function () {
       maximumCrush: true
     }))
     .pipe(gulp.dest(distDir))
-    .pipe(gulp.dest(tmpDir));
+    .pipe(gulp.dest(tmpDir))
+    .pipe($.size({ title: 'vulcanize/polybuild' }));
+});
+
+// Vulcanize imports
+gulp.task('vulcanize-example', function () {
+  return gulp.src(appDir + '/index.html')
+    .pipe($.vulcanize({
+      dest: distDir,
+      exclude: ['firebase.js'],
+      strip: true,
+      inlineCss: true,
+      inlineScripts: true
+    }))
+    .pipe($.rename("index.build.html"))
+    .pipe(gulp.dest(distDir))
+    .pipe(gulp.dest(tmpDir))
+    .pipe($.size({title: 'vulcanize'}));
 });
 
 
