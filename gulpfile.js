@@ -151,13 +151,13 @@ gulp.task('copy', function () {
     .pipe(gulp.dest(distDir + '/services'))
     .pipe(gulp.dest(tmpDir+'/services'));
 
-  var nodemodules = gulp.src(['node_modules/mousetrap/mousetrap.*', 'node_modules/hangul-js/hangul.*'])
+  var jsmodules = gulp.src(['node_modules/mousetrap/mousetrap.*', 'node_modules/hangul-js/hangul.*', 'bower_components/firebase/firebase.js'])
     .pipe(gulp.dest(distDir + '/assets/js'))
     .pipe(gulp.dest(tmpDir+'/assets/js'))
     .pipe(gulp.dest(appDir + '/assets/js'));
 
 
-  return merge(app, html, bower, elements, json, assets, nodemodules, services).pipe($.size({title: 'copy'}));
+  return merge(app, html, bower, elements, json, assets, jsmodules, services).pipe($.size({title: 'copy'}));
 });
 
 // Copy Web Fonts To Dist
@@ -192,13 +192,6 @@ gulp.task('html', function () {
     // Output Files
     .pipe(gulp.dest(tmpDir))
     .pipe($.size({title: 'html'}));
-});
-
-gulp.task('offlineapp', function(){
-  return gulp.src(appDir + '/index.html')
-    .pipe($.replace('<html>', '<html manifest="app.manifest">'))
-    .pipe($.rename('offline.html'))
-    .pipe(gulp.dest(appDir));
 });
 
 // Polybuild imports
@@ -273,7 +266,7 @@ gulp.task('serve:dist', ['default'], function () {
 
 gulp.task('manifest', function(){
   
-  gulp.src([appDir + '/index.html', appDir + '/**/*.m4a', appDir + '/**/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png'])
+  var manifest = gulp.src([appDir + '/index.html', appDir + '/**/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png'])
     .pipe($.manifest({
       hash: true,
       preferOnline: true,
@@ -282,12 +275,16 @@ gulp.task('manifest', function(){
       exclude: 'app.manifest'
      }))
     .pipe(gulp.dest(appDir));
+  var replace = gulp.src(appDir + '/index.html')
+    .pipe($.replace('<html>', '<html manifest="app.manifest">'))
+    .pipe(gulp.dest(appDir));
+  return merge(manifest, replace);
 });
 
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
   runSequence(
-    ['manifest', 'offlineapp'],
+    'manifest',
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],

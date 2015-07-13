@@ -30,3 +30,4 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [hangul.js](https://www.npmjs.com/package/hangul-js) - This assembles/disassembles the Korean letters in the block groups.  
 [microsoft translate api](https://www.microsoft.com/translator/getstarted.aspx) - this is being used for Meiselmodus  
 [ms translator library](https://github.com/openlabs/Microsoft-Translator-Python-API/) - in conjunction with this  
+[chrome app - Manifest Schema](https://developer.chrome.com/apps/manifest) - this is the manifest schema for chrome apps

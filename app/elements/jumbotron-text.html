@@ -67,11 +67,11 @@
         this.scoreBox.lastBucket = this.usertext;
         this.resetBox();
       } else {
-        var cw = this.wordBoard.getCheckWord().toLowerCase();
         if(this.lastBucket == "!!!" || this.lastBucket.length > 2) {
           this.scoreBox.lastBucket = this.usertext;
           this.resetBox();
         } else if(this.lastBucket !== "") {
+          var cw = this.wordBoard.getCheckWord().toLowerCase();
           if(!this.$.jtext.hasAttribute("raised")) this.$.jtext.setAttribute("raised", true);
           if(this.wordBoard.gameLang === "ko") {
             if(this.scoreArray.length >= window.Hangul.disassemble(this.zielWort).join('').length + 2) this.scoreArray.shift();
@@ -87,8 +87,6 @@
             this.usertext = this.scoreArray.join("");
             cw = cw.split("");
           }
-          console.log(cw.slice(0, this.scoreArray.length));
-          console.log(this.scoreArray);
           if(JSON.stringify(cw.slice(0, this.scoreArray.length)) === JSON.stringify(this.scoreArray)) {
             this.fire("word-percent-correct", { progress: (this.scoreArray.length / cw.length) * 100, secondary: 0 });
           } else {

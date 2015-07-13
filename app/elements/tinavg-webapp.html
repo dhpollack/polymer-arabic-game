@@ -314,41 +314,45 @@ limitations under the License.
       
       // selected tab
       if(!this.selected) this.selected = 0;
-      
+  
       // firebase
-      var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
-      var lastlogin = window.localStorage["tinavg-lastvisit"];
-      var ulanglist = window.navigator.languages;
-      var preflang = window.navigator.language || window.navigator.userLanguage;
-      this.letterSeq = [];
-      fbRef.onAuth(function(authData) {
-        if (authData) {
-          // save the user's profile into Firebase so we can list users,
-          // use them in Security and Firebase Rules, and show profiles
-          fbRef.child("users").child(authData.uid).update({
-            provider: authData.provider,
-            name: _getFirebaseName(authData),
-            lastlogin: lastlogin,
-            stimestamp: Firebase.ServerValue.TIMESTAMP,
-            userlang: ulanglist,
-            preflang: preflang,
-            options: this.getOptions()
-          });
-          fbRef.child("users").child(authData.uid).child("logins").push({
-            lastlogin: lastlogin,
-            stimestamp: Firebase.ServerValue.TIMESTAMP
-          });
-        } else {
-          fbRef.child("users").child("anonymous").child("logins").push({
-            lastlogin: lastlogin,
-            userlang: ulanglist,
-            preflang: preflang,
-            stimestamp: Firebase.ServerValue.TIMESTAMP
-          });
-        }
-      }.bind(this));
-      
-      this.firebaseRef = fbRef;
+      try {
+        var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
+        var lastlogin = window.localStorage["tinavg-lastvisit"];
+        var ulanglist = window.navigator.languages;
+        var preflang = window.navigator.language || window.navigator.userLanguage;
+        this.letterSeq = [];
+        fbRef.onAuth(function(authData) {
+          if (authData) {
+            // save the user's profile into Firebase so we can list users,
+            // use them in Security and Firebase Rules, and show profiles
+            fbRef.child("users").child(authData.uid).update({
+              provider: authData.provider,
+              name: _getFirebaseName(authData),
+              lastlogin: lastlogin,
+              stimestamp: Firebase.ServerValue.TIMESTAMP,
+              userlang: ulanglist,
+              preflang: preflang,
+              options: this.getOptions()
+            });
+            fbRef.child("users").child(authData.uid).child("logins").push({
+              lastlogin: lastlogin,
+              stimestamp: Firebase.ServerValue.TIMESTAMP
+            });
+          } else {
+            fbRef.child("users").child("anonymous").child("logins").push({
+              lastlogin: lastlogin,
+              userlang: ulanglist,
+              preflang: preflang,
+              stimestamp: Firebase.ServerValue.TIMESTAMP
+            });
+          }
+        }.bind(this));
+        
+        this.firebaseRef = fbRef;
+      } catch(e) {
+        console.log(e);
+      }
 
       // Keyboard Shortcut Bindings
       Mousetrap.bind('shift+enter', function() { 
@@ -407,11 +411,6 @@ limitations under the License.
       document.querySelector('[unresolved]').removeAttribute("unresolved");
       this.showHelp();
       
-      //preload flags
-      for(var i = 0; i < this.languageList.length; i++) {
-        new Image().src = "/assets/images/" + this.languageList[i].abbrev + ".png";
-      }
-
       this.async(function() { 
         this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
         this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
@@ -428,7 +427,7 @@ limitations under the License.
     },
     letterTapped: function(e) {
       this.$.jt.lastBucket = e.detail.letter;
-      this.fbLetterSeq(e);
+      if(this.firebaseRef) this.fbLetterSeq(e);
     },
     fbLetterSeq: function(e) {
       if(this.letterSeq.length === 0 && e.detail.letter === '!!!') {
@@ -564,7 +563,6 @@ limitations under the License.
       }
     },
     wordPercentCorrect: function(ev) {
-      console.log(ev);
       this.progress1 = ev.detail.progress;
       this.progress2 = ev.detail.secondary;
     }
