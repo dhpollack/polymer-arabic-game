@@ -456,7 +456,7 @@ limitations under the License.
     },
     showHelp: function(e) {
       this.async(function(){ this.$.so.open();}, 200);
-      if(this.$.so.noCancelOnOutsideClick) this.$.so.noCancelOnOutsideClick = false;
+      if(e) this.$.so.noCancelOnOutsideClick = false;
     },
     showClue: function(e) {
       this.$.wboard.revealWord();
@@ -578,9 +578,6 @@ limitations under the License.
     wordPercentCorrect: function(ev) {
       this.progress1 = ev.detail.progress;
       this.progress2 = ev.detail.secondary;
-    },
-    clickToCloseOptions: function() {
-      this.$.so.noCancelOnOutsideClick = !this.$.so.noCancelOnOutsideClick;
     }
   });
 function _getFirebaseName(authData) {
