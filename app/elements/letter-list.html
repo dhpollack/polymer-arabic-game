@@ -118,9 +118,14 @@
       if(!this.allLettersList[this.gameLang]) {
         this.allLettersList[this.gameLang] = this.filterResults(this.$.lservice.lobj);
       }
-      this.stripDiacritics = this.allLettersList[this.gameLang].lang.stripDiacritics;
-      this.fire("stripdia-set",{stripdia: this.stripDiacritics });
-      this.setLetters = true;
+      if(this.allLettersList[this.gameLang]) {
+        this.stripDiacritics = this.allLettersList[this.gameLang].lang.stripDiacritics;
+        this.fire("stripdia-set",{stripdia: this.stripDiacritics });
+        this.setLetters = true;
+      } else {
+        console.log("The letterList isn't set: ");
+        console.log(this.allLettersList);
+      }
     },
     runNewLetters: function(){
       if(this.wordBoardBox.getCheckWord() !== undefined) {

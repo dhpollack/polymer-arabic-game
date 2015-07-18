@@ -14,7 +14,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
---><link rel="import" href="../../bower_components/polymer/polymer.html">
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 <!-- Additional Component Load -->
 <!-- Layout/Polymer Elements -->
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
@@ -121,7 +122,7 @@ limitations under the License.
       </paper-header-panel>
     </paper-drawer-panel>
     <!-- Dialog Modal -->
-    <paper-dialog id="so" entry-animation="slide-from-left-animation" exit-animation="slide-right-animation" with-backdrop>
+    <paper-dialog id="so" entry-animation="slide-from-left-animation" exit-animation="slide-right-animation" with-backdrop no-cancel-on-outside-click>
       <div id="overlay-toolbar" class="vertical flex overlay-toolbar">
         <center><h2>This Is Not A Vocabulary Game</h2></center>
         <paper-tabs selected="{{selected}}">
@@ -276,40 +277,47 @@ limitations under the License.
     ],
     created: function() {
 
-      if(localStorage.getItem("tinavg-earmodus") === undefined) {
-        this.earmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
-      }
-
-      if(localStorage.getItem("tinavg-learnmodus") === undefined) {
-        this.learnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
-      }
-
-      if(localStorage.getItem("tinavg-recordmodus") === undefined) {
-        this.recordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
-      }
-
-      if(JSON.parse(localStorage.getItem("tinavg-nerdmodus")) === undefined) {
-        this.nerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
-      }
-
-      if(JSON.parse(localStorage.getItem("tinavg-nerdsprache")) === undefined) {
-        this.nerdSprache = JSON.parse(localStorage.getItem("tinavg-nerdsprache"));
-      }
     },
     ready: function() {
 
       // localStorage functions and setting defaults
       window.localStorage["tinavg-lastvisit"] = new Date();
+
+      if(localStorage.getItem("tinavg-earmodus") !== undefined) {
+        this.earmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
+      } else {
+        this.earmodus = false;
+      }
+
+      if(localStorage.getItem("tinavg-learnmodus") !== undefined) {
+        this.learnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
+      } else {
+        this.learnmodus = false;
+      }
+
+      if(localStorage.getItem("tinavg-recordmodus") !== undefined) {
+        this.recordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
+      } else {
+        this.recordmodus = false;
+      }
+
+      if(localStorage.getItem("tinavg-nerdmodus") !== undefined) {
+        this.nerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
+      } else {
+        this.nerdmodus = false;
+      }
+      
       if(_findWithAttr(this.languageList, "abbrev", JSON.parse(localStorage.getItem("tinavg-lastlang"))) === -1) {
         this.gameLang = "de";
       } else {
         this.gameLang = JSON.parse(localStorage.getItem("tinavg-lastlang"));
       }
-      if(this.earmodus === undefined) this.earmodus = false;
-      if(this.learnmodus === undefined) this.learnmodus = false;
-      if(this.recordmodus === undefined) this.recordmodus = false;
-      if(this.nerdmodus === undefined) this.nerdmodus = false;
-      if(this.nerdSprache === undefined) this.nerdSprache = "de";
+      
+      if(_findWithAttr(this.nerdSpracheList, "abbrev", JSON.parse(localStorage.getItem("tinavg-nerdsprache"))) === -1) {
+        this.nerdSprache = "en";
+      } else {
+        this.nerdSprache = JSON.parse(localStorage.getItem("tinavg-nerdsprache"));
+      }
       this.$.jt.forceLearnmodus(this.learnmodus);
       
       // selected tab
@@ -410,11 +418,15 @@ limitations under the License.
       document.getElementById('friendly_message').setAttribute('hidden', true);
       document.querySelector('[unresolved]').removeAttribute("unresolved");
       this.showHelp();
+
+      if(document.cookie.indexOf("cookieconsent_dismissed") > -1) {
+        this.$.so.noCancelOnOutsideClick = false;
+      }
       
       this.async(function() { 
-        this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
         this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
-      }, 100);
+        this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
+      }, 200);
 
     },
     setLangHelp: function() {
@@ -444,6 +456,7 @@ limitations under the License.
     },
     showHelp: function(e) {
       this.async(function(){ this.$.so.open();}, 200);
+      if(this.$.so.noCancelOnOutsideClick) this.$.so.noCancelOnOutsideClick = false;
     },
     showClue: function(e) {
       this.$.wboard.revealWord();
@@ -565,6 +578,9 @@ limitations under the License.
     wordPercentCorrect: function(ev) {
       this.progress1 = ev.detail.progress;
       this.progress2 = ev.detail.secondary;
+    },
+    clickToCloseOptions: function() {
+      this.$.so.noCancelOnOutsideClick = !this.$.so.noCancelOnOutsideClick;
     }
   });
 function _getFirebaseName(authData) {
