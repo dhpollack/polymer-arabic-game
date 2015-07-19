@@ -55,7 +55,7 @@
     },
     listeners: {
       'new-words': 'setWords',
-      'lang-code-changed': 'changeLanguage',
+      'game-lang-changed': 'changeLanguage',
       'earmodus-changed': 'hideWord',
       'tap': 'tapWord'
     },
@@ -77,13 +77,13 @@
           wordSpan.classList.remove("flip-text");
         };
     },
-    enableSynth: function(e) {
+    enableSynth: function() {
       if('speechSynthesis' in window) {
         this.useSynth = true;
         this.voices = window.speechSynthesis.getVoices();
       }
     },
-    changeLanguage: function(event) {
+    changeLanguage: function() {
       this.$.wservice.gameLang = this.gameLang;
       this.phraseArray = [];
       this.phraseIndex = 0;
