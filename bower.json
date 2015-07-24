@@ -15,7 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "font-roboto": "Polymer/font-roboto#^1.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
@@ -44,6 +43,7 @@
     "polymer": "Polymer/polymer#^1.0.0",
     "viewport-units-buggyfill": "^0.5.2",
     "firebase-element": "GoogleWebComponents/firebase-element#^1.0.0",
-    "cookieconsent2": "^1.0.0"
+    "cookieconsent2": "^1.0.0",
+    "page": "visionmedia/page.js#^1.0.0"
   }
 }

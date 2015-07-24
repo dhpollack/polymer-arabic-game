@@ -1,0 +1,30 @@
+{
+  "name": "tinavg: Alphabets for Everyone",
+  "short_name": "tinavg",
+  "manifest_version": 2,
+  "version": "0.2.1",
+  "description": "Alphabets for Everyone!  A simple, fast-paced, fun pattern matching language game.",
+  "icons": { "16": "assets/images/launcher-icon-128.png", "128": "assets/images/launcher-icon-128.png" },
+  "author": "David Pollack",
+  "homepage_url": "https://www.tinavg.com",
+  "app": {
+    "background": {
+      "scripts": [ "background.js" ],
+      "persistent": false
+    }
+  },
+  "externally_connectable": {
+    "matches": ["*://*.firebase.com/*", "*://*.firebaseio.com/*"]
+  },
+  "web_accessible_resources": [
+    "assets/*",
+    "elements/*",
+    "services/*",
+    "launcher-icon.png"
+  ],
+  "start_url": "index.build.html",
+  "permissions": [
+    "*://*.firebase.com/*",
+    "*://*.firebaseio.com/*"
+  ]
+}

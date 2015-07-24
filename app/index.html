@@ -45,21 +45,6 @@
 <body fullbleed unresolved>
   <div id="friendly_message" hidden>If you see this message something is taking too long, please try reloading your browser. <a href="javascript:void(0)" onclick="hideFriendlyMessage();">Click here to hide this message</a></div>
   <tinavg-webapp id="tinavg_app"></tinavg-webapp>
-  <script type="text/javascript">
-    window.cookieconsent_options = {
-        learnMore: 'more info',
-        link: 'https://www.tinavg.com/terms.html',
-        theme: 'dark-top'
-    }
-    setTimeout(function() {
-      if(document.querySelector('[unresolved]')) {
-        document.getElementById('friendly_message').removeAttribute('hidden');
-        document.querySelector('[unresolved]').removeAttribute("unresolved");
-      }
-    }, 25000);
-    function hideFriendlyMessage() {
-      document.getElementById('friendly_message').setAttribute('hidden', true);
-    }
-  </script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
