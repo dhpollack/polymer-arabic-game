@@ -120,13 +120,13 @@ gulp.task('metadata', function () {
 // Copy All Files At The Root Level (app)
 gulp.task('copy', function () {
   var app = gulp.src([
-    'app/*',
-    '!app/test'
+    appDir + '/*',
+    '!' + appDir + '/test'
   ], {
     dot: true
   }).pipe(gulp.dest(distDir));
 
-  var html = gulp.src(['app/**/*.html'])
+  var html = gulp.src([appDir + '/**/*.html'])
     .pipe(gulp.dest(tmpDir))
     .pipe(gulp.dest(distDir))
     .pipe(reload({stream: true}));
@@ -196,13 +196,18 @@ gulp.task('html', function () {
 
 // Polybuild imports
 gulp.task('vulcanize', function () {
-  return gulp.src(tmpDir + '/index.html')
+  var vulcanize = gulp.src(appDir + '/elements/tinavg-webapp.html')
     .pipe(polybuild({
       maximumCrush: true
     }))
-    .pipe(gulp.dest(distDir))
-    .pipe(gulp.dest(tmpDir))
+    .pipe(gulp.dest(distDir + '/elements'))
+    .pipe(gulp.dest(tmpDir + '/elements'))
     .pipe($.size({ title: 'vulcanize/polybuild' }));
+  var replace = gulp.src(appDir + '/index.html')
+    .pipe($.replace('elements/tinavg-webapp.html', 'elements/tinavg-webapp.build.html'))
+    .pipe(gulp.dest(tmpDir))
+    .pipe(gulp.dest(distDir));
+  return merge(vulcanize, replace);
 });
 
 // Vulcanize imports
@@ -236,7 +241,7 @@ gulp.task('serve', ['styles', 'elements'], function () {
     //       will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: [appDir, tmpDir],
+      baseDir: [tmpDir, appDir],
       routes: {
         '/bower_components': 'bower_components'
       }
