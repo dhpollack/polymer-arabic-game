@@ -40,6 +40,7 @@
     "paper-input": "PolymerElements/paper-input#^1.0.0",
     "paper-progress": "PolymerElements/paper-progress#^1.0.0",
     "neon-animation": "PolymerElements/neon-animation#^1.0.0",
+    "neon-animation": "PolymerElements/platinum-sw#^1.0.0",
     "polymer": "Polymer/polymer#^1.0.0",
     "viewport-units-buggyfill": "^0.5.2",
     "firebase-element": "GoogleWebComponents/firebase-element#^1.0.0",

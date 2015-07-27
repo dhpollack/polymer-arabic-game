@@ -66,6 +66,12 @@ gulp.task('jshint', function () {
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
+gulp.task('jsonlint', function() {
+  gulp.src(appDir + "/**/*.json")
+    .pipe($.jsonlint())
+    .pipe($.jsonlint.reporter());
+});
+
 // Optimize Images
 gulp.task('images', function () {
   return gulp.src(appDir+'/assets/images/**/*')
@@ -156,8 +162,15 @@ gulp.task('copy', function () {
     .pipe(gulp.dest(tmpDir+'/assets/js'))
     .pipe(gulp.dest(appDir + '/assets/js'));
 
+  var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
+    .pipe(gulp.dest(tmpDir + '/elements/bootstrap'))
+    .pipe(gulp.dest(distDir + '/elements/bootstrap'));
 
-  return merge(app, html, bower, elements, json, assets, jsmodules, services).pipe($.size({title: 'copy'}));
+  var swToolbox = gulp.src(['bower_components/sw-toolbox/*.js'])
+    .pipe(gulp.dest(tmpDir + '/sw-toolbox'))
+    .pipe(gulp.dest(distDir + '/sw-toolbox'));
+
+  return merge(app, html, bower, elements, json, assets, jsmodules, services, swBootstrap, swToolbox).pipe($.size({title: 'copy'}));
 });
 
 // Copy Web Fonts To Dist
@@ -291,7 +304,7 @@ gulp.task('default', ['clean'], function (cb) {
   runSequence(
     ['copy', 'styles'],
     'elements',
-    ['jshint', 'images', 'fonts', 'html'],
+    ['jshint', 'jsonlint', 'images', 'fonts', 'html'],
     'vulcanize',
     cb);
 });

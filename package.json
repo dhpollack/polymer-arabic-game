@@ -20,6 +20,7 @@
     "gulp-if": "^1.2.1",
     "gulp-imagemin": "^2.2.1",
     "gulp-jshint": "^1.6.3",
+    "gulp-jsonlint": "^1.1.0",
     "gulp-load-plugins": "^0.10.0",
     "gulp-manifest": "0.0.6",
     "gulp-minify-html": "^1.0.2",
@@ -28,8 +29,8 @@
     "gulp-shell": "^0.4.0",
     "gulp-size": "^1.0.0",
     "gulp-uglify": "^1.2.0",
-    "gulp-util": "^3.0.5",
     "gulp-useref": "^1.1.2",
+    "gulp-util": "^3.0.5",
     "gulp-vulcanize": "^6.0.0",
     "hangul-js": "^0.1.4",
     "jshint-stylish": "^2.0.0",
@@ -38,8 +39,8 @@
     "opn": "^1.0.0",
     "psi": "^1.0.4",
     "require-dir": "^0.3.0",
-    "vulcanize": ">= 1.4.2",
-    "run-sequence": "^1.0.2"
+    "run-sequence": "^1.0.2",
+    "vulcanize": ">= 1.4.2"
   },
   "engines": {
     "node": ">=0.10.0"
