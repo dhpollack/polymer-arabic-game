@@ -289,7 +289,6 @@ gulp.task('manifest', function(){
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
   runSequence(
-    'manifest',
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
