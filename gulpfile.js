@@ -261,8 +261,8 @@ gulp.task('serve', ['styles', 'elements'], function () {
     }
   });
 
-//  gulp.watch([appDir+'/**/*.html'], ['vulcanize', reload]);
-  gulp.watch([appDir+'/**/*.html'], reload);
+  gulp.watch([appDir+'/**/*.html'], ['vulcanize', reload]);
+//  gulp.watch([appDir+'/**/*.html'], reload);
   gulp.watch([appDir+'/**/*.json'], reload);
   gulp.watch([appDir+'/assets/css/**/*.css'], ['styles', reload]);
   gulp.watch([appDir+'/elements/**/*.css'], ['elements', reload]);
@@ -299,9 +299,16 @@ gulp.task('manifest', function(){
   return merge(manifest, replace);
 });
 
+gulp.task('precache', function () {
+  return gulp.src([appDir + '/**/*.json', '!' + appDir + '/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png', appDir + '/**/druck1.ogg'])
+    .pipe($.filelist('precache.json'))
+    .pipe(gulp.dest(appDir))
+});
+
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
   runSequence(
+    'precache',
     ['copy', 'styles'],
     'elements',
     ['jshint', 'jsonlint', 'images', 'fonts', 'html'],

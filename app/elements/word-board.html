@@ -84,7 +84,6 @@
       }
     },
     changeLanguage: function() {
-      this.$.wservice.gameLang = this.gameLang;
       this.phraseArray = [];
       this.phraseIndex = 0;
     },
@@ -147,11 +146,12 @@
       this.jumbotronBox.zielWort = this.phraseArray[this.phraseIndex];
     },
     setWords: function() {
+      var gl = this.gameLang;
       if(!this.wordBoardWord) this.init();
-      if(!this.wordArray[this.gameLang]) {
+      if(!this.wordArray[gl]) {
         var items = this.$.wservice.warray;
         if(items.length !== 0) {
-          this.wordArray[this.gameLang] = items;
+          this.wordArray[gl] = items;
         }
       } else {
         console.log(this.wordArray);

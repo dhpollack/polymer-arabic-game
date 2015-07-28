@@ -59,18 +59,8 @@ limitations under the License.
 
   </style>
   <template>
-    
-    <!-- localstorage -->
-    <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
-
     <!-- in main viewport -->
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
-      
       <!-- Drawer -->
       <div id="collapse" class="mini-menu" drawer>
         <div>
@@ -224,6 +214,13 @@ limitations under the License.
                          precache-file="../precache.json">
       </platinum-sw-cache>
     </platinum-sw-register>
+    <!-- localstorage -->
+    <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
   </template>
 </dom-module>
 <script>
@@ -284,6 +281,7 @@ limitations under the License.
       }
     },
     listeners: {
+      'iron-select': 'showMenuPanel',
       'letter-card-tapped': 'letterTapped',
       'stripdia-set': 'setWBoardDisplay',
       'ready-set-go': 'lettersSet',
@@ -295,93 +293,63 @@ limitations under the License.
     observers: [
 
     ],
-    created: function() {
-
-    },
     ready: function() {
 
       // localStorage functions and setting defaults
-      window.localStorage["tinavg-lastvisit"] = new Date();
+      localStorage["tinavg-lastvisit"] = new Date();
+      
+      var tinavgEarmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
+      var tinavgLearnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
+      var tinavgRecordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
+      var tinavgNerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
+      var tinavgLastlang = localStorage.getItem("tinavg-lastlang");
+      var tinavgNerdsprache = localStorage.getItem("tinavg-nerdsprache");
 
-      if(localStorage.getItem("tinavg-earmodus") !== undefined) {
-        this.earmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
+      if(tinavgEarmodus !== undefined) {
+        this.earmodus = tinavgEarmodus;
       } else {
         this.earmodus = false;
       }
 
-      if(localStorage.getItem("tinavg-learnmodus") !== undefined) {
-        this.learnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
+      if(tinavgLearnmodus !== undefined) {
+        this.learnmodus = tinavgLearnmodus;
       } else {
         this.learnmodus = false;
       }
 
-      if(localStorage.getItem("tinavg-recordmodus") !== undefined) {
-        this.recordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
+      if(tinavgRecordmodus !== undefined) {
+        this.recordmodus = tinavgRecordmodus;
       } else {
         this.recordmodus = false;
       }
 
-      if(localStorage.getItem("tinavg-nerdmodus") !== undefined) {
-        this.nerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
+      if(tinavgNerdmodus !== undefined) {
+        this.nerdmodus = tinavgNerdmodus;
       } else {
         this.nerdmodus = false;
       }
       
-      if(_findWithAttr(this.languageList, "abbrev", JSON.parse(localStorage.getItem("tinavg-lastlang"))) === -1) {
+      if(this.gameLang !== undefined) {
+        console.log("Game Language Set: " + this.gameLang);
+      } if(_findWithAttr(this.languageList, "abbrev", tinavgLastlang) === -1) {
         this.gameLang = "de";
       } else {
-        this.gameLang = JSON.parse(localStorage.getItem("tinavg-lastlang"));
+        this.gameLang = tinavgLastlang;
       }
       
-      if(_findWithAttr(this.nerdSpracheList, "abbrev", JSON.parse(localStorage.getItem("tinavg-nerdsprache"))) === -1) {
+      if(_findWithAttr(this.nerdSpracheList, "abbrev", tinavgNerdsprache) === -1) {
         this.nerdSprache = "en";
       } else {
-        this.nerdSprache = JSON.parse(localStorage.getItem("tinavg-nerdsprache"));
+        this.nerdSprache = tinavgNerdsprache;
       }
       this.$.jt.forceLearnmodus(this.learnmodus);
       
       // selected tab
       if(!this.selected) this.selected = 0;
+      
+      // Firebase
+      this.firebaseLogin();
   
-      // firebase
-      try {
-        var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
-        var lastlogin = window.localStorage["tinavg-lastvisit"];
-        var ulanglist = window.navigator.languages;
-        var preflang = window.navigator.language || window.navigator.userLanguage;
-        this.letterSeq = [];
-        fbRef.onAuth(function(authData) {
-          if (authData) {
-            // save the user's profile into Firebase so we can list users,
-            // use them in Security and Firebase Rules, and show profiles
-            fbRef.child("users").child(authData.uid).update({
-              provider: authData.provider,
-              name: _getFirebaseName(authData),
-              lastlogin: lastlogin,
-              stimestamp: Firebase.ServerValue.TIMESTAMP,
-              userlang: ulanglist,
-              preflang: preflang,
-              options: this.getOptions()
-            });
-            fbRef.child("users").child(authData.uid).child("logins").push({
-              lastlogin: lastlogin,
-              stimestamp: Firebase.ServerValue.TIMESTAMP
-            });
-          } else {
-            fbRef.child("users").child("anonymous").child("logins").push({
-              lastlogin: lastlogin,
-              userlang: ulanglist,
-              preflang: preflang,
-              stimestamp: Firebase.ServerValue.TIMESTAMP
-            });
-          }
-        }.bind(this));
-        
-        this.firebaseRef = fbRef;
-      } catch(e) {
-        console.log(e);
-      }
-
       // Keyboard Shortcut Bindings
       Mousetrap.bind('shift+enter', function() { 
         this.$.jt.click(); 
@@ -467,11 +435,15 @@ limitations under the License.
       } else {
         this.letterSeq.push(e.detail.letter);
       }
-      var authData = this.firebaseRef.getAuth();
-      if(authData) {
-        this.firebaseWordRef.child('letters').set(this.letterSeq);
+      if(this.firebaseRef) {
+        var authData = this.firebaseRef.getAuth();
+        if(authData) {
+          this.firebaseWordRef.child('letters').set(this.letterSeq);
+        } else {
+          // not logged in
+        }
       } else {
-        // not logged in
+        this.firebaseLogin();
       }
     },
     showHelp: function(e) {
@@ -486,6 +458,9 @@ limitations under the License.
       } else {
         this.$.clueshow.style.transform = "rotateX(360deg)";
       }
+    },
+    showMenuPanel: function(e) {
+      if(!this.firebaseRef) this.firebaseLogin();
     },
     toggleEarModus: function() {
       this.earmodus = !this.earmodus;
@@ -505,8 +480,14 @@ limitations under the License.
       this.gameLang = ev.target.value;
       this.$.jt.resetBox();
     },
-    setLangManual: function(lang) {
+    setLangManual: function(lang, force) {
       console.log("toggling language: " + lang + " | chars: " + this.letterLimit);
+      if(_findWithAttr(this.nerdSpracheList, "abbrev", lang) > -1 || force) {
+        if(localStorage.getItem("tinavg-lastlang") !== lang) localStorage.setItem("tinavg-lastlang", lang);
+        this.gameLang = lang;
+      } else {
+        console.log("Invalid language: " + lang);
+      }
       this.gameLang = lang;
       this.$.jt.resetBox();
     },
@@ -543,14 +524,18 @@ limitations under the License.
     lettersSet: function() {
       this.showÜbersetzung();
       this.letterSeq = [];
-      var authData = this.firebaseRef.getAuth();
-      if(authData) {
-        var wordObj = this.$.wboard.getWordObj();
-        var word = { "word": wordObj.word, "ohne": wordObj.ohne } ;
-        this.firebaseWordRef = this.firebaseRef.child("users").child(authData.uid).child('words').push(word);
-        this.firebaseWordRef.child('timestamp').set(Firebase.ServerValue.TIMESTAMP);
+      if(this.firebaseRef) {
+        var authData = this.firebaseRef.getAuth();
+        if(authData) {
+          var wordObj = this.$.wboard.getWordObj();
+          var word = { "word": wordObj.word, "ohne": wordObj.ohne } ;
+          this.firebaseWordRef = this.firebaseRef.child("users").child(authData.uid).child('words').push(word);
+          this.firebaseWordRef.child('timestamp').set(Firebase.ServerValue.TIMESTAMP);
+        } else {
+          // not logged in
+        }
       } else {
-        // not logged in
+        this.firebaseLogin();
       }
       this.setLangHelp();
     },
@@ -604,6 +589,46 @@ limitations under the License.
     },
     swError: function(err) {
       console.log(err);
+    },
+    firebaseLogin: function() {
+      // firebase
+      try {
+        var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
+        var lastlogin = window.localStorage["tinavg-lastvisit"];
+        var ulanglist = window.navigator.languages;
+        var preflang = window.navigator.language || window.navigator.userLanguage;
+        this.letterSeq = [];
+        fbRef.onAuth(function(authData) {
+          if (authData) {
+            // save the user's profile into Firebase so we can list users,
+            // use them in Security and Firebase Rules, and show profiles
+            fbRef.child("users").child(authData.uid).update({
+              provider: authData.provider,
+              name: _getFirebaseName(authData),
+              lastlogin: lastlogin,
+              stimestamp: Firebase.ServerValue.TIMESTAMP,
+              userlang: ulanglist,
+              preflang: preflang,
+              options: this.getOptions()
+            });
+            fbRef.child("users").child(authData.uid).child("logins").push({
+              lastlogin: lastlogin,
+              stimestamp: Firebase.ServerValue.TIMESTAMP
+            });
+          } else {
+            fbRef.child("users").child("anonymous").child("logins").push({
+              lastlogin: lastlogin,
+              userlang: ulanglist,
+              preflang: preflang,
+              stimestamp: Firebase.ServerValue.TIMESTAMP
+            });
+          }
+        }.bind(this));
+        
+        this.firebaseRef = fbRef;
+      } catch(e) {
+        console.log(e);
+      }
     }
   });
 function _getFirebaseName(authData) {

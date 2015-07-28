@@ -37,16 +37,18 @@
       'game-lang-changed': 'changeJsonUrl'
     },
     attached: function() {
-      this.jsonUrl = this.createJsonUrl(this.gameLang);
+      var gl = this.gameLang;
+      this.jsonUrl = this.createJsonUrl(gl);
       //this.$.wajax.auto = true;
     },
     ready: function() {
       this.wordBoard = document.getElementById("wboard");
       this.letterList = document.getElementById("lettergrid");
     },
-    changeJsonUrl: function(ev) {
-      this.jsonUrl = this.createJsonUrl(this.gameLang);
-      if(this.wordBoard && this.wordBoard.wordArray[this.gameLang]) {
+    changeJsonUrl: function() {
+      var gl = this.gameLang;
+      this.jsonUrl = this.createJsonUrl(gl);
+      if(this.wordBoard && this.wordBoard.wordArray[gl]) {
         this.letterList.setWord = false;
         this.async(function() { this.spoofLoad(); }, 100);
       } else {

@@ -18,18 +18,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page('/', function () {
       app.route = 'home';
     });
-    page('/privacy.html', function() {
+    page('/privacy', function() {
       app.route = 'privacy';
     });
-    page('/terms.html', function () {
+    page('/terms', function () {
       app.route = 'terms';
     });
     page('/contact', function () {
       app.route = 'contact';
     });
+    page('/lang/:lang', function (data) {
+      app.route = 'home';
+      app.setLangManual(data.params.lang);
+    });
     // add #! before urls
-    //page({
-    //  hashbang: true
-    //});
+    page({
+      hashbang: true
+    });
   });
 </script>

@@ -75,7 +75,6 @@
     },
     listeners: {
       'new-letters': 'onNewLetters',
-      'game-lang-changed': 'changeLanguage',
       'set-letters-changed': 'runLetters',
       'set-word-changed': 'runLetters'
     },
@@ -88,9 +87,6 @@
     },
     init: function() {
       this.wordBoardBox = document.querySelector('word-board');
-    },
-    changeLanguage: function() {
-      this.$.lservice.gameLang = this.gameLang;
     },
     runLetters: function() {
       if(!this.wordBoardWord) this.init();
@@ -115,11 +111,12 @@
       return items;
     },
     onNewLetters: function() {
-      if(!this.allLettersList[this.gameLang]) {
-        this.allLettersList[this.gameLang] = this.filterResults(this.$.lservice.lobj);
+      var gl = this.gameLang;
+      if(!this.allLettersList[gl]) {
+        this.allLettersList[gl] = this.filterResults(this.$.lservice.lobj);
       }
-      if(this.allLettersList[this.gameLang]) {
-        this.stripDiacritics = this.allLettersList[this.gameLang].lang.stripDiacritics;
+      if(this.allLettersList[gl]) {
+        this.stripDiacritics = this.allLettersList[gl].lang.stripDiacritics;
         this.fire("stripdia-set",{stripdia: this.stripDiacritics });
         this.setLetters = true;
       } else {
@@ -137,12 +134,13 @@
       }
     },
     onNewWord: function() {
+      var gl = this.gameLang;
       var word = this.wordBoardBox.getCheckWord();
       if(word !== undefined && word.length !== 0) {
         word = word.toLowerCase();
         console.log("fired filter-word-changed: " + word + " | ohneAccent: " + this.stripDiacritics);
         this.setWord = true;
-        if(Object.keys(this.allLettersList).length > 0 && this.allLettersList[this.gameLang] && this.setLetters) {
+        if(Object.keys(this.allLettersList).length > 0 && this.allLettersList[gl] && this.setLetters) {
           this.shuffleLetters(word, this.limit);
         } else {
           console.log("this.letterList is not yet set :-/");
@@ -150,7 +148,8 @@
       }
     },
     shuffleLetters: function(word, tileLimit) {
-      if(this.gameLang === "ko") {
+      var gl = this.gameLang;
+      if(gl === "ko") {
         word = window.Hangul.disassemble(word).join('');
         //console.log(word);
       }
@@ -164,13 +163,13 @@
       this.itemIndex = 1;
       var dummyArray = [];
       var numTiles = tileLimit;
-      if(this.gameLang === "emoji") {
+      if(gl === "emoji") {
         numTiles = numTiles - countEmoji(word);
       } else {
         numTiles = numTiles - word.split("").filter(function(value, index, self){ return self.indexOf(value) === index;}).length;
       }
-      shuffle(this.allLettersList[this.gameLang].alphabet);
-      this.allLettersList[this.gameLang].alphabet.forEach(function(value, index) {
+      shuffle(this.allLettersList[gl].alphabet);
+      this.allLettersList[gl].alphabet.forEach(function(value, index) {
         if(value.letter === "!!!" || value.letter === undefined) {
           //do nothing
         } else if(word.indexOf(value.letter) > -1) {
