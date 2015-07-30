@@ -59,6 +59,13 @@ limitations under the License.
 
   </style>
   <template>
+    <!-- localstorage -->
+    <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
     <!-- in main viewport -->
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
       <!-- Drawer -->
@@ -214,13 +221,6 @@ limitations under the License.
                          precache-file="../precache.json">
       </platinum-sw-cache>
     </platinum-sw-register>
-    <!-- localstorage -->
-    <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
   </template>
 </dom-module>
 <script>
@@ -281,6 +281,7 @@ limitations under the License.
       }
     },
     listeners: {
+      'set-default-options': 'setDefaults',
       'iron-select': 'showMenuPanel',
       'letter-card-tapped': 'letterTapped',
       'stripdia-set': 'setWBoardDisplay',
@@ -297,52 +298,6 @@ limitations under the License.
 
       // localStorage functions and setting defaults
       localStorage["tinavg-lastvisit"] = new Date();
-      
-      var tinavgEarmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
-      var tinavgLearnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
-      var tinavgRecordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
-      var tinavgNerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
-      var tinavgLastlang = localStorage.getItem("tinavg-lastlang");
-      var tinavgNerdsprache = localStorage.getItem("tinavg-nerdsprache");
-
-      if(tinavgEarmodus !== undefined) {
-        this.earmodus = tinavgEarmodus;
-      } else {
-        this.earmodus = false;
-      }
-
-      if(tinavgLearnmodus !== undefined) {
-        this.learnmodus = tinavgLearnmodus;
-      } else {
-        this.learnmodus = false;
-      }
-
-      if(tinavgRecordmodus !== undefined) {
-        this.recordmodus = tinavgRecordmodus;
-      } else {
-        this.recordmodus = false;
-      }
-
-      if(tinavgNerdmodus !== undefined) {
-        this.nerdmodus = tinavgNerdmodus;
-      } else {
-        this.nerdmodus = false;
-      }
-      
-      if(this.gameLang !== undefined) {
-        console.log("Game Language Set: " + this.gameLang);
-      } if(_findWithAttr(this.languageList, "abbrev", tinavgLastlang) === -1) {
-        this.gameLang = "de";
-      } else {
-        this.gameLang = tinavgLastlang;
-      }
-      
-      if(_findWithAttr(this.nerdSpracheList, "abbrev", tinavgNerdsprache) === -1) {
-        this.nerdSprache = "en";
-      } else {
-        this.nerdSprache = tinavgNerdsprache;
-      }
-      this.$.jt.forceLearnmodus(this.learnmodus);
       
       // selected tab
       if(!this.selected) this.selected = 0;
@@ -412,10 +367,58 @@ limitations under the License.
       }
       
       this.async(function() { 
+        this.fire('set-default-options');
         this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
         this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
       }, 200);
 
+    },
+    setDefaults: function() {
+      var tinavgEarmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
+      var tinavgLearnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
+      var tinavgRecordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
+      var tinavgNerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
+      var tinavgLastlang = localStorage.getItem("tinavg-lastlang");
+      var tinavgNerdsprache = localStorage.getItem("tinavg-nerdsprache");
+      if(tinavgEarmodus !== undefined) {
+        this.earmodus = tinavgEarmodus;
+      } else {
+        this.earmodus = false;
+      }
+
+      if(tinavgLearnmodus !== undefined) {
+        this.learnmodus = tinavgLearnmodus;
+      } else {
+        this.learnmodus = false;
+      }
+
+      if(tinavgRecordmodus !== undefined) {
+        this.recordmodus = tinavgRecordmodus;
+      } else {
+        this.recordmodus = false;
+      }
+
+      if(tinavgNerdmodus !== undefined) {
+        this.nerdmodus = tinavgNerdmodus;
+      } else {
+        this.nerdmodus = false;
+      }
+      
+      if(this.gameLang !== (null && undefined)) {
+        console.log("Game Language Set: " + this.gameLang);
+      } else if(_findWithAttr(this.languageList, "abbrev", tinavgLastlang) === -1) {
+        console.log("default language set to deutsch");
+        this.gameLang = "de";
+      } else {
+        this.gameLang = tinavgLastlang;
+      }
+      
+      if(_findWithAttr(this.nerdSpracheList, "abbrev", tinavgNerdsprache) === -1) {
+        this.nerdSprache = "en";
+      } else {
+        this.nerdSprache = tinavgNerdsprache;
+      }
+      this.$.jt.forceLearnmodus(this.learnmodus);
     },
     setLangHelp: function() {
       var langHtml = this.$.lettergrid.getLangHelpInfo();

@@ -245,6 +245,12 @@ gulp.task('clean', del.bind(null, [tmpDir, distDir]));
 
 // Watch Files For Changes & Reload
 gulp.task('serve', ['styles', 'elements'], function () {
+  var dirs = []
+  if($.util.env.dir && $.util.env.dir === 'tmp') {
+    dirs = [tmpDir, appDir]
+  } else {
+    dirs = [appDir, tmpDir]
+  } 
   browserSync({
     notify: false,
     port: process.env.PORT,
@@ -254,7 +260,7 @@ gulp.task('serve', ['styles', 'elements'], function () {
     //       will present a certificate warning in the browser.
     // https: true,
     server: {
-      baseDir: [tmpDir, appDir],
+      baseDir: dirs,
       routes: {
         '/bower_components': 'bower_components'
       }

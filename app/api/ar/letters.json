@@ -1,208 +1,206 @@
-[
-  {
-    "lang": {
-      "code": "ar",
-      "stripDiacritics": true,
-      "langHelpInfo": "<h3><u>Arabic</u></h3><ol><li>Right to left language </li><li>Letters change depending on position within the word (solo, beginning, middle, end)</li><li>Ignore the symbols (non-dots only) above and below certain letters in your answer</li><li>These are called diacritics (like accent marks in latin languages) and are used for pronounciation, but are not considered different letters and they are not included past the learning stage of the language</li><li>Arabic is like the Flappy Bird of languages... Good Luck!</li></ol>"
+{
+  "lang": {
+    "code": "ar",
+    "stripDiacritics": true,
+    "langHelpInfo": "<h3><u>Arabic</u></h3><ol><li>Right to left language </li><li>Letters change depending on position within the word (solo, beginning, middle, end)</li><li>Ignore the symbols (non-dots only) above and below certain letters in your answer</li><li>These are called diacritics (like accent marks in latin languages) and are used for pronounciation, but are not considered different letters and they are not included past the learning stage of the language</li><li>Arabic is like the Flappy Bird of languages... Good Luck!</li></ol>"
+  },
+  "alphabet": [
+    {
+      "uid": 1,
+      "hidden": true,
+      "letter": "ا",
+      "en": "alif"
     },
-    "alphabet": [
-      {
-        "uid": 1,
-        "hidden": true,
-        "letter": "ا",
-        "en": "alif"
-      },
-      {
-        "uid": 2,
-        "hidden": true,
-        "letter": "ب",
-        "en": "baa"
-      },
-      {
-        "uid": 3,
-        "hidden": true,
-        "letter": "ج",
-        "en": "jeem"
-      },
-      {
-        "uid": 4,
-        "hidden": true,
-        "letter": "د",
-        "en": "daal"
-      },
-      {
-        "uid": 5,
-        "hidden": true,
-        "letter": "ه",
-        "en": "haa"
-      },
-    
-      {
-        "uid": 6,
-        "hidden": true,
-        "letter": "و",
-        "en": "waaw"
-      },
-    
-      {
-        "uid": 7,
-        "hidden": true,
-        "letter": "ز",
-        "en": "zhay"
-      },
-    
-      {
-        "uid": 8,
-        "hidden": true,
-        "letter": "ح",
-        "en": "hhaa"
-      },
-    
-      {
-        "uid": 9,
-        "hidden": true,
-        "letter": "ط",
-        "en": "ttaa"
-      },
-    
-      {
-        "uid": 10,
-        "hidden": true,
-        "letter": "ي",
-        "en": "yaay"
-      },
-    
-      {
-        "uid": 11,
-        "hidden": true,
-        "letter": "ك",
-        "en": "kaaf"
-      },
-    
-      {
-        "uid": 12,
-        "hidden": true,
-        "letter": "ل",
-        "en": "laam"
-      },
-    
-      {
-        "uid": 13,
-        "hidden": true,
-        "letter": "م",
-        "en": "meem"
-      },
-    
-      {
-        "uid": 14,
-        "hidden": true,
-        "letter": "ن",
-        "en": "noon"
-      },
-    
-      {
-        "uid": 15,
-        "hidden": true,
-        "letter": "س",
-        "en": "seen"
-      },
-    
-      {
-        "uid": 16,
-        "hidden": true,
-        "letter": "ع",
-        "en": "ain"
-      },
-    
-      {
-        "uid": 17,
-        "hidden": true,
-        "letter": "ف",
-        "en": "faa"
-      },
-    
-      {
-        "uid": 18,
-        "hidden": true,
-        "letter": "ص",
-        "en": "ssaad"
-      },
-    
-      {
-        "uid": 19,
-        "hidden": true,
-        "letter": "ق",
-        "en": "qaaf"
-      },
-    
-      {
-        "uid": 20,
-        "hidden": true,
-        "letter": "ر",
-        "en": "raa"
-      },
-      {
-        "uid": 21,
-        "hidden": true,
-        "letter": "ش",
-        "en": "sheen"
-      },
-      {
-        "uid": 22,
-        "hidden": true,
-        "letter": "ت",
-        "en": "taa"
-      },
-      {
-        "uid": 23,
-        "hidden": true,
-        "letter": "ث",
-        "en": "thaa"
-      },
-      {
-        "uid": 24,
-        "hidden": true,
-        "letter": "خ",
-        "en": "khaa"
-      },
-      {
-        "uid": 25,
-        "hidden": true,
-        "letter": "ذ",
-        "en": "dhaal"
-      },
-      {
-        "uid": 26,
-        "hidden": true,
-        "letter": "ض",
-        "en": "ddaad"
-      },
-      {
-        "uid": 27,
-        "hidden": true,
-        "letter": "ظ",
-        "en": "zhaa"
-      },
-      {
-        "uid": 28,
-        "hidden": true,
-        "letter": "غ",
-        "en": "ghain"
-      },
-      {
-        "uid": 29,
-        "hidden": true,
-        "letter": "ى",
-        "en": "yaay",
-        "regular": false
-      },
-      {
-        "uid": 30,
-        "hidden": true,
-        "letter": "ء",
-        "en": "hamza",
-        "regular": false
-      }
-    ]
-  }
-]
+    {
+      "uid": 2,
+      "hidden": true,
+      "letter": "ب",
+      "en": "baa"
+    },
+    {
+      "uid": 3,
+      "hidden": true,
+      "letter": "ج",
+      "en": "jeem"
+    },
+    {
+      "uid": 4,
+      "hidden": true,
+      "letter": "د",
+      "en": "daal"
+    },
+    {
+      "uid": 5,
+      "hidden": true,
+      "letter": "ه",
+      "en": "haa"
+    },
+  
+    {
+      "uid": 6,
+      "hidden": true,
+      "letter": "و",
+      "en": "waaw"
+    },
+  
+    {
+      "uid": 7,
+      "hidden": true,
+      "letter": "ز",
+      "en": "zhay"
+    },
+  
+    {
+      "uid": 8,
+      "hidden": true,
+      "letter": "ح",
+      "en": "hhaa"
+    },
+  
+    {
+      "uid": 9,
+      "hidden": true,
+      "letter": "ط",
+      "en": "ttaa"
+    },
+  
+    {
+      "uid": 10,
+      "hidden": true,
+      "letter": "ي",
+      "en": "yaay"
+    },
+  
+    {
+      "uid": 11,
+      "hidden": true,
+      "letter": "ك",
+      "en": "kaaf"
+    },
+  
+    {
+      "uid": 12,
+      "hidden": true,
+      "letter": "ل",
+      "en": "laam"
+    },
+  
+    {
+      "uid": 13,
+      "hidden": true,
+      "letter": "م",
+      "en": "meem"
+    },
+  
+    {
+      "uid": 14,
+      "hidden": true,
+      "letter": "ن",
+      "en": "noon"
+    },
+  
+    {
+      "uid": 15,
+      "hidden": true,
+      "letter": "س",
+      "en": "seen"
+    },
+  
+    {
+      "uid": 16,
+      "hidden": true,
+      "letter": "ع",
+      "en": "ain"
+    },
+  
+    {
+      "uid": 17,
+      "hidden": true,
+      "letter": "ف",
+      "en": "faa"
+    },
+  
+    {
+      "uid": 18,
+      "hidden": true,
+      "letter": "ص",
+      "en": "ssaad"
+    },
+  
+    {
+      "uid": 19,
+      "hidden": true,
+      "letter": "ق",
+      "en": "qaaf"
+    },
+  
+    {
+      "uid": 20,
+      "hidden": true,
+      "letter": "ر",
+      "en": "raa"
+    },
+    {
+      "uid": 21,
+      "hidden": true,
+      "letter": "ش",
+      "en": "sheen"
+    },
+    {
+      "uid": 22,
+      "hidden": true,
+      "letter": "ت",
+      "en": "taa"
+    },
+    {
+      "uid": 23,
+      "hidden": true,
+      "letter": "ث",
+      "en": "thaa"
+    },
+    {
+      "uid": 24,
+      "hidden": true,
+      "letter": "خ",
+      "en": "khaa"
+    },
+    {
+      "uid": 25,
+      "hidden": true,
+      "letter": "ذ",
+      "en": "dhaal"
+    },
+    {
+      "uid": 26,
+      "hidden": true,
+      "letter": "ض",
+      "en": "ddaad"
+    },
+    {
+      "uid": 27,
+      "hidden": true,
+      "letter": "ظ",
+      "en": "zhaa"
+    },
+    {
+      "uid": 28,
+      "hidden": true,
+      "letter": "غ",
+      "en": "ghain"
+    },
+    {
+      "uid": 29,
+      "hidden": true,
+      "letter": "ى",
+      "en": "yaay",
+      "regular": false
+    },
+    {
+      "uid": 30,
+      "hidden": true,
+      "letter": "ء",
+      "en": "hamza",
+      "regular": false
+    }
+  ]
+}

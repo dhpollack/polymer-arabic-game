@@ -69,7 +69,7 @@
       //console.log("loading letters from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
       // Make a copy of the loaded data
       if(jsonSuccess) {
-        var ajaxData = this.$.ajax.lastResponse.slice()[0];
+        var ajaxData = this.$.ajax.lastResponse;
         this.lobj = ajaxData;
         this.fire('new-letters');
         this.letterListBox.setLetters = true;

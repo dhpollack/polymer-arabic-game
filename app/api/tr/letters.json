@@ -1,173 +1,171 @@
-[
-  {
-    "lang": {
-      "code": "tr",
-      "stripDiacritics": false
+{
+  "lang": {
+    "code": "tr",
+    "stripDiacritics": false
+  },
+  "alphabet": [
+    {
+      "uid": 1,
+      "hidden": true,
+      "letter": "a"
     },
-    "alphabet": [
-      {
-        "uid": 1,
-        "hidden": true,
-        "letter": "a"
-      },
-      {
-        "uid": 2,
-        "hidden": true,
-        "letter": "b"
-      },
-      {
-        "uid": 3,
-        "hidden": true,
-        "letter": "c"
-      },
-      {
-        "uid": 4,
-        "hidden": true,
-        "letter": "d"
-      },
-      {
-        "uid": 5,
-        "hidden": true,
-        "letter": "e"
-      },
-      {
-        "uid": 6,
-        "hidden": true,
-        "letter": "f"
-      },
-      {
-        "uid": 7,
-        "hidden": true,
-        "letter": "g"
-      },
-      {
-        "uid": 8,
-        "hidden": true,
-        "letter": "h"
-      },
-      {
-        "uid": 9,
-        "hidden": true,
-        "letter": "i"
-      },
-      {
-        "uid": 10,
-        "hidden": true,
-        "letter": "j"
-      },
-      {
-        "uid": 11,
-        "hidden": true,
-        "letter": "k"
-      },
-      {
-        "uid": 12,
-        "hidden": true,
-        "letter": "l"
-      },
-      {
-        "uid": 13,
-        "hidden": true,
-        "letter": "m"
-      },
-      {
-        "uid": 14,
-        "hidden": true,
-        "letter": "n"
-      },
-      {
-        "uid": 15,
-        "hidden": true,
-        "letter": "o"
-      },
-      {
-        "uid": 16,
-        "hidden": true,
-        "letter": "p"
-      },
-      {
-        "uid": 18,
-        "hidden": true,
-        "letter": "r"
-      },
-      {
-        "uid": 19,
-        "hidden": true,
-        "letter": "s"
-      },
-      {
-        "uid": 17,
-        "hidden": true,
-        "letter": "ş"
-      },
-      {
-        "uid": 20,
-        "hidden": true,
-        "letter": "t"
-      },
-      {
-        "uid": 21,
-        "hidden": true,
-        "letter": "u"
-      },
-      {
-        "uid": 22,
-        "hidden": true,
-        "letter": "v"
-      },
-      {
-        "uid": 23,
-        "hidden": true,
-        "letter": "â",
-        "regular": false
-      },
-      {
-        "uid": 24,
-        "hidden": true,
-        "letter": "ö"
-      },
-      {
-        "uid": 25,
-        "hidden": true,
-        "letter": "y"
-      },
-      {
-        "uid": 26,
-        "hidden": true,
-        "letter": "z"
-      },
-      {
-        "uid": 27,
-        "hidden": true,
-        "letter": "ç"
-      },
-      {
-        "uid": 28,
-        "hidden": true,
-        "letter": "ğ"
-      },
-      {
-        "uid": 29,
-        "hidden": true,
-        "letter": "ü"
-      },
-      {
-        "uid": 30,
-        "hidden": true,
-        "letter": "ı"
-      },
-      {
-        "uid": 31,
-        "hidden": true,
-        "letter": "î",
-        "regular": false
-      },
-      {
-        "uid": 32,
-        "hidden": true,
-        "letter": "û",
-        "regular": false
-      }    
-    ]
-  }
-]
+    {
+      "uid": 2,
+      "hidden": true,
+      "letter": "b"
+    },
+    {
+      "uid": 3,
+      "hidden": true,
+      "letter": "c"
+    },
+    {
+      "uid": 4,
+      "hidden": true,
+      "letter": "d"
+    },
+    {
+      "uid": 5,
+      "hidden": true,
+      "letter": "e"
+    },
+    {
+      "uid": 6,
+      "hidden": true,
+      "letter": "f"
+    },
+    {
+      "uid": 7,
+      "hidden": true,
+      "letter": "g"
+    },
+    {
+      "uid": 8,
+      "hidden": true,
+      "letter": "h"
+    },
+    {
+      "uid": 9,
+      "hidden": true,
+      "letter": "i"
+    },
+    {
+      "uid": 10,
+      "hidden": true,
+      "letter": "j"
+    },
+    {
+      "uid": 11,
+      "hidden": true,
+      "letter": "k"
+    },
+    {
+      "uid": 12,
+      "hidden": true,
+      "letter": "l"
+    },
+    {
+      "uid": 13,
+      "hidden": true,
+      "letter": "m"
+    },
+    {
+      "uid": 14,
+      "hidden": true,
+      "letter": "n"
+    },
+    {
+      "uid": 15,
+      "hidden": true,
+      "letter": "o"
+    },
+    {
+      "uid": 16,
+      "hidden": true,
+      "letter": "p"
+    },
+    {
+      "uid": 18,
+      "hidden": true,
+      "letter": "r"
+    },
+    {
+      "uid": 19,
+      "hidden": true,
+      "letter": "s"
+    },
+    {
+      "uid": 17,
+      "hidden": true,
+      "letter": "ş"
+    },
+    {
+      "uid": 20,
+      "hidden": true,
+      "letter": "t"
+    },
+    {
+      "uid": 21,
+      "hidden": true,
+      "letter": "u"
+    },
+    {
+      "uid": 22,
+      "hidden": true,
+      "letter": "v"
+    },
+    {
+      "uid": 23,
+      "hidden": true,
+      "letter": "â",
+      "regular": false
+    },
+    {
+      "uid": 24,
+      "hidden": true,
+      "letter": "ö"
+    },
+    {
+      "uid": 25,
+      "hidden": true,
+      "letter": "y"
+    },
+    {
+      "uid": 26,
+      "hidden": true,
+      "letter": "z"
+    },
+    {
+      "uid": 27,
+      "hidden": true,
+      "letter": "ç"
+    },
+    {
+      "uid": 28,
+      "hidden": true,
+      "letter": "ğ"
+    },
+    {
+      "uid": 29,
+      "hidden": true,
+      "letter": "ü"
+    },
+    {
+      "uid": 30,
+      "hidden": true,
+      "letter": "ı"
+    },
+    {
+      "uid": 31,
+      "hidden": true,
+      "letter": "î",
+      "regular": false
+    },
+    {
+      "uid": 32,
+      "hidden": true,
+      "letter": "û",
+      "regular": false
+    }    
+  ]
+}

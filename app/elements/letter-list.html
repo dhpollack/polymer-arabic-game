@@ -88,7 +88,7 @@
     init: function() {
       this.wordBoardBox = document.querySelector('word-board');
     },
-    runLetters: function() {
+    runLetters: function(ev) {
       if(!this.wordBoardWord) this.init();
       if(this.setWord && this.setLetters) {
         this.runNewLetters();
@@ -113,7 +113,9 @@
     onNewLetters: function() {
       var gl = this.gameLang;
       if(!this.allLettersList[gl]) {
-        this.allLettersList[gl] = this.filterResults(this.$.lservice.lobj);
+        var data = this.filterResults(this.$.lservice.lobj);
+        var lang = data.lang.code;
+        this.allLettersList[lang] = data;
       }
       if(this.allLettersList[gl]) {
         this.stripDiacritics = this.allLettersList[gl].lang.stripDiacritics;

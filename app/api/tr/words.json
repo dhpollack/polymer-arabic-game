@@ -1,25 +1,31 @@
-[
-{ "word": "iki", "grammar": { "partofs": "adjective"}},
-{ "word": "du",  "grammar": {"partofs": "noun"}},
-{ "word": "Maus",  "grammar": {"partofs": "noun", "gender": "female"}},
-{ "word": "Eichhörnchen",  "grammar": {"partofs": "noun", "gender": "neuter"}},
-{ "word": "gemacht",  "grammar": {"partofs": "verb"}},
-{ "word": "Zwiebeln",  "grammar": {"partofs": "noun", "number": "plural"}},
-{ "word": "tschüss",  "grammar": {"partofs": "verb"}},
-{ "word": "zwei",  "grammar": {"partofs": "adjective"}},
-{ "word": "Straße",  "grammar": {"partofs": "noun", "gender": "female"}},
-{ "word": "Karten",  "grammar": {"partofs": "noun", "number": "plural"}},
-{ "word": "möchte",  "grammar": {"partofs": "verb"}},
-{ "word": "hätte",  "grammar": {"partofs": "verb"}},
-{ "word": "hatte",  "grammar": {"partofs": "verb"}},
-{ "word": "nein",  "grammar": {"partofs": "adjective"}},
-{ "word": "München",  "grammar": {"partofs": "noun"}},
-{ "word": "Angela",  "grammar": {"partofs": "noun"}},
-{ "word": "Merkel",  "grammar": {"partofs": "noun"}},
-{ "word": "was",  "grammar": {"partofs": "noun"}},
-{ "word": "Chance",  "grammar": {"partofs": "noun", "number": "singular", "gender": "female"}},
-{ "word": "Tee",  "grammar": {"partofs": "noun", "gender": "male"}},
-{ "word": "Pferd",  "grammar": {"partofs": "noun", "gender": "neuter"}},
-{ "word": "natürlich",  "grammar": {"partofs": "adjective"}},
-{ "word": "Saft",  "grammar": {"partofs": "noun", "gender": "male"}}
-]
+{
+ "lang": {
+    "code": "tr",
+    "stripDiacritics": false
+  },
+  "words": [
+    { "word": "iki", "grammar": { "partofs": "adjective"}},
+    { "word": "du",  "grammar": {"partofs": "noun"}},
+    { "word": "Maus",  "grammar": {"partofs": "noun", "gender": "female"}},
+    { "word": "Eichhörnchen",  "grammar": {"partofs": "noun", "gender": "neuter"}},
+    { "word": "gemacht",  "grammar": {"partofs": "verb"}},
+    { "word": "Zwiebeln",  "grammar": {"partofs": "noun", "number": "plural"}},
+    { "word": "tschüss",  "grammar": {"partofs": "verb"}},
+    { "word": "zwei",  "grammar": {"partofs": "adjective"}},
+    { "word": "Straße",  "grammar": {"partofs": "noun", "gender": "female"}},
+    { "word": "Karten",  "grammar": {"partofs": "noun", "number": "plural"}},
+    { "word": "möchte",  "grammar": {"partofs": "verb"}},
+    { "word": "hätte",  "grammar": {"partofs": "verb"}},
+    { "word": "hatte",  "grammar": {"partofs": "verb"}},
+    { "word": "nein",  "grammar": {"partofs": "adjective"}},
+    { "word": "München",  "grammar": {"partofs": "noun"}},
+    { "word": "Angela",  "grammar": {"partofs": "noun"}},
+    { "word": "Merkel",  "grammar": {"partofs": "noun"}},
+    { "word": "was",  "grammar": {"partofs": "noun"}},
+    { "word": "Chance",  "grammar": {"partofs": "noun", "number": "singular", "gender": "female"}},
+    { "word": "Tee",  "grammar": {"partofs": "noun", "gender": "male"}},
+    { "word": "Pferd",  "grammar": {"partofs": "noun", "gender": "neuter"}},
+    { "word": "natürlich",  "grammar": {"partofs": "adjective"}},
+    { "word": "Saft",  "grammar": {"partofs": "noun", "gender": "male"}}
+  ]
+}
