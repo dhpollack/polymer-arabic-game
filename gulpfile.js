@@ -300,9 +300,10 @@ gulp.task('manifest', function(){
 });
 
 gulp.task('precache', function () {
-  return gulp.src([appDir + '/**/*.json', '!' + appDir + '/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png', appDir + '/**/druck1.ogg'])
+  return gulp.src([appDir + '/**/*.json', '!' + appDir + '/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png', appDir + '/**/druck1.ogg'], {base: appDir + '/'})
     .pipe($.filelist('precache.json'))
-    .pipe(gulp.dest(appDir))
+    .pipe($.replace(appDir + '/', ''))
+    .pipe(gulp.dest(appDir));
 });
 
 // Build Production Files, the Default Task

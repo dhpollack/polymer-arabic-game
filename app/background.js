@@ -9,7 +9,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
   var screenWidth = screen.availWidth;
   var screenHeight = screen.availHeight;
 
-  chrome.app.window.create('index.build.html', {
+  chrome.app.window.create('index.html', {
     id: "tinavg",
     outerBounds: {
       width: screenWidth,
