@@ -239,6 +239,13 @@ gulp.task('vulcanize-example', function () {
     .pipe($.size({title: 'vulcanize'}));
 });
 
+gulp.task('dedebug', function() {
+  return gulp.src(tmpDir + "/elements/tinavg-webapp.build.js")
+    .pipe($.stripDebug())
+    .pipe(gulp.dest(tmpDir + "/elements"))
+    .pipe(gulp.dest(distDir + "/elements"));
+});
+
 
 // Clean Output Directory
 gulp.task('clean', del.bind(null, [tmpDir, distDir]));
@@ -320,6 +327,7 @@ gulp.task('default', ['clean'], function (cb) {
     'elements',
     ['jshint', 'jsonlint', 'images', 'fonts', 'html'],
     'vulcanize',
+    'dedebug',
     cb);
 });
 
