@@ -66,11 +66,6 @@
     content: 'viewport-units-buggyfill; width: 100vw; height: 79.98vh;';
     background: #f3d6b0;
   }
-  .recorder-icon {
-    color: #222;
-    height: 25vmax;
-    width: 25vmax;
-  }
 
   score-board {
     font-size: 6vh;
@@ -143,11 +138,18 @@
   .mini-menu {
     background: rgba(200,170,160, 1.0);
   }
+  .mini-menu > div {
+    margin-bottom: 1vh;
+  }
+  .floated-label-placeholder {
+    display: none;
+  }
+  paper-input-container {
+    padding: 0;
+  }
   
   .tinavg-med-icon {
     font-size: 14px;
-    height: 7vmin;
-    width: 7vmin;
     color: white;
     display: inline-block;
     -webkit-user-select: none;
@@ -231,6 +233,9 @@
     bottom:0;
     z-index: 5;
 
+  }
+  .menu-line span {
+    margin-left: 24px;
   }
   @-webkit-keyframes glowtext {
     from {
@@ -395,10 +400,6 @@
     }
     score-board {
       font-size: 6vw;
-    }
-    .recorder-icon {
-      height: 33.33vmax;
-      width: 33.33vmax;
     }
   }
   @media screen and (orientation: landscape) {

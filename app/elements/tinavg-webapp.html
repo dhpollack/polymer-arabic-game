@@ -37,6 +37,9 @@ limitations under the License.
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../bower_components/firebase-element/firebase-auth.html">
 <link rel="import" href="../../bower_components/platinum-sw/platinum-sw-cache.html">
@@ -58,6 +61,7 @@ limitations under the License.
     }
 
   </style>
+
   <template>
     <!-- localstorage -->
     <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
@@ -69,24 +73,46 @@ limitations under the License.
     <!-- in main viewport -->
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
       <!-- Drawer -->
-      <div id="collapse" class="mini-menu" drawer>
+      <div id="collapse" class="mini-menu vertical layout" drawer>
+        <div>
+          <paper-dropdown-menu label="Language" noink>
+            <paper-menu class="dropdown-content">
+              <template is="dom-repeat" items="{{languageList}}" as="gl">
+                <paper-item value="{{gl.abbrev}}">{{gl.fullname}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+        </div>
+        <div>
+          <paper-dropdown-menu label="Meiselsprache" noink>
+            <paper-menu class="dropdown-content">
+              <template is="dom-repeat" items="{{nerdSpracheList}}" as="ms">
+                <paper-item value="{{ms.abbrev}}">{{ms.fullname}}</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+        </div>
+        <!--
         <div>
           Language: 
           <select id="selectLang" on-change="setLang">
             <template is="dom-repeat" items="{{languageList}}"><option value="{{item.abbrev}}">{{item.fullname}}</option></template>
           </select>
         </div>
-        <br /><div>Earmodus: <paper-toggle-button id="select_earmodus" on-tap="toggleEarModus" checked$="{{earmodus}}"></paper-toggle-button></div>
-        <br /><div>Learnmodus: <paper-toggle-button id="select_learnmodus" on-tap="toggleLearnModus" checked$="{{learnmodus}}"></paper-toggle-button></div>
-        <br /><div>Meiselmodus: <paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button></div>
-        <br /><div>
+        -->
+        <div class="menu-line"><paper-toggle-button id="select_earmodus" on-tap="toggleEarModus" checked$="{{earmodus}}"></paper-toggle-button><span>Earmodus</span></div>
+        <div class="menu-line"><paper-toggle-button id="select_learnmodus" on-tap="toggleLearnModus" checked$="{{learnmodus}}"></paper-toggle-button><span>Learnmodus</span></div>
+        <div class="menu-line"><paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button><span>Meiselmodus</span></div>
+        <!--
+        <div>
           Meiselsprache: 
           <select id="meiselspracheliste" on-change="setNerdSprache">
             <template is="dom-repeat" items="{{nerdSpracheList}}"><option value="{{item.abbrev}}">{{item.fullname}}</option></template>
           </select>
         </div>
-        <br /><div>Talkmodus: <paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button></div>
-        <br /><div>
+        -->
+        <div class="menu-line"><paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button><span>Talkmodus</span></div>
+        <div>
           <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://intense-heat-8981.firebaseio.com" provider="twitter" on-error="errorHandler" ></firebase-auth>
           <img src="../assets/images/sign-in-with-twitter-gray.png" alt="sign in with Twitter" on-tap="login" hidden$="{{computeLoginHidden(statusKnown, user)}}">
           <button on-tap="logout" hidden$="{{!computeLoginHidden(statusKnown, user)}}">Logout</button>
@@ -102,7 +128,7 @@ limitations under the License.
             </div>
             <word-board id="wboard" class="horizontal center-justified layout flex-2" game-lang="{{gameLang}}" earmodus="{{earmodus}}"></word-board>
             <div class="horizontal end-justified layout flex">
-              <iron-icon id="menutoggle" class="spin-flip-transition tinavg-med-icon big" icon="menu" paper-drawer-toggle></iron-icon>
+              <iron-icon id="menutoggle" class="tinavg-med-icon spin-flip-transition" icon="menu" paper-drawer-toggle></iron-icon>
             </div>
           </div>
           <div class="core-header horizontal justified layout center">

@@ -40,11 +40,12 @@
     "paper-input": "PolymerElements/paper-input#^1.0.0",
     "paper-progress": "PolymerElements/paper-progress#^1.0.0",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.0.0",
-    "neon-animation": "PolymerElements/platinum-sw#^1.0.0",
+    "platinum-sw": "PolymerElements/platinum-sw#^1.0.0",
+    "neon-animation": "PolymerElements/neon-animation#^1.0.0",
     "polymer": "Polymer/polymer#^1.0.0",
     "viewport-units-buggyfill": "^0.5.2",
     "firebase-element": "GoogleWebComponents/firebase-element#^1.0.0",
     "cookieconsent2": "^1.0.0",
-    "page": "visionmedia/page.js#^1.0.0",
+    "page": "visionmedia/page.js#^1.0.0"
   }
 }
