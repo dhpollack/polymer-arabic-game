@@ -85,7 +85,10 @@
     },
     updateScoreBoard: function() {
       if(!this.wordBoardBox) this.init();
-      if(["","_____"].indexOf(this.lastBucket) === -1) {
+      if((this.lastBucket || this.wordBoardBox.getCheckWord()) === undefined) {
+        console.log("lastBucket: " + this.lastBucket);
+        console.log("getCheckWord: " + this.wordBoardBox.getCheckWord());
+      } else if(["","_____"].indexOf(this.lastBucket) === -1) {
         console.log("Does " + this.lastBucket.toLowerCase() + " = " + this.wordBoardBox.getCheckWord().toLowerCase());
         if(this.learnmodus && this.lastBucket === "(^_^)") {
           if(this.recordmodus) this.givePts();

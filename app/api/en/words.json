@@ -1,7 +1,7 @@
 {
  "lang": {
     "code": "en",
-    "stripDiacritics": false
+    "stripDiacritics": true
   },
   "words": [
     { "word": "gnarly", "grammar": { "partofs": "adjective" }},

@@ -85,23 +85,31 @@ gulp.task('images', function () {
 
 // Optimize Audio - create .mp4 and .opus
 gulp.task('audio', function () {
-  return gulp.src(appDir+'/assets/audio/**/*.flac')
+  
+  var audioPath;
+  if($.util.env.dir) {
+    audioPath = appDir+'/assets/audio/' + $.util.env.dir + '/**/*.flac';
+  } else {
+    audioPath = appDir+'/assets/audio/**/*.flac';
+  }
+  return gulp.src(audioPath)
     .pipe($.shell([
       "mkdir -p .tmp",
       // removing opus for now
       //'echo <%= file.path %> >> '+ tmpDir + '/opus.log',
       //'opusenc --bitrate 8 <%= file.path %> <%= f(file.path, ".opus") %> >> '+ tmpDir + '/opus.log 2>&1',
-      "echo <%= g(file.path) %> >> "+ tmpDir + "/ffmpeg.log",
-      "ffmpeg -y -i <%= g(file.path) %> -strict experimental -acodec aac -b:a 64k -ac 1 <%= f(g(file.path), \".m4a\") %> >> "+ tmpDir + "/ffmpeg.log 2>&1"
+      'echo "<%= g(file.path) %>" >> '+ tmpDir + '/ffmpeg.log',
+      'ffmpeg -y -i "<%= g(file.path) %>" -strict experimental -acodec aac -b:a 64k -ac 1 "<%= f(g(file.path), ".m4a") %>" >> '+ tmpDir + '/ffmpeg.log 2>&1'
     ], {
       templateData: {
         f: function(s, ext) {
-          var dest = s.replace('.flac', ext).replace('/originals', '');
+          var dest = s.replace('.flac', ext).replace('/originals', '').toLowerCase();
           mkpath(path.dirname(dest));
           return dest;
         },
         g: function(s) {
-          return s.replace(/[\\$'"]/g, "\\$&");
+          return s;
+          //return s.replace(/[\\$'"]/g, "\\$&");
         }
       }
     }));

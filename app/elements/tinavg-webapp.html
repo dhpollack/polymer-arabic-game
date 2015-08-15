@@ -74,43 +74,39 @@ limitations under the License.
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
       <!-- Drawer -->
       <div id="collapse" class="mini-menu vertical layout" drawer>
-        <div>
+        <div hidden>
           <paper-dropdown-menu label="Language" noink>
-            <paper-menu class="dropdown-content">
+            <paper-menu class="dropdown-content" id="glMenu" selected={{gameLang}} valueattr="value">
               <template is="dom-repeat" items="{{languageList}}" as="gl">
                 <paper-item value="{{gl.abbrev}}">{{gl.fullname}}</paper-item>
               </template>
             </paper-menu>
           </paper-dropdown-menu>
         </div>
-        <div>
+        <div hidden>
           <paper-dropdown-menu label="Meiselsprache" noink>
-            <paper-menu class="dropdown-content">
+            <paper-menu id="msMenu" class="dropdown-content">
               <template is="dom-repeat" items="{{nerdSpracheList}}" as="ms">
                 <paper-item value="{{ms.abbrev}}">{{ms.fullname}}</paper-item>
               </template>
             </paper-menu>
           </paper-dropdown-menu>
         </div>
-        <!--
         <div>
           Language: 
           <select id="selectLang" on-change="setLang">
             <template is="dom-repeat" items="{{languageList}}"><option value="{{item.abbrev}}">{{item.fullname}}</option></template>
           </select>
         </div>
-        -->
-        <div class="menu-line"><paper-toggle-button id="select_earmodus" on-tap="toggleEarModus" checked$="{{earmodus}}"></paper-toggle-button><span>Earmodus</span></div>
-        <div class="menu-line"><paper-toggle-button id="select_learnmodus" on-tap="toggleLearnModus" checked$="{{learnmodus}}"></paper-toggle-button><span>Learnmodus</span></div>
-        <div class="menu-line"><paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button><span>Meiselmodus</span></div>
-        <!--
         <div>
           Meiselsprache: 
           <select id="meiselspracheliste" on-change="setNerdSprache">
             <template is="dom-repeat" items="{{nerdSpracheList}}"><option value="{{item.abbrev}}">{{item.fullname}}</option></template>
           </select>
         </div>
-        -->
+        <div class="menu-line"><paper-toggle-button id="select_earmodus" on-tap="toggleEarModus" checked$="{{earmodus}}"></paper-toggle-button><span>Earmodus</span></div>
+        <div class="menu-line"><paper-toggle-button id="select_learnmodus" on-tap="toggleLearnModus" checked$="{{learnmodus}}"></paper-toggle-button><span>Learnmodus</span></div>
+        <div class="menu-line" hidden><paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button><span>Meiselmodus</span></div>
         <div class="menu-line"><paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button><span>Talkmodus</span></div>
         <div>
           <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://intense-heat-8981.firebaseio.com" provider="twitter" on-error="errorHandler" ></firebase-auth>
@@ -219,8 +215,13 @@ limitations under the License.
               <ul>
                 <li>Suzan hails from Israel and contributed her voice after a chance meeting while she was on vacation in Berlin.  I was super excited about that because I was going to Israel the very next week, so I could actually put this project to use.  She also showed me a around a bit in Jerusalem and will hopefully remain a dear friend in the future.</li>
               </ul>
-          <p>Additionally, I would like to thank my friend, Luisa Meisel, for whom the "Meiselmodus" is named after (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded.</p>
-          <p>Finally, I would like to thank my father, Bob Pollack.  The list would be endless if I had to thank him for everything, but he has endured the trials and tribulations of beta testing tinavg.com on the iPad/iPhone.  His along with all of my friends' comments, suggestions, criticisms, and wild looks of bewilderment have made this game what it is today.</p>
+          <h3>French</h3>
+            <strong>Voice: Amélie Pipi</strong>
+              <ul>
+                <li>I am delighted that Amélie was able to lend her voice to the game.  She is a professional translator and should probably be appalled by the machine translations that I use for the Meiselsprache, but maybe one day when I make it big, I'll use her services to translate this game.</li>
+              </ul>
+          <p>Additionally, I would like to thank my friend, Luisa Meisel, after whom the "Meiselsprache" is named (originally conceived as "Nerdmodus").  She was the first of many that suggested that I add definitions to the game.  I resisted for a long time, even going so far as to name the game "this is not a vocabulary game" but in the end, I conceded.</p>
+          <p>Finally, I would like to thank my father, Bob Pollack.  The list would be endless if I had to thank him for everything, but he has endured the trials and tribulations of beta testing tinavg.com on the iPad/iPhone.  His (along with all of my friends') comments, suggestions, criticisms, and wild looks of bewilderment have made this game what it is today.</p>
         </div>
         <div id="contact">
           <h3>Email Me!</h3>
@@ -264,8 +265,25 @@ limitations under the License.
             {"abbrev": "ar","fullname": "Arabic"},
             {"abbrev":"ko","fullname": "Korean"}, 
             {"abbrev":"ru","fullname":"Russian"}, 
-            {"abbrev":"he", "fullname": "Hebrew"}
+            {"abbrev":"he", "fullname": "Hebrew"},
+            {"abbrev":"fr","fullname":"French"}
             ];
+        }
+      },
+      nerdSpracheList: {
+        type: Array,
+        value: function() { 
+          return [
+            {"abbrev": "disable","fullname": "None"}, 
+            {"abbrev": "de","fullname": "German"}, 
+            {"abbrev": "en", "fullname":"English"}, 
+            {"abbrev": "ar","fullname": "Arabic"},
+            {"abbrev":"ko","fullname": "Korean"}, 
+            {"abbrev":"ru","fullname":"Russian"}, 
+            {"abbrev":"he", "fullname": "Hebrew"}, 
+            {"abbrev": "fr", "fullname": "French"}, 
+            {"abbrev": "tr", "fullname": "Turkish"}
+            ]; 
         }
       },
       letterLimit: {
@@ -286,20 +304,6 @@ limitations under the License.
       },
       nerdSprache: {
         type: String
-      },
-      nerdSpracheList: {
-        type: Array,
-        value: function() { 
-          return [
-            {"abbrev": "de","fullname": "German"}, 
-            {"abbrev": "en", "fullname":"English"}, 
-            {"abbrev": "ar","fullname": "Arabic"},
-            {"abbrev":"ko","fullname": "Korean"}, 
-            {"abbrev":"ru","fullname":"Russian"}, 
-            {"abbrev":"he", "fullname": "Hebrew"}, 
-            {"abbrev": "tr", "fullname": "Turkish"}
-            ]; 
-        }
       },
       user: {
         type: Object,
@@ -396,6 +400,7 @@ limitations under the License.
         this.fire('set-default-options');
         this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
         this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
+
       }, 200);
 
     },
@@ -440,11 +445,12 @@ limitations under the License.
       }
       
       if(_findWithAttr(this.nerdSpracheList, "abbrev", tinavgNerdsprache) === -1) {
-        this.nerdSprache = "en";
+        this.nerdSprache = "disable";
       } else {
         this.nerdSprache = tinavgNerdsprache;
       }
       this.$.jt.forceLearnmodus(this.learnmodus);
+      //this.$.glMenu.select(this.setGameLangIndex());
     },
     setLangHelp: function() {
       var langHtml = this.$.lettergrid.getLangHelpInfo();
@@ -511,7 +517,7 @@ limitations under the License.
     },
     setLangManual: function(lang, force) {
       console.log("toggling language: " + lang + " | chars: " + this.letterLimit);
-      if(_findWithAttr(this.nerdSpracheList, "abbrev", lang) > -1 || force) {
+      if(_findWithAttr(this.languageList, "abbrev", lang) > -1 || force) {
         if(localStorage.getItem("tinavg-lastlang") !== lang) localStorage.setItem("tinavg-lastlang", lang);
         this.gameLang = lang;
       } else {
@@ -539,7 +545,7 @@ limitations under the License.
     },
     showÜbersetzung: function() {
       // stub to add phrase info
-      if(this.nerdmodus) {
+      if(this.nerdSprache !== "disable") {
         if(this.$.wboard.getWordObj().übersetzung !== undefined && this.$.wboard.getWordObj().übersetzung[this.nerdSprache]) {
           this.$.übersetzung.text = this.$.wboard.getWordObj().übersetzung[this.nerdSprache];
         } else if(this.$.wboard.getWordObj().uebersetzungen[this.nerdSprache] !== undefined) {
@@ -601,6 +607,15 @@ limitations under the License.
       options.nerdsprache = this.nerdSprache;
       options.earmodus = this.earmodus;
       return options;
+    },
+    setGameLangIndex: function(ev) {
+      console.log(ev);
+      console.log(this.languageList);
+      console.log(this.gameLang);
+      var ret = _findWithAttr(this.languageList, "abbrev", this.gameLang);
+      console.log(ret);
+      this.glIndex = ret;
+      return ret;
     },
     jumbotronIndexCompute: function() {
       if(this.letterLimit) {

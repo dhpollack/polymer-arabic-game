@@ -163,6 +163,8 @@
     content: 'viewport-units-buggyfill; font-size: 13vh;';
   }
   .flag-div {
+    width: 7vmin;
+    height: 7vmin;
     background: url(/assets/images/de.png) center center no-repeat;
     background-size: contain;
   }

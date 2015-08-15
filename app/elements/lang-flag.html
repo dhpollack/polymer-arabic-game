@@ -33,6 +33,7 @@
       }
     },
     switchLanguage: function() {
+      console.log(this.gameLang);
       if(!this.isReady || this.gameLang === null) return;
       var deg = 0;
       this.$.flag_icon.style.background = "url(/assets/images/" + this.gameLang + ".png) center center no-repeat";

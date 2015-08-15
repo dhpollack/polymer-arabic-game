@@ -87,6 +87,15 @@
       this.phraseArray = [];
       this.phraseIndex = 0;
     },
+    setPhraseArray: function(gl, randomIndex, findex) {
+      if(!findex) findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
+      this.phraseArray = [];
+      if(!this.wordArray[gl].words[randomIndex].grammar.type || this.wordArray[gl].words[randomIndex].grammar.type !== 'phrase') {
+        this.phraseArray[0] = this.wordArray[gl].words[randomIndex][findex];
+      } else {
+        this.phraseArray = this.wordArray[gl].words[randomIndex][findex].split(" ");
+      }
+    },
     wordFilter: function(gl, randomIndex) {
       if(!this.letterListBox) this.init();
       if(!gl) gl = this.gameLang;
@@ -103,6 +112,8 @@
           this.ranWordIndex = randomIndex;
           //console.log("wordArray.length: " + this.wordArray[this.gameLang].length + "\nthis.ranWordIndex: " + this.ranWordIndex);
           this.phraseIndex = 0;
+        } else {
+          console.log(this.phraseArray[this.phraseIndex]);
         }
         if(this.wordArray !== undefined && gl !== undefined && randomIndex !== undefined && this.wordArray[gl].words[randomIndex] !== (undefined || null) && typeof this.wordArray[gl].words[randomIndex].grammar === 'object') {
           this.wordBoardWord.className = "";
@@ -131,7 +142,20 @@
       if(!randomIndex) randomIndex = this.ranWordIndex;
       if(this.wordArray[gl] !== undefined && this.wordArray[gl].words !== undefined && randomIndex !== undefined && this.wordArray[gl].words.length !== 0) {
         var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
-        var word = this.wordArray[gl].words[randomIndex][findex].split(" ");
+        var word = [];
+        
+        if(!this.wordArray[gl].words[randomIndex].grammar.type || this.wordArray[gl].words[randomIndex].grammar.type !== 'phrase') {
+          word[0] = this.wordArray[gl].words[randomIndex][findex];
+        } else {
+          word = this.wordArray[gl].words[randomIndex][findex].split(" ");
+        }
+        if(this.phraseIndex >= word.length) {
+          console.log(word);
+          console.log(this.phraseArray);
+          console.log(this.phraseIndex);
+          this.phraseIndex = 0;
+          this.fire("set-words");
+        }
         return word[this.phraseIndex];
       } else {
         console.log("words not set yet");
@@ -146,11 +170,17 @@
     setDisplayWord: function(gl, randomIndex) {
       if(!gl) gl = this.gameLang;
       if(!randomIndex) randomIndex = this.ranWordIndex;
-      var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
-      this.phraseArray = this.wordArray[gl].words[randomIndex][findex].split(" ");
-      this.myWord = this.phraseArray[this.phraseIndex];
-      this.wordAudio = this.produceWordAudioUrl(this.phraseArray[this.phraseIndex].toLowerCase(), gl);
-      this.jumbotronBox.zielWort = this.phraseArray[this.phraseIndex];
+      if(!this.letterListBox) this.letterListBox = document.querySelector('letter-list');
+      if(this.wordArray[gl]) {
+        var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
+        this.setPhraseArray(gl, randomIndex);
+        this.myWord = this.phraseArray[this.phraseIndex];
+        this.wordAudio = this.produceWordAudioUrl(this.phraseArray[this.phraseIndex].toLowerCase(), gl);
+        this.jumbotronBox.zielWort = this.phraseArray[this.phraseIndex];
+      } else {
+        console.log('Word array not set yet');
+        console.trace();
+      }
     },
     setWords: function(ev, gl) {
       if(typeof gl !== "string") gl = this.gameLang;
@@ -201,7 +231,7 @@
     },
     produceWordAudioUrl: function(word, gl) {
       this.useSynth = false;
-      return "/assets/audio/"+ gl +"/words/" + word + ".m4a";
+      return "/assets/audio/"+ gl +"/words/" + word.replace("?", "_") + ".m4a";
     },
     tapWord: function(tapped) {
       this.wordBoardWord.classList.add("flip-text");
