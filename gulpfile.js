@@ -260,11 +260,11 @@ gulp.task('clean', del.bind(null, [tmpDir, distDir]));
 
 // Watch Files For Changes & Reload
 gulp.task('serve', ['styles', 'elements'], function () {
-  var dirs = []
+  var dirs = [];
   if($.util.env.dir && $.util.env.dir === 'tmp') {
-    dirs = [tmpDir, appDir]
+    dirs = [tmpDir, appDir];
   } else {
-    dirs = [appDir, tmpDir]
+    dirs = [appDir, tmpDir];
   } 
   browserSync({
     notify: false,
