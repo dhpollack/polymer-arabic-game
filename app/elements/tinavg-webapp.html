@@ -501,13 +501,14 @@ limitations under the License.
       this.earmodus = !this.earmodus;
     },
     toggleLearnModus: function() {
-      this.learnmodus = !this.learnmodus;
-      this.$.jt.resetBox();
+      if(!this.recordmodus) {
+        this.learnmodus = !this.learnmodus;
+        this.$.jt.resetBox();
+      } 
     },
     toggleRecordModus: function() {
       this.recordmodus = !this.recordmodus;
       this.learnmodus = this.recordmodus;
-      this.$.select_learnmodus.toggleAttribute('disabled');
       this.$.jt.resetBox();
     },
     setLang: function(ev) {
