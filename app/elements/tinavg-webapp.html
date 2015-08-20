@@ -516,6 +516,8 @@ limitations under the License.
       this.$.jt.resetBox();
     },
     setLangManual: function(lang, force) {
+      var forceLangs = ['emoji'];
+      if(forceLangs.indexOf(lang) > -1) force = true;
       console.log("toggling language: " + lang + " | chars: " + this.letterLimit);
       if(_findWithAttr(this.languageList, "abbrev", lang) > -1 || force) {
         if(localStorage.getItem("tinavg-lastlang") !== lang) localStorage.setItem("tinavg-lastlang", lang);
@@ -531,12 +533,15 @@ limitations under the License.
     },
     switchModus: function() {
       var currentLangIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
-      if(currentLangIndex + 1 < this.languageList.length) {
-        this.gameLang = this.languageList[currentLangIndex + 1].abbrev;
+      var gl;
+      if(currentLangIndex + 1 < this.languageList.length && currentLangIndex !== -1) {
+        gl = this.languageList[currentLangIndex + 1].abbrev;
       } else {
-        this.gameLang = this.languageList[0].abbrev;
+        gl = this.languageList[0].abbrev;
       }
-      this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
+      history.replaceState(null, null, "/#!/lang/" + gl);
+      this.gameLang = gl;
+      this.$.selectLang.selectedIndex = currentLangIndex;
       this.$.jt.resetBox();
     },
     toggleNerdModus: function() {

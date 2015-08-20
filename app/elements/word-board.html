@@ -90,7 +90,7 @@
     setPhraseArray: function(gl, randomIndex, findex) {
       if(!findex) findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
       this.phraseArray = [];
-      if(!this.wordArray[gl].words[randomIndex].grammar.type || this.wordArray[gl].words[randomIndex].grammar.type !== 'phrase') {
+      if(!this.wordArray[gl].words[randomIndex].grammar || this.wordArray[gl].words[randomIndex].grammar.type !== 'phrase') {
         this.phraseArray[0] = this.wordArray[gl].words[randomIndex][findex];
       } else {
         this.phraseArray = this.wordArray[gl].words[randomIndex][findex].split(" ");
@@ -118,11 +118,15 @@
         if(this.wordArray !== undefined && gl !== undefined && randomIndex !== undefined && this.wordArray[gl].words[randomIndex] !== (undefined || null) && typeof this.wordArray[gl].words[randomIndex].grammar === 'object') {
           this.wordBoardWord.className = "";
           this.myWordSpan.className = "";
+          var grammarClasses = [];
           if(this.wordArray[gl].words[randomIndex].grammar.segments === undefined) {
-            this.setGrammarStyles(this.wordArray[gl].words[randomIndex].grammar);
+            grammarClasses = this.setGrammarStyles(this.wordArray[gl].words[randomIndex].grammar);
           } else {
-            this.setGrammarStyles(this.wordArray[gl].words[randomIndex].grammar.segments[this.phraseIndex]);
+            grammarClasses = this.setGrammarStyles(this.wordArray[gl].words[randomIndex].grammar.segments[this.phraseIndex]);
           }
+          grammarClasses.forEach(function(value) {
+            this.wordBoardWord.classList.add(value);
+          }.bind(this));
         } else {
           this.wordBoardWord.className = "";
           this.myWordSpan.className = "";
@@ -144,7 +148,7 @@
         var findex = (this.letterListBox.stripDiacritics) ? "ohne" : "word";
         var word = [];
         
-        if(!this.wordArray[gl].words[randomIndex].grammar.type || this.wordArray[gl].words[randomIndex].grammar.type !== 'phrase') {
+        if(!this.wordArray[gl].words[randomIndex].grammar || this.wordArray[gl].words[randomIndex].grammar.type !== 'phrase') {
           word[0] = this.wordArray[gl].words[randomIndex][findex];
         } else {
           word = this.wordArray[gl].words[randomIndex][findex].split(" ");
@@ -283,6 +287,7 @@
       var classesToAdd = [];
       var wordDiv = this.wordBoardWord;
       classesToAdd.push("word-board");
+      if(!grammar) return classesToAdd;
       // this should probably be a map of some sort
       if(grammar.partofs !== undefined) {
         switch(grammar.partofs) {
@@ -321,9 +326,8 @@
             break;
         }        
       }
-      classesToAdd.forEach(function(value) {
-        wordDiv.classList.add(value);
-      });
+      console.log(classesToAdd);
+      return classesToAdd;
     }
   });
 })();
