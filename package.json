@@ -1,8 +1,9 @@
 {
-  "name": "this-is-not-a-vocabulary-game",
-  "version": "0.1.0",
+  "name": "tinavg",
+  "version": "0.3.0",
   "dependencies": {
-    "mousetrap": "^1.5.2"
+    "hangul-js": "^0.1.0",
+    "mousetrap": "^1.5.0"
   },
   "private": true,
   "devDependencies": {
@@ -35,7 +36,6 @@
     "gulp-useref": "^1.1.2",
     "gulp-util": "^3.0.5",
     "gulp-vulcanize": "^6.0.0",
-    "hangul-js": "^0.1.4",
     "jshint-stylish": "^2.0.0",
     "merge-stream": "^0.1.7",
     "mkpath": "^0.1.0",

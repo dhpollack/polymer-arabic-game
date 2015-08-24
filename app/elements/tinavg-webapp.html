@@ -53,16 +53,8 @@ limitations under the License.
 
 <script src="../assets/js/app.js"></script>
 <dom-module id="tinavg-webapp">
-  <style is="custom-style">
-    /* see tinavg-style.html... it didn't work */
-    :host {
-      --paper-progress-container-color: #f3d6b0;
-      --paper-progress-secondary-color: var(--paper-red-a700);
-    }
-
-  </style>
-
   <template>
+    <style include="tinavg-style"></style>
     <!-- localstorage -->
     <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
     <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
@@ -245,7 +237,7 @@ limitations under the License.
                           clients-claim
                           skip-waiting>
       <platinum-sw-cache default-cache-strategy="networkFirst"
-                         precache-file="../precache.json">
+                         cache-config-file="../cache-config.json">
       </platinum-sw-cache>
     </platinum-sw-register>
   </template>
@@ -526,7 +518,6 @@ limitations under the License.
       } else {
         console.log("Invalid language: " + lang);
       }
-      this.gameLang = lang;
       this.$.jt.resetBox();
     },
     setWBoardDisplay: function() {

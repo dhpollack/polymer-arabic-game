@@ -144,7 +144,7 @@
   .floated-label-placeholder {
     display: none;
   }
-  paper-input-container {
+  paper-dropdown-menu paper-input-container {
     padding: 0;
   }
   

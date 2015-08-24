@@ -13,7 +13,9 @@ var path = require('path');
 var mkpath = require('mkpath');
 var fs = require("fs");
 var polybuild = require('polybuild');
-
+var packageJson = require('./package.json');
+var glob = require('glob');
+var crypto = require('crypto');
 
 var appDir = 'app';
 var tmpDir = '.tmp';
@@ -261,8 +263,12 @@ gulp.task('clean', del.bind(null, [tmpDir, distDir]));
 // Watch Files For Changes & Reload
 gulp.task('serve', ['styles', 'elements'], function () {
   var dirs = [];
-  if($.util.env.dir && $.util.env.dir === 'tmp') {
-    dirs = [tmpDir, appDir];
+  if($.util.env.dir) {
+    if($.util.env.dir === 'tmp') {
+      dirs = [tmpDir, appDir];
+    } else if($.util.env.dir === 'dist') {
+      dirs = [distDir];
+    }
   } else {
     dirs = [appDir, tmpDir];
   } 
@@ -282,7 +288,7 @@ gulp.task('serve', ['styles', 'elements'], function () {
     }
   });
 
-  if($.util.env.dir && $.util.env.dir === 'tmp') {
+  if($.util.env.dir && $.util.env.dir === 'tmp' || 'dist') {
     gulp.watch([appDir+'/**/*.html'], ['vulcanize', reload]);
   } else {
     gulp.watch([appDir+'/**/*.html'], reload);
@@ -323,6 +329,7 @@ gulp.task('manifest', function(){
   return merge(manifest, replace);
 });
 
+/* deprecated */
 gulp.task('precache', function () {
   return gulp.src([appDir + '/**/*.json', '!' + appDir + '/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png', appDir + '/**/druck1.ogg'], {base: appDir + '/'})
     .pipe($.filelist('precache.json'))
@@ -330,14 +337,37 @@ gulp.task('precache', function () {
     .pipe(gulp.dest(appDir));
 });
 
+gulp.task('cache-config', function (callback) {
+  var dir = distDir;
+  var config = {
+    cacheId: packageJson.name || path.basename(__dirname),
+    disabled: false
+  };
+
+  glob('{elements,api,assets/js,assets/css,assets/images}/**/*.*', {cwd: dir}, function(error, files) {
+    if (error) {
+      callback(error);
+    } else {
+      files.push('bower_components/webcomponentsjs/webcomponents-lite.min.js');
+      config.precache = files;
+
+      var md5 = crypto.createHash('md5');
+      md5.update(JSON.stringify(config.precache));
+      config.precacheFingerprint = md5.digest('hex');
+
+      var configPath = path.join(dir, 'cache-config.json');
+      fs.writeFile(configPath, JSON.stringify(config), callback);
+    }
+  });
+});
+
 // Build Production Files, the Default Task
 gulp.task('default', ['clean'], function (cb) {
   runSequence(
-    'precache',
     ['copy', 'styles'],
     'elements',
     ['jshint', 'jsonlint', 'images', 'fonts', 'html'],
-    'vulcanize',
+    ['vulcanize', 'cache-config'],
     'dedebug',
     cb);
 });
@@ -346,7 +376,7 @@ gulp.task('default', ['clean'], function (cb) {
 // Update `url` below to the public URL for your site
 gulp.task('pagespeed', function (cb) {
   // Update the below URL to the public URL of your site
-  pagespeed.output('arabic.da3.net', {
+  pagespeed.output('www.tinavg.com', {
     strategy: 'mobile',
     // By default we use the PageSpeed Insights free (no API key) tier.
     // Use a Google Developer API key if you have one: http://goo.gl/RkN0vE
