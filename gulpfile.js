@@ -75,6 +75,7 @@ gulp.task('jsonlint', function() {
 });
 
 // Optimize Images
+// Removing imagemin for space reasons.  Only saved 12K, but costs 112M
 gulp.task('images', function () {
   return gulp.src(appDir+'/assets/images/**/*')
     .pipe($.cache($.imagemin({
@@ -148,7 +149,6 @@ gulp.task('copy', function () {
     .pipe(reload({stream: true}));
 
   var bower = gulp.src(['bower_components/**/*.{css,js,html,swf}', '!**/test/**/*', '!**/demo/**/*', '!**/Gruntfile.js'])
-    .pipe(gulp.dest(distDir + '/bower_components'))
     .pipe(gulp.dest(tmpDir + '/bower_components'));
 
   var json = gulp.src([appDir + '/*.json', appDir + '/**/*.json', '!' + appDir + '/**/words.json'])
@@ -167,10 +167,15 @@ gulp.task('copy', function () {
     .pipe(gulp.dest(distDir + '/services'))
     .pipe(gulp.dest(tmpDir+'/services'));
 
-  var jsmodules = gulp.src(['node_modules/mousetrap/mousetrap.*', 'node_modules/hangul-js/hangul.*', 'bower_components/firebase/firebase.js'])
+  var jsmodules = gulp.src([
+      'node_modules/mousetrap/mousetrap.*',
+      'node_modules/hangul-js/hangul.*',
+      'bower_components/firebase/firebase.js',
+      'bower_components/cookieconsent2/cookieconsent.js',
+      'bower_components/webcomponentsjs/webcomponents*.js',
+      'bower_components/viewport-units-buggyfill/viewport-units-buggyfill*.js'])
     .pipe(gulp.dest(distDir + '/assets/js'))
-    .pipe(gulp.dest(tmpDir+'/assets/js'))
-    .pipe(gulp.dest(appDir + '/assets/js'));
+    .pipe(gulp.dest(tmpDir+'/assets/js'));
 
   var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
     .pipe(gulp.dest(tmpDir + '/elements/bootstrap'))
@@ -180,7 +185,7 @@ gulp.task('copy', function () {
     .pipe(gulp.dest(tmpDir + '/sw-toolbox'))
     .pipe(gulp.dest(distDir + '/sw-toolbox'));
 
-  return merge(app, html, bower, elements, json, assets, jsmodules, services, swBootstrap, swToolbox).pipe($.size({title: 'copy'}));
+  return merge(app, html, elements, json, bower, assets, jsmodules, services, swBootstrap, swToolbox).pipe($.size({title: 'copy'}));
 });
 
 // Copy Web Fonts To Dist
@@ -228,6 +233,7 @@ gulp.task('vulcanize', function () {
     .pipe($.size({ title: 'vulcanize/polybuild' }));
   var replace = gulp.src(appDir + '/index.html')
     .pipe($.replace('elements/tinavg-webapp.html', 'elements/tinavg-webapp.build.html'))
+    .pipe($.replace(/..\/bower_components\/(.*)\/(.*)[.]js/g, 'assets/js/$2.js'))
     .pipe(gulp.dest(tmpDir))
     .pipe(gulp.dest(distDir));
   return merge(vulcanize, replace);
@@ -283,12 +289,14 @@ gulp.task('serve', ['styles', 'elements'], function () {
     server: {
       baseDir: dirs,
       routes: {
-        '/bower_components': 'bower_components'
+        '/bower_components': 'bower_components',
+        '/node_modules': 'node_modules',
+        '/cache-config.json' : '_dist/cache-config.json'
       }
     }
   });
 
-  if($.util.env.dir && $.util.env.dir === 'tmp' || 'dist') {
+  if($.util.env.dir && $.util.env.dir === ('tmp' || 'dist')) {
     gulp.watch([appDir+'/**/*.html'], ['vulcanize', reload]);
   } else {
     gulp.watch([appDir+'/**/*.html'], reload);
@@ -312,6 +320,7 @@ gulp.task('serve:dist', ['default'], function () {
   });
 });
 
+/* deprecated */
 gulp.task('manifest', function(){
   
   var manifest = gulp.src([appDir + '/index.html', appDir + '/**/*.json', '!' + appDir + '/**/words.json', appDir + '/**/*.png'])
@@ -344,11 +353,11 @@ gulp.task('cache-config', function (callback) {
     disabled: false
   };
 
-  glob('{elements,api,assets/js,assets/css,assets/images}/**/*.*', {cwd: dir}, function(error, files) {
+  glob('{api,assets/js,assets/css,assets/images}/**/*.*', {cwd: dir}, function(error, files) {
     if (error) {
       callback(error);
     } else {
-      files.push('bower_components/webcomponentsjs/webcomponents-lite.min.js');
+      files.push('bower_components/webcomponentsjs/webcomponents-lite.min.js', 'elements/tinavg-webapp.build.html', 'elements/tinavg-webapp.build.js');
       config.precache = files;
 
       var md5 = crypto.createHash('md5');
@@ -366,7 +375,7 @@ gulp.task('default', ['clean'], function (cb) {
   runSequence(
     ['copy', 'styles'],
     'elements',
-    ['jshint', 'jsonlint', 'images', 'fonts', 'html'],
+    ['jshint', 'jsonlint', 'fonts', 'html'],
     ['vulcanize', 'cache-config'],
     'dedebug',
     cb);

@@ -49,18 +49,19 @@ limitations under the License.
 <link rel="import" href="tinavg-style.html">
 <link rel="import" href="elements.html">
 <!-- keyboard shortcuts -->
-<script src="../assets/js/mousetrap.min.js"></script>
+<script src="../../node_modules/mousetrap/mousetrap.min.js"></script>
 
 <script src="../assets/js/app.js"></script>
 <dom-module id="tinavg-webapp">
   <template>
     <style include="tinavg-style"></style>
+    <!-- Firebase Auths -->
+    <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://intense-heat-8981.firebaseio.com" provider="{{loginProvider}}" on-error="errorHandler" ></firebase-auth>
     <!-- localstorage -->
     <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
     <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
-    <iron-localstorage name="tinavg-nerdmodus" value="{{nerdmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-nerdsprache" value="{{nerdSprache}}"></iron-localstorage>
     <!-- in main viewport -->
     <paper-drawer-panel id="pdp" responsive-width="25000px" right-drawer>
@@ -98,13 +99,7 @@ limitations under the License.
         </div>
         <div class="menu-line"><paper-toggle-button id="select_earmodus" on-tap="toggleEarModus" checked$="{{earmodus}}"></paper-toggle-button><span>Earmodus</span></div>
         <div class="menu-line"><paper-toggle-button id="select_learnmodus" on-tap="toggleLearnModus" checked$="{{learnmodus}}"></paper-toggle-button><span>Learnmodus</span></div>
-        <div class="menu-line" hidden><paper-toggle-button id="select_nerdmodus" on-tap="toggleNerdModus" checked$="{{nerdmodus}}"></paper-toggle-button><span>Meiselmodus</span></div>
         <div class="menu-line"><paper-toggle-button id="select_recordmodus" on-tap="toggleRecordModus" checked$="{{recordmodus}}"></paper-toggle-button><span>Talkmodus</span></div>
-        <div>
-          <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://intense-heat-8981.firebaseio.com" provider="twitter" on-error="errorHandler" ></firebase-auth>
-          <img src="../assets/images/sign-in-with-twitter-gray.png" alt="sign in with Twitter" on-tap="login" hidden$="{{computeLoginHidden(statusKnown, user)}}">
-          <button on-tap="logout" hidden$="{{!computeLoginHidden(statusKnown, user)}}">Logout</button>
-        </div>
       </div>
       
       <!-- Main Content Area -->
@@ -146,12 +141,38 @@ limitations under the License.
       <div id="overlay-toolbar" class="vertical flex overlay-toolbar">
         <center><h2>This Is Not A Vocabulary Game</h2></center>
         <paper-tabs selected="{{selected}}">
+          <paper-tab>Game</paper-tab>
           <paper-tab>Rules</paper-tab>
           <paper-tab>Credits</paper-tab>
           <paper-tab>Contact</paper-tab>
         </paper-tabs>
       </div>
       <iron-pages selected="{{selected}}" class="overlay-pages">
+        <div id="game" class="login-menu vertical center-center layout">
+          <h2>Welcome!</h2>
+          <h4>Select Your Option:</h4>
+          <paper-button raised on-tap="login" data-lp="twitter" hidden$="{{computeLoginHidden(statusKnown, user)}}">
+            <paper-item class="horizontal layout center">
+              <img src="../assets/images/login-twitter.png" alt="sign in with Twitter">
+              <span class="login-text">Login with Twitter</span>
+            </paper-item>
+          </paper-button>
+          <paper-button raised on-tap="login" data-lp="facebook" hidden$="{{computeLoginHidden(statusKnown, user)}}">
+            <paper-item class="horizontal layout center">
+              <img src="../assets/images/login-fb.png" alt="sign in with Facebook">
+              <span class="login-text">Login with Facebook</span>
+            </paper-item>
+          </paper-button>
+          <paper-button raised on-tap="login" data-lp="google" hidden$="{{computeLoginHidden(statusKnown, user)}}">
+            <paper-item class="horizontal layout center">
+              <img src="../assets/images/login-google.png" alt="sign in with Twitter">
+              <span class="login-text">Login with Google</span>
+            </paper-item>
+          </paper-button>
+          <paper-button raised dialog-dismiss><paper-item><span>Just Play!</span></paper-item></paper-button>
+          <paper-button raised on-tap="selectRules"><paper-item><span>Read The Game Rules</span></paper-item></paper-button>
+          <paper-button raised on-tap="logout" hidden$="{{!computeLoginHidden(statusKnown, user)}}"><paper-item><span>Logout</span></paper-item></paper-button>
+        </div>
         <div id="rules">
           <h3>The Goal</h3>
           <p>Learn the alphabet (shapes and sounds) and spelling patterns of a foreign language.</p>
@@ -288,9 +309,6 @@ limitations under the License.
       recordmodus: {
         type: Boolean
       },
-      nerdmodus: {
-        type: Boolean
-      },
       earmodus: {
         type: Boolean
       },
@@ -311,7 +329,9 @@ limitations under the License.
       'checking-word': 'fbLetterSeq',
       'word-percent-correct': 'wordPercentCorrect',
       'service-worker-installed': 'confirmSWInstall',
-      'service-worker-error': 'swError'
+      'service-worker-error': 'swError',
+      'cookieconsent-dismissed': 'ccDismissed',
+      'firebase-login': 'firebaseSuccess'
     },
     observers: [
 
@@ -382,11 +402,12 @@ limitations under the License.
       // remove unresolve, reveal app, show help
       document.getElementById('friendly_message').setAttribute('hidden', true);
       document.querySelector('[unresolved]').removeAttribute("unresolved");
-      this.showHelp();
-
-      if(document.cookie.indexOf("cookieconsent_dismissed") > -1) {
-        this.$.so.noCancelOnOutsideClick = false;
+      if(!this.fbConnBool) {
+        this.showHelp();
       }
+      if(localStorage.cookieconsent_dismissed || document.cookie.indexOf("cookieconsent_dismissed") > -1) {
+        this.ccDismissed();
+      } 
       
       this.async(function() { 
         this.fire('set-default-options');
@@ -400,7 +421,6 @@ limitations under the License.
       var tinavgEarmodus = JSON.parse(localStorage.getItem("tinavg-earmodus"));
       var tinavgLearnmodus = JSON.parse(localStorage.getItem("tinavg-learnmodus"));
       var tinavgRecordmodus = JSON.parse(localStorage.getItem("tinavg-recordmodus"));
-      var tinavgNerdmodus = JSON.parse(localStorage.getItem("tinavg-nerdmodus"));
       var tinavgLastlang = localStorage.getItem("tinavg-lastlang");
       var tinavgNerdsprache = localStorage.getItem("tinavg-nerdsprache");
       if(tinavgEarmodus !== undefined) {
@@ -421,12 +441,6 @@ limitations under the License.
         this.recordmodus = false;
       }
 
-      if(tinavgNerdmodus !== undefined) {
-        this.nerdmodus = tinavgNerdmodus;
-      } else {
-        this.nerdmodus = false;
-      }
-      
       if(this.gameLang !== (null && undefined)) {
         console.log("Game Language Set: " + this.gameLang);
       } else if(_findWithAttr(this.languageList, "abbrev", tinavgLastlang) === -1) {
@@ -465,7 +479,11 @@ limitations under the License.
       if(this.firebaseRef) {
         var authData = this.firebaseRef.getAuth();
         if(authData) {
-          this.firebaseWordRef.child('letters').set(this.letterSeq);
+          if(this.firebaseWordRef === 'undefined') {
+            this.firebaseWordSave();
+          } else {
+            this.firebaseWordRef.child('letters').set(this.letterSeq);
+          }
         } else {
           // not logged in
         }
@@ -474,8 +492,11 @@ limitations under the License.
       }
     },
     showHelp: function(e) {
+      if(e) {
+        this.$.so.noCancelOnOutsideClick = false;
+        this.selected = 1;
+      }
       this.async(function(){ this.$.so.open();}, 200);
-      if(e) this.$.so.noCancelOnOutsideClick = false;
     },
     showClue: function(e) {
       this.$.wboard.revealWord();
@@ -536,10 +557,6 @@ limitations under the License.
       this.$.selectLang.selectedIndex = currentLangIndex;
       this.$.jt.resetBox();
     },
-    toggleNerdModus: function() {
-      this.nerdmodus = !this.nerdmodus;
-      this.showÜbersetzung();
-    },
     showÜbersetzung: function() {
       // stub to add phrase info
       if(this.nerdSprache !== "disable") {
@@ -557,15 +574,7 @@ limitations under the License.
       this.showÜbersetzung();
       this.letterSeq = [];
       if(this.firebaseRef) {
-        var authData = this.firebaseRef.getAuth();
-        if(authData) {
-          var wordObj = this.$.wboard.getWordObj();
-          var word = { "word": wordObj.word, "ohne": wordObj.ohne } ;
-          this.firebaseWordRef = this.firebaseRef.child("users").child(authData.uid).child('words').push(word);
-          this.firebaseWordRef.child('timestamp').set(Firebase.ServerValue.TIMESTAMP);
-        } else {
-          // not logged in
-        }
+        this.firebaseWordSave();
       } else {
         this.firebaseLogin();
       }
@@ -575,8 +584,24 @@ limitations under the License.
       this.nerdSprache = ev.target.value;
       this.showÜbersetzung();
     },
-    login: function() {
+    selectRules: function() {
+      this.selected = 1;
+    },
+    login: function(ev, detail) {
+      var provider;
+      for(var i=0; i < ev.path.length; i++) {
+        if(ev.path[i].localName === "paper-button") {
+          provider = ev.path[i].attributes['data-lp'].value;
+          break;
+        }
+      }
+      var validProviders = ["twitter", "facebook", "google"];
+      if(validProviders.indexOf(provider) === -1) {
+        console.log(provider);
+        provider = "twitter"; 
+      }
       var params;
+      this.loginProvider = provider;
       try {
         params = JSON.parse(this.params);
       } catch (e) {
@@ -597,12 +622,11 @@ limitations under the License.
     },
     getOptions: function() {
       var options = {};
-      options.language = this.gameLang;
-      options.learnmodus = this.learnmodus;
-      options.recordmodus = this.recordmodus;
-      options.nerdmodus = this.nerdmodus;
-      options.nerdsprache = this.nerdSprache;
-      options.earmodus = this.earmodus;
+      options.language = this.gameLang || "not set yet";
+      options.learnmodus = this.learnmodus || "not set yet";
+      options.recordmodus = this.recordmodus || "not set yet";
+      options.nerdsprache = this.nerdSprache || "not set yet";
+      options.earmodus = this.earmodus || "not set yet";
       return options;
     },
     setGameLangIndex: function(ev) {
@@ -634,12 +658,14 @@ limitations under the License.
     firebaseLogin: function() {
       // firebase
       try {
+        
         var fbRef = new Firebase('https://intense-heat-8981.firebaseio.com');
         var lastlogin = window.localStorage["tinavg-lastvisit"];
         var ulanglist = window.navigator.languages;
         var preflang = window.navigator.language || window.navigator.userLanguage;
         this.letterSeq = [];
         fbRef.onAuth(function(authData) {
+          this.firebaseRef = fbRef;
           if (authData) {
             // save the user's profile into Firebase so we can list users,
             // use them in Security and Firebase Rules, and show profiles
@@ -656,6 +682,8 @@ limitations under the License.
               lastlogin: lastlogin,
               stimestamp: Firebase.ServerValue.TIMESTAMP
             });
+            this.firebaseWordSave(authData);
+            this.fire("firebase-login", {success: true});
           } else {
             fbRef.child("users").child("anonymous").child("logins").push({
               lastlogin: lastlogin,
@@ -665,21 +693,43 @@ limitations under the License.
             });
           }
         }.bind(this));
-        
-        this.firebaseRef = fbRef;
       } catch(e) {
         console.log(e);
       }
+    },
+    firebaseSuccess: function(ev) {
+      if(!this.fbConnBool) {
+        this.fbConnBool = true;
+      }
+      this.$.so.close();
+    },
+    firebaseWordSave: function(authData) {
+      if(!authData) authData = this.firebaseRef.getAuth();
+      if(authData) {
+        var wordObj = this.$.wboard.getWordObj();
+        var word = { "word": wordObj.word, "ohne": wordObj.ohne };
+        this.firebaseWordRef = this.firebaseRef.child("users").child(authData.uid).child('words').push(word);
+        this.firebaseWordRef.child('timestamp').set(Firebase.ServerValue.TIMESTAMP);
+      } else {
+        console.log("authData not set for words");
+      }      
+    },
+    ccDismissed: function(ev) {
+      this.$.so.noCancelOnOutsideClick = false;
+      if(ev) console.log(ev);
     }
   });
 function _getFirebaseName(authData) {
   switch(authData.provider) {
-     case 'password':
-       return authData.password.email.replace(/@.*/, '');
-     case 'twitter':
-       return authData.twitter.displayName;
-     case 'facebook':
-       return authData.facebook.displayName;
+  case 'password':
+    return authData.password.email.replace(/@.*/, '');
+  case 'twitter':
+    return authData.twitter.displayName;
+  case 'facebook':
+    return authData.facebook.displayName;
+  case 'google':
+    return authData.google.displayName;
+    
   }
 }
 function _findWithAttr(array, attr, value) {

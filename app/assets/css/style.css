@@ -141,6 +141,14 @@
   .mini-menu > div {
     margin-bottom: 1vh;
   }
+  
+  .login-menu paper-button {
+    line-height: 48px;
+    min-width: 300px;
+  }
+  .login-text {
+    padding-left: 10px;
+  }
   .floated-label-placeholder {
     display: none;
   }

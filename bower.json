@@ -45,7 +45,7 @@
     "polymer": "Polymer/polymer#^1.0.0",
     "viewport-units-buggyfill": "^0.5.0",
     "firebase-element": "GoogleWebComponents/firebase-element#^1.0.0",
-    "cookieconsent2": "^1.0.0",
+    "cookieconsent2": "dhpollack/cookieconsent2#master",
     "page": "visionmedia/page.js#^1.0.0"
   }
 }
