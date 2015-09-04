@@ -266,6 +266,7 @@ limitations under the License.
   </template>
 </dom-module>
 <script>
+  /* global Polymer TinavgBehavior Mousetrap Firebase history */
   Polymer({
     is: 'tinavg-webapp',
     behaviors: [TinavgBehavior],
@@ -501,12 +502,17 @@ limitations under the License.
       this.async(function(){ this.$.so.open();}, 200);
     },
     showClue: function(e) {
-      this.$.wboard.revealWord();
-      if(this.$.clueshow.classList.contains("glow-yellow")) this.$.clueshow.classList.remove("glow-yellow");
-      if(this.$.clueshow.style.transform === "rotateX(360deg)") {
-        this.$.clueshow.style.transform = "rotateX(0deg)";
+      var clueshowIcon = this.$.clueshow.icon;
+      if(clueshowIcon === "check") {
+        this.checkWord();
       } else {
-        this.$.clueshow.style.transform = "rotateX(360deg)";
+        this.$.wboard.revealWord();
+        if(this.$.clueshow.classList.contains("glow-yellow")) this.$.clueshow.classList.remove("glow-yellow");
+        if(this.$.clueshow.style.transform === "rotateX(360deg)") {
+          this.$.clueshow.style.transform = "rotateX(0deg)";
+        } else {
+          this.$.clueshow.style.transform = "rotateX(360deg)";
+        }
       }
     },
     showMenuPanel: function(e) {
@@ -650,6 +656,14 @@ limitations under the License.
     wordPercentCorrect: function(ev) {
       this.progress1 = ev.detail.progress;
       this.progress2 = ev.detail.secondary;
+      if(ev.detail.progress === 100) {
+        this.$.clueshow.icon = "check";
+      } else if(this.$.clueshow.icon !== "text-format") {
+        this.$.clueshow.icon = "text-format";
+      }
+    },
+    checkWord: function() {
+      this.$.jt.lastBucket = "!!!"; 
     },
     confirmSWInstall: function() {
       console.log("SW Install Complete");

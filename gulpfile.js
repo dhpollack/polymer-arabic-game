@@ -170,6 +170,8 @@ gulp.task('copy', function () {
   var jsmodules = gulp.src([
       'node_modules/mousetrap/mousetrap.*',
       'node_modules/hangul-js/hangul.*',
+      'node_modules/p5/lib/*.js',
+      'node_modules/p5/lib/addons/*.js',
       'bower_components/firebase/firebase.js',
       'bower_components/cookieconsent2/cookieconsent.js',
       'bower_components/webcomponentsjs/webcomponents*.js',
@@ -258,7 +260,6 @@ gulp.task('vulcanize-example', function () {
 gulp.task('dedebug', function() {
   return gulp.src(tmpDir + "/elements/tinavg-webapp.build.js")
     .pipe($.stripDebug())
-    .pipe(gulp.dest(tmpDir + "/elements"))
     .pipe(gulp.dest(distDir + "/elements"));
 });
 
