@@ -30,4 +30,18 @@ I'm playing around with [Polymer](https://www.polymer-project.org/) to create a 
 [hangul.js](https://www.npmjs.com/package/hangul-js) - This assembles/disassembles the Korean letters in the block groups.  
 [microsoft translate api](https://www.microsoft.com/translator/getstarted.aspx) - this is being used for Meiselmodus  
 [ms translator library](https://github.com/openlabs/Microsoft-Translator-Python-API/) - in conjunction with this  
-[chrome app - Manifest Schema](https://developer.chrome.com/apps/manifest) - this is the manifest schema for chrome apps
+[chrome app - Manifest Schema](https://developer.chrome.com/apps/manifest) - this is the manifest schema for chrome apps  
+[surge.sh](https://surge.sh) - another free host for single page apps similar to divshot.  Current host of tinavg.com.  
+[Polymer Starter Kit](https://github.com/PolymerElements/polymer-starter-kit) - Although I did not build my app of this, I did use it as inspiration/guide for certain aspects such as page routing.
+[p5](http://p5js.org/) - The current recording library.  It's a bit overkill, but it works on mobile.  
+[mousetrap](https://craig.is/killing/mice) - keyboard based navigation js library and a fantastic URL.  
+[cookieconsent2](https://github.com/silktide/cookieconsent2) - cookie consent js library.  I've modified it a bit to add a callback when the ok button is pressed.  
+[firebase](https://www.firebase.com) - library used for saving gameplay data and logging in users.  
+[parse](https://www.parse.com/) - possible alternative to firebase.  
+[peerjs](http://peerjs.com/) - webrtc audio  
+[requirejs](https://github.com/jrburke/requirejs) - 
+[twitter assets](https://dev.twitter.com/overview/general/image-resources) - images for twitter links  
+[google assets](https://developers.google.com/identity/branding-guidelines) - branding guidelines  
+[facebook assets](https://www.facebookbrand.com/) - facebook assets  
+[emojione](http://emojione.com/developers) - open source emoji assets  
+[twitter emoji](https://github.com/twitter/twemoji) - another open source eomji project  
