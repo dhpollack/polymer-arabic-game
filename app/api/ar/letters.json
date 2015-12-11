@@ -201,6 +201,13 @@
       "letter": "ء",
       "en": "hamza",
       "regular": false
+    },
+    {
+      "uid": 31,
+      "hidden": true,
+      "letter": "ة",
+      "en": "",
+      "regular": false
     }
   ]
 }

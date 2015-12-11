@@ -9,7 +9,7 @@
   </style>
   <template>
     <div id="jumbotron-div" class="jumbotron">
-      <span id="jtext">{{usertext}}</span>
+      <paper-button id="jtext">{{usertext}}</paper-button>
     </div>
   </template>
 </dom-module>
@@ -47,9 +47,6 @@
       'tap': 'handleClick',
       'last-bucket-changed': 'updateJumbotron'
     },
-    ready: function() {
-      console.log("Starting...");
-    },
     init: function() {
       this.scoreBox = document.getElementById('score-board-player-1');
       this.wordBoard = document.querySelector('word-board');
@@ -76,14 +73,14 @@
         } else if(this.lastBucket !== "") {
           var cw = this.wordBoard.getCheckWord().toLowerCase();
           if(!this.$.jtext.hasAttribute("raised")) this.$.jtext.setAttribute("raised", true);
-          if(this.wordBoard.gl === "ko") {
+          if(this.wordBoard.gameLang === "ko") {
             if(this.scoreArray.length >= window.Hangul.disassemble(this.zielWort).join('').length + 2) this.scoreArray.shift();
           } else {
             if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
           }
           window.clearTimeout(checkTimeout);
           this.scoreArray.push(this.lastBucket);
-          if(this.wordBoard.gl === "ko") {
+          if(this.wordBoard.gameLang === "ko") {
             this.usertext = window.Hangul.assemble(this.scoreArray.join(""));
             cw = window.Hangul.disassemble(cw);
           } else {
