@@ -13,7 +13,7 @@
     }
   </style>
   <template>
-    <letter-service id="lservice" game-lang="{{gameLang}}" lobj="{{lobj}}"></letter-service>
+    <letter-service id="lservice" gl="[[gl]]" lobj="{{lobj}}"></letter-service>
     <div id="lmc" class="horizontal layout flex wrap" style="width: 100vw">
       <template id="repeater" is="dom-repeat" filter="addIndex" items="{{letterList}}">
         <letter-card
@@ -21,7 +21,7 @@
           uid="[[item.uid]]"
           aac-audio="[[item.audio]]"
           letter="[[item.letter]]"
-          game-lang="[[gameLang]]"
+          gl="[[gl]]"
           regular="[[item.regular]]"
           hidden="[[item.hidden]]"
           tabindex="[[item.index]]">
@@ -81,6 +81,7 @@
     created: function() {
     },
     ready: function() {
+      console.log("letterlist ready");
     },
     addIndex: function(item) {
       return hackIndex(item);
@@ -102,7 +103,7 @@
         console.log("hmm, you've got an empty dataset");
       } else {
         var lang = items.lang.code;
-        this.gameLang = lang;
+        this.gl = lang;
         items.alphabet.forEach(function(entry, i, array) {
           array[i].audio = computeAacAudio(entry, lang);
           array[i].hidden = false;
@@ -111,7 +112,7 @@
       return items;
     },
     onNewLetters: function() {
-      var gl = this.gameLang;
+      var gl = this.gl;
       if(!this.allLettersList[gl]) {
         var data = this.filterResults(this.$.lservice.lobj);
         var lang = data.lang.code;
@@ -135,8 +136,12 @@
         console.log("check word still not set");
       }
     },
+    glChanged: function() {
+      //this.runNewLetters();
+      this.$.lservice.changeJsonUrl();
+    },
     onNewWord: function() {
-      var gl = this.gameLang;
+      var gl = this.gl;
       var word = this.wordBoardBox.getCheckWord();
       if(word !== undefined && word.length !== 0) {
         word = word.toLowerCase();
@@ -150,7 +155,7 @@
       }
     },
     shuffleLetters: function(word, tileLimit) {
-      var gl = this.gameLang;
+      var gl = this.gl;
       if(gl === "ko") {
         word = window.Hangul.disassemble(word).join('');
         //console.log(word);
@@ -194,7 +199,7 @@
       this.letterList = shuffle(dummyArray);
     },
     getLangHelpInfo: function() {
-      return this.allLettersList[this.gameLang].lang.langHelpInfo;
+      return this.allLettersList[this.gl].lang.langHelpInfo;
     }
   });
   var itemIndex;

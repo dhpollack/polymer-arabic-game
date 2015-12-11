@@ -180,10 +180,8 @@
     color: #18C924; /* greenish */
   }
   paper-button {
-    text-transform: none;
-  }
-  .content.paper-button {
     padding: 2px;
+    text-transform: none;
   }
   .overlay-toolbar {
     background-color: #16B38B;
@@ -196,6 +194,9 @@
   paper-dialog {
     overflow: hidden;
     width: 100%;
+  }
+  paper-dialog > *:first-child {
+    margin-top: 0;
   }
   .overlay-pages {
     padding: 10px;

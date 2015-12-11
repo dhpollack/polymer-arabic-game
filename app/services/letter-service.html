@@ -10,10 +10,13 @@
   </style>
   <template>
     <iron-ajax id="ajax" 
+      auto
       url="{{jsonUrl}}" 
-      handleas="json" 
+      handle-as="json"
+      last-response="{{lobj}}"
       on-request="lettersRequest"
-      on-response="lettersLoaded">
+      on-response="lettersLoaded"
+      debounce-duration="300">
     </iron-ajax>
   </template>
 </dom-module>
@@ -35,15 +38,18 @@
       }
     },
     listeners: {
-      'game-lang-changed': 'changeJsonUrl'
+      'gl-changed': 'changeJsonUrl'
     },
     attached: function() {
-      var gl = this.gameLang;
+      var gl = this.gl;
       if(gl) this.jsonUrl = this.createJsonUrl(gl);
     },
     changeJsonUrl: function() {
-      var gl = this.gameLang;
+      var gl = this.gl;
       this.jsonUrl = this.createJsonUrl(gl);
+      console.log("URL UPDATE LETTERS");
+      console.log(this.jsonUrl);
+
       if(this.letterListBox && this.letterListBox.allLettersList[gl]) {
         this.letterListBox.setLetters = false;
         this.async(function() { this.spoofLoad(); }, 150);
@@ -59,6 +65,7 @@
       }
     },
     lettersRequest: function() {
+      console.log("Letter Request Sent");
       if(!this.letterListBox) {
         this.letterListBox = document.querySelector("letter-list");
       }

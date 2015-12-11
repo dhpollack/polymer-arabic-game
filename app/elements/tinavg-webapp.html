@@ -58,7 +58,7 @@ limitations under the License.
     <!-- Firebase Auths -->
     <firebase-auth id="firebaseLogin" user="{{user}}" status-known="{{statusKnown}}" location="https://intense-heat-8981.firebaseio.com" provider="{{loginProvider}}" on-error="errorHandler" ></firebase-auth>
     <!-- localstorage -->
-    <iron-localstorage name="tinavg-lastlang" value="{{gameLang}}"></iron-localstorage>
+    <iron-localstorage name="tinavg-lastlang" value="{{gl}}"></iron-localstorage>
     <iron-localstorage name="tinavg-earmodus" value="{{earmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-learnmodus" value="{{learnmodus}}"></iron-localstorage>
     <iron-localstorage name="tinavg-recordmodus" value="{{recordmodus}}"></iron-localstorage>
@@ -69,7 +69,7 @@ limitations under the License.
       <div id="collapse" class="mini-menu vertical layout" drawer>
         <div hidden>
           <paper-dropdown-menu label="Language" noink>
-            <paper-menu class="dropdown-content" id="glMenu" selected={{gameLang}} valueattr="value">
+            <paper-menu class="dropdown-content" id="glMenu" selected={{gl}} valueattr="value">
               <template is="dom-repeat" items="{{languageList}}" as="gl">
                 <paper-item value="{{gl.abbrev}}">{{gl.fullname}}</paper-item>
               </template>
@@ -109,7 +109,10 @@ limitations under the License.
             <div class="footer-button horizontal start-justified layout flex">
               <score-board id="score-board-player-1" player="1" learnmodus="{{learnmodus}}" recordmodus="{{recordmodus}}"></score-board>
             </div>
-            <word-board id="wboard" class="horizontal center-justified layout flex-2" game-lang="{{gameLang}}" earmodus="{{earmodus}}"></word-board>
+            <div class="horizontal center-justified layout flex-2">
+              <word-board id="wboard" gl="{{gl}}" earmodus="{{earmodus}}"></word-board>
+            </div>
+
             <div class="horizontal end-justified layout flex">
               <iron-icon id="menutoggle" class="tinavg-med-icon spin-flip-transition" icon="menu" paper-drawer-toggle></iron-icon>
             </div>
@@ -117,7 +120,7 @@ limitations under the License.
           <div class="core-header horizontal justified layout center">
             <div class="top-right-item horizontal start-justified layout flex">
               <iron-icon id="help-show" class="tinavg-med-icon" icon="help" on-tap="showHelp"></iron-icon>
-              <lang-flag id="switchModusIcon" game-lang="[[gameLang]]" langs="[[languageList]]" on-tap="switchModus"></lang-flag>
+              <lang-flag id="switchModusIcon" gl="[[gl]]" langs="[[languageList]]" on-tap="switchModus"></lang-flag>
             </div>
             <div class="horizontal center-justified layout flex-2">
               <jumbotron-text id="jt" tabindex="{{jumbotronIndexCompute()}}" learnmodus="{{learnmodus}}"></jumbotron-text>
@@ -125,15 +128,16 @@ limitations under the License.
             <div id="nerdmodus-div" class="horizontal end-justified layout flex">
               <score-board id="score-board-player-2" player="2" hidden></score-board>
               <div id="clue-show-div" class="tinavg-med-icon"><iron-icon id="clueshow" class="spin-flip-transition tinavg-med-icon" icon="text-format" on-tap="showClue"></iron-icon></div>
+              
             </div>
           </div>
         </div>
         <div id="maincontentarea" class="content">
           <word-recorder id="wrecorder" hidden$="{{!recordmodus}}"></word-recorder>
-          <letter-list id="lettergrid" limit="{{letterLimit}}" game-lang="{{gameLang}}" hidden$="{{recordmodus}}"></letter-list>
+          <letter-list id="lettergrid" limit="{{letterLimit}}" gl="{{gl}}" hidden$="{{recordmodus}}"></letter-list>
         </div>
         <paper-progress value="{{progress1}}" secondary-progress="{{progress2}}"></paper-progress>
-        <paper-toast id="übersetzung" text="{{gameLang}}"></paper-toast>
+        <paper-toast id="übersetzung" text="{{gl}}"></paper-toast>
       </paper-header-panel>
     </paper-drawer-panel>
     <!-- Dialog Modal -->
@@ -191,7 +195,7 @@ limitations under the License.
             <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-menutoggle" icon="menu" class="tinavg-med-icon"></iron-icon></div>: Reveals the options menu</li>
             <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-a" icon="text-format" class="tinavg-med-icon"></iron-icon></div>: Goes through the letter sequence, then says the word aloud</li>
             <li><div class="tinavg-med-icon"><iron-icon id="help-overlay-help-show" icon="help" class="tinavg-med-icon"></iron-icon></div>: Shows this help menu.</li>
-            <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[gameLang]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
+            <li><div class="tinavg-med-icon"><lang-flag id="help-overlay-switch-modus" mylang="[[gl]]" langs="[[languageList]]" class="same-line"></lang-flag></div>: Switches the language.  Does NOT check word.</li>
             <li><div class="tinavg-med-icon"><iron-icon icon="av:mic" class="tinavg-med-icon"></iron-icon></div>: Record voice in Talkmodus.  Also stops recording.</li>
             <li><div class="tinavg-med-icon"><iron-icon icon="av:play-circle-filled" class="tinavg-med-icon"></iron-icon></div>: Play voice recording.  Also stops recording.</li>
             <li>Target Word: You can click this to have the word spoken outloud.</li>
@@ -414,7 +418,7 @@ limitations under the License.
       
       this.async(function() { 
         this.fire('set-default-options');
-        this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
+        this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gl);
         this.$.meiselspracheliste.selectedIndex = _findWithAttr(this.nerdSpracheList, "abbrev", this.nerdSprache); 
 
       }, 200);
@@ -444,13 +448,13 @@ limitations under the License.
         this.recordmodus = false;
       }
 
-      if(this.gameLang !== (null && undefined)) {
-        console.log("Game Language Set: " + this.gameLang);
+      if(this.gl !== (null && undefined)) {
+        console.log("Game Language Set: " + this.gl);
       } else if(_findWithAttr(this.languageList, "abbrev", tinavgLastlang) === -1) {
         console.log("default language set to deutsch");
-        this.gameLang = "de";
+        this.gl = "de";
       } else {
-        this.gameLang = tinavgLastlang;
+        this.gl = tinavgLastlang;
       }
       
       if(_findWithAttr(this.nerdSpracheList, "abbrev", tinavgNerdsprache) === -1) {
@@ -459,7 +463,7 @@ limitations under the License.
         this.nerdSprache = tinavgNerdsprache;
       }
       this.$.jt.forceLearnmodus(this.learnmodus);
-      //this.$.glMenu.select(this.setGameLangIndex());
+      //this.$.glMenu.select(this.setglIndex());
     },
     setLangHelp: function() {
       var langHtml = this.$.lettergrid.getLangHelpInfo();
@@ -534,7 +538,7 @@ limitations under the License.
     },
     setLang: function(ev) {
       console.log("toggling language: " + ev.target.value + " | chars: " + this.letterLimit);
-      this.gameLang = ev.target.value;
+      this.gl = ev.target.value;
       this.$.jt.resetBox();
     },
     setLangManual: function(lang, force) {
@@ -543,7 +547,7 @@ limitations under the License.
       console.log("toggling language: " + lang + " | chars: " + this.letterLimit);
       if(_findWithAttr(this.languageList, "abbrev", lang) > -1 || force) {
         if(localStorage.getItem("tinavg-lastlang") !== lang) localStorage.setItem("tinavg-lastlang", lang);
-        this.gameLang = lang;
+        this.gl = lang;
       } else {
         console.log("Invalid language: " + lang);
       }
@@ -553,7 +557,7 @@ limitations under the License.
       this.$.wboard.setDisplayWord();
     },
     switchModus: function() {
-      var currentLangIndex = _findWithAttr(this.languageList, "abbrev", this.gameLang);
+      var currentLangIndex = _findWithAttr(this.languageList, "abbrev", this.gl);
       var gl;
       if(currentLangIndex + 1 < this.languageList.length && currentLangIndex !== -1) {
         gl = this.languageList[currentLangIndex + 1].abbrev;
@@ -561,8 +565,9 @@ limitations under the License.
         gl = this.languageList[0].abbrev;
       }
       history.replaceState(null, null, "/#!/lang/" + gl);
-      this.gameLang = gl;
-      this.$.selectLang.selectedIndex = currentLangIndex;
+      this.gl = gl;
+      console.log("lang index: " + currentLangIndex);
+      this.$.selectLang.selectedIndex = _findWithAttr(this.languageList, "abbrev", this.gl);
       this.$.jt.resetBox();
     },
     showÜbersetzung: function() {
@@ -630,18 +635,18 @@ limitations under the License.
     },
     getOptions: function() {
       var options = {};
-      options.language = this.gameLang || "not set yet";
+      options.language = this.gl || "not set yet";
       options.learnmodus = this.learnmodus || "not set yet";
       options.recordmodus = this.recordmodus || "not set yet";
       options.nerdsprache = this.nerdSprache || "not set yet";
       options.earmodus = this.earmodus || "not set yet";
       return options;
     },
-    setGameLangIndex: function(ev) {
+    setglIndex: function(ev) {
       console.log(ev);
       console.log(this.languageList);
-      console.log(this.gameLang);
-      var ret = _findWithAttr(this.languageList, "abbrev", this.gameLang);
+      console.log(this.gl);
+      var ret = _findWithAttr(this.languageList, "abbrev", this.gl);
       console.log(ret);
       this.glIndex = ret;
       return ret;

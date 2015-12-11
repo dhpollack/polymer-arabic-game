@@ -21,7 +21,7 @@
       }
     },
     listeners: {
-      "game-lang-changed": "switchLanguage"
+      "gl-changed": "switchLanguage",
     },
     handleClick: function(e) {
     },
@@ -33,14 +33,13 @@
       }
     },
     switchLanguage: function() {
-      console.log(this.gameLang);
-      if(!this.isReady || this.gameLang === null) return;
+      if(!this.isReady || this.gl === null) return;
       var deg = 0;
-      this.$.flag_icon.style.background = "url(/assets/images/" + this.gameLang + ".png) center center no-repeat";
+      this.$.flag_icon.style.background = "url(/assets/images/" + this.gl + ".png) center center no-repeat";
       this.$.flag_icon.style.backgroundSize = "contain";
       this.fire("reset-jumbotron", true);
       //this.$.jt.resetBox();
-      deg = (this.abbrevs.indexOf(this.gameLang) + 1) * 360;
+      deg = (this.abbrevs.indexOf(this.gl) + 1) * 360;
       this.async(function() {
         this.$.flag_icon.style.transform = "rotateY("+ deg + "deg)";
       });

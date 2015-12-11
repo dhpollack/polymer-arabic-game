@@ -9,7 +9,7 @@
   </style>
   <template>
     <div id="jumbotron-div" class="jumbotron">
-      <paper-button id="jtext">{{usertext}}</paper-button>
+      <span id="jtext">{{usertext}}</span>
     </div>
   </template>
 </dom-module>
@@ -47,6 +47,9 @@
       'tap': 'handleClick',
       'last-bucket-changed': 'updateJumbotron'
     },
+    ready: function() {
+      console.log("Starting...");
+    },
     init: function() {
       this.scoreBox = document.getElementById('score-board-player-1');
       this.wordBoard = document.querySelector('word-board');
@@ -73,14 +76,14 @@
         } else if(this.lastBucket !== "") {
           var cw = this.wordBoard.getCheckWord().toLowerCase();
           if(!this.$.jtext.hasAttribute("raised")) this.$.jtext.setAttribute("raised", true);
-          if(this.wordBoard.gameLang === "ko") {
+          if(this.wordBoard.gl === "ko") {
             if(this.scoreArray.length >= window.Hangul.disassemble(this.zielWort).join('').length + 2) this.scoreArray.shift();
           } else {
             if(this.scoreArray.length >= this.zielWort.length + 2) this.scoreArray.shift();
           }
           window.clearTimeout(checkTimeout);
           this.scoreArray.push(this.lastBucket);
-          if(this.wordBoard.gameLang === "ko") {
+          if(this.wordBoard.gl === "ko") {
             this.usertext = window.Hangul.assemble(this.scoreArray.join(""));
             cw = window.Hangul.disassemble(cw);
           } else {
@@ -101,10 +104,10 @@
                   this.wordBoard.playAudio(false);
                 }
                 this.first=false;
-                this.$.jtext.querySelector("paper-material").setAttribute("elevation", 4);
+                this.$.jtext.setAttribute("elevation", 4);
               }.bind(this), 700);
           } else {
-            this.$.jtext.querySelector("paper-material").setAttribute("elevation", 1);
+            this.$.jtext.setAttribute("elevation", 1);
           }
           this.lastBucket = "";
         }

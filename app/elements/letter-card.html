@@ -96,7 +96,7 @@
         //disabling this for now.
         if(false) {
           var msg = new SpeechSynthesisUtterance();
-          msg.lang = this.gameLang;
+          msg.lang = this.gl;
           msg.text = this.letter;
           window.speechSynthesis.speak(msg);
         }
@@ -116,10 +116,10 @@
       this.$.letterpr.upAction();
       if(playAudio) this.$.letteraudio.play();
     },
-    computeAacAudio: function(letter, gameLang) {
+    computeAacAudio: function(letter, gl) {
       this.useSynth = false;
-      if(letter === " " || gameLang === undefined) return "";
-      return "/assets/audio/"+ gameLang +"/" + letter + ".m4a";
+      if(letter === " " || gl === undefined) return "";
+      return "/assets/audio/"+ gl +"/" + letter + ".m4a";
     }
   });
 })();

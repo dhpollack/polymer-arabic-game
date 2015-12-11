@@ -2,10 +2,21 @@
   TinavgBehavior = {
 
     properties: {
-      gameLang: {
+      gl: {
         type: String,
         notify: true
       }
+    },
+    listeners: {
+      "gl-changed": "_gameLangChanged"
+    },
+    _gameLangChanged: function(value) {
+      console.log("Game Lange Change: " + this.gl);
+      this.$.switchModusIcon.switchLanguage();
+      this.$.wboard.changeLanguage();
+      this.$.lettergrid.glChanged();
+
+
     }
 
   };  

@@ -10,10 +10,13 @@
   </style>
   <template>
     <iron-ajax id="wajax" 
+      auto
       url={{jsonUrl}} 
-      handleas="json" 
+      handle-as="json"
+      last-response="{{warray}}"
       on-request="requestSent" 
-      on-response="wordsLoaded">
+      on-response="wordsLoaded"
+      debounce-duration="300">
     </iron-ajax>
   </template>
 </dom-module>
@@ -34,20 +37,23 @@
       }
     },
     listeners: {
-      'game-lang-changed': 'changeJsonUrl'
+      'gl-changed': 'changeJsonUrl'
     },
     attached: function() {
-      var gl = this.gameLang;
+      var gl = this.gl;
       this.jsonUrl = this.createJsonUrl(gl);
       //this.$.wajax.auto = true;
     },
     ready: function() {
       this.wordBoard = document.getElementById("wboard");
       this.letterList = document.getElementById("lettergrid");
+      console.log("AJAX INIT");
     },
     changeJsonUrl: function() {
-      var gl = this.gameLang;
+      var gl = this.gl;
       this.jsonUrl = this.createJsonUrl(gl);
+      console.log("URL UPDATE");
+      console.log(this.jsonUrl);
       if(this.wordBoard && this.wordBoard.wordArray[gl]) {
         this.letterList.setWord = false;
         this.async(function() { this.spoofLoad(); }, 100);
@@ -64,13 +70,14 @@
       }
     },
     requestSent: function(e) {
+      console.log("Word Request Sent");
       if(!this.letterList) this.letterList = document.getElementById("lettergrid");
       if(!this.wordBoard) this.wordBoard = document.getElementById("wboard");
       this.letterList.setWord = false;
     },
     wordsLoaded: function() {
       var jsonSuccess = (this.$.wajax.lastResponse != null) ? true : false;
-      //console.log("loading words from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
+      console.log("loading words from url: " + this.jsonUrl + " \nSuccess: " + jsonSuccess);
       // Make a copy of the loaded data
       if(jsonSuccess) {
         if(this.letterList) this.letterList.setWord = true;
